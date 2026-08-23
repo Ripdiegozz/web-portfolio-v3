@@ -6,7 +6,12 @@ export const contactSchema = z.object({
     .trim()
     .min(1, 'Name required')
     .max(100)
-    .refine((v) => !/[\x00-\x1f\x7f]/.test(v), 'Name contains control characters'),
+    .refine(
+      // Control chars would allow header-style injection in email subject/body.
+      // eslint-disable-next-line no-control-regex
+      (v) => !/[\x00-\x1f\x7f]/.test(v),
+      'Name contains control characters'
+    ),
   email: z.email().max(200),
   message: z.string().trim().min(10, 'Message too short').max(5000),
   /** Honeypot: hidden field, must remain empty. Bots fill it. Must parse as a

@@ -27,7 +27,13 @@ const mockActivityDeps = (): AppDeps['activity'] => ({
   writeCache: async () => {},
 });
 
-export function buildDeps(bindings: WorkerBindings): AppDeps {
+// Module-scope singleton: created once per Worker isolate, reused for every
+// request. Without this, a memoryRateLimiter built per request starts with an
+// empty counter map and the rate limit becomes a no-op. Bindings are static
+// for the life of the isolate; first sighting wins.
+let cachedDeps: AppDeps | null = null;
+
+function createDeps(bindings: WorkerBindings): AppDeps {
   if (e2eMocks) {
     const limiter = memoryRateLimiter(MAX_PER_DAY);
     return {
@@ -42,9 +48,11 @@ export function buildDeps(bindings: WorkerBindings): AppDeps {
   }
 
   const kv = bindings.RATE_LIMIT_KV;
+  // NOTE: without the KV namespace wired in wrangler.jsonc, the fallback limiter
+  // is per-isolate only; provision RATE_LIMIT_KV before production deploy.
   const limiter = kv
     ? kvRateLimiter(kv, 86_400, MAX_PER_DAY)
-    : memoryRateLimiter(MAX_PER_DAY); // degraded-but-working if binding missing
+    : memoryRateLimiter(MAX_PER_DAY);
   const secret = bindings.TURNSTILE_SECRET_KEY ?? '';
   const sendEmail = makeSendContactEmail(bindings.RESEND_API_KEY ?? '');
 
@@ -61,4 +69,9 @@ export function buildDeps(bindings: WorkerBindings): AppDeps {
     // TODO(Task 17): replaced by the GitHub activity fetcher with edge cache.
     activity: mockActivityDeps(),
   };
+}
+
+export function buildDeps(bindings: WorkerBindings): AppDeps {
+  if (!cachedDeps) cachedDeps = createDeps(bindings);
+  return cachedDeps;
 }

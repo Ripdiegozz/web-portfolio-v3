@@ -216,6 +216,7 @@ export const es: TranslationDictionary = {
     readTime: '{n} min de lectura',
     publishedOn: 'Publicado el',
     tagsLabel: 'Etiquetas',
+    tableOfContents: 'En esta página',
     emptyState: 'Aún no hay artículos publicados.',
   },
   contact: {

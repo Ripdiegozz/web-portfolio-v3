@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 import { isPublished, getReadingTime, formatBlogDate } from '../../lib/blog';
 import { getTranslations } from '../../i18n';
 import type { Locale } from '../../i18n/types';
@@ -12,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 
 const locale: Locale = 'en';
 const dict = getTranslations(locale);
@@ -21,6 +22,8 @@ const t = dict.blogPage;
 const mins = getReadingTime(entry.body ?? '');
 const readTime = t.readTime.replace('{n}', String(mins));
 const dateStr = formatBlogDate(entry.data.pubDate, locale);
+
+const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length > 1;
 ---
 <BaseLayout
   title={`${entry.data.title} | Diego`}
@@ -28,7 +31,7 @@ const dateStr = formatBlogDate(entry.data.pubDate, locale);
   locale={locale}
   dict={dict}
 >
-  <main id="main" class="mx-auto max-w-3xl px-6 py-16 md:py-24">
+  <div id="main" class="mx-auto w-full max-w-6xl px-6 py-16 md:py-24">
 
     <!-- Back link -->
     <a
@@ -38,8 +41,8 @@ const dateStr = formatBlogDate(entry.data.pubDate, locale);
       {t.backBlog}
     </a>
 
-    <!-- Article header -->
-    <header class="mb-12">
+    <!-- Article header (full width) -->
+    <header class="mb-12 max-w-3xl">
       {entry.data.tags.length > 0 && (
         <ul class="mb-4 flex flex-wrap gap-1.5" aria-label={t.tagsLabel}>
           {entry.data.tags.map((tag) => (
@@ -71,7 +74,7 @@ const dateStr = formatBlogDate(entry.data.pubDate, locale);
       </div>
     </header>
 
-    <!-- Hero image -->
+    <!-- Hero image (full width) -->
     {entry.data.heroImage && (
       <img
         src={entry.data.heroImage}
@@ -79,17 +82,35 @@ const dateStr = formatBlogDate(entry.data.pubDate, locale);
         width="1200"
         height="630"
         loading="eager"
-        class="mb-12 w-full rounded-lg object-cover"
+        class="mb-12 max-w-3xl w-full rounded-lg object-cover"
       />
     )}
 
-    <!-- Post body -->
-    <article class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-sans-display prose-a:text-accent-readable prose-a:underline-offset-4 prose-code:font-mono-code prose-pre:rounded-lg prose-pre:border prose-pre:border-border-subtle prose-img:rounded-lg">
-      <Content />
-    </article>
+    <!-- Mobile ToC (before content) -->
+    {hasToc && (
+      <div class="mb-8 lg:hidden">
+        <TableOfContents headings={headings} label={t.tableOfContents ?? 'On this page'} />
+      </div>
+    )}
+
+    <!-- Two-column layout: article + sticky sidebar -->
+    <div class={hasToc ? 'lg:grid lg:grid-cols-[1fr_220px] lg:gap-16' : ''}>
+
+      <!-- Post body -->
+      <article class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-sans-display prose-a:text-accent-readable prose-a:underline-offset-4 prose-code:font-mono-code prose-pre:rounded-lg prose-pre:border prose-pre:border-border-subtle prose-img:rounded-lg">
+        <Content />
+      </article>
+
+      <!-- Desktop ToC sidebar -->
+      {hasToc && (
+        <div class="hidden lg:block">
+          <TableOfContents headings={headings} label={t.tableOfContents ?? 'On this page'} />
+        </div>
+      )}
+    </div>
 
     <!-- Footer nav -->
-    <footer class="mt-16 border-t border-border-subtle pt-8">
+    <footer class="mt-16 max-w-3xl border-t border-border-subtle pt-8">
       <a
         href="/blog/"
         class="inline-flex items-center gap-1.5 font-mono-code text-sm text-text-muted transition-colors hover:text-text-primary"
@@ -97,5 +118,5 @@ const dateStr = formatBlogDate(entry.data.pubDate, locale);
         {t.backBlog}
       </a>
     </footer>
-  </main>
+  </div>
 </BaseLayout>

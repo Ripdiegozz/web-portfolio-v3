@@ -146,6 +146,7 @@ export interface BlogPageTranslations {
   readTime: string;
   publishedOn: string;
   tagsLabel: string;
+  tableOfContents: string;
   emptyState: string;
 }
 

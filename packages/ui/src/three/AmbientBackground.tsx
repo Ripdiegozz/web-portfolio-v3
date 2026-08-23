@@ -248,8 +248,8 @@ const DOT_WAVE_FRAG = /* glsl */ `
     float dist = length(coord);
     if (dist > 0.5) discard;
 
-    // Sharp edge with minimal 1px anti-alias border to keep dots distinct
-    float circle = smoothstep(0.5, 0.3, dist);
+    // Sharp edge with minimal anti-alias border to keep dots distinct
+    float circle = smoothstep(0.5, 0.25, dist);
 
     if (uIsDark > 0.5) {
       // --- DARK MODE ---
@@ -262,12 +262,12 @@ const DOT_WAVE_FRAG = /* glsl */ `
       gl_FragColor = vec4(col, alpha);
     } else {
       // --- LIGHT MODE ---
-      // Soft, refined azure dots (#3b82f6 / #2563eb) that remain ambient and never collide with text
-      vec3 lightBase = vec3(0.28, 0.54, 0.94);
-      vec3 lightCrest = vec3(0.14, 0.38, 0.84);
+      // Crisp, rich sapphire/cobalt dots with balanced contrast on white background
+      vec3 lightBase = vec3(0.18, 0.42, 0.86);
+      vec3 lightCrest = vec3(0.10, 0.28, 0.72);
       vec3 col = mix(lightBase, lightCrest, vElevation);
 
-      float alpha = circle * vAlpha * mix(0.22, 0.58, vElevation);
+      float alpha = circle * vAlpha * mix(0.38, 0.80, vElevation);
       gl_FragColor = vec4(col, alpha);
     }
   }
@@ -275,19 +275,21 @@ const DOT_WAVE_FRAG = /* glsl */ `
 
 const STARS_VERT = /* glsl */ `
   uniform float uTime;
+  uniform float uIsDark;
   varying float vTwinkle;
 
   void main() {
     vec3 p = position;
     p.y += sin(p.x * 0.12 + uTime * 0.8) * 0.12;
 
-    vTwinkle = 0.4 + 0.6 * sin(uTime * 1.5 + p.x * 2.0 + p.y * 1.5);
+    vTwinkle = 0.45 + 0.55 * sin(uTime * 1.5 + p.x * 2.0 + p.y * 1.5);
 
     vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mvPosition;
 
-    float pSize = 1.0 * (260.0 / -mvPosition.z);
-    gl_PointSize = clamp(pSize, 1.0, 2.5);
+    float base = mix(1.6, 1.2, uIsDark);
+    float pSize = base * (280.0 / -mvPosition.z);
+    gl_PointSize = clamp(pSize, 1.2, 3.2);
   }
 `;
 
@@ -304,10 +306,11 @@ const STARS_FRAG = /* glsl */ `
 
     if (uIsDark > 0.5) {
       vec3 col = vec3(0.9, 0.93, 1.0);
-      gl_FragColor = vec4(col, circle * vTwinkle * 0.22);
+      gl_FragColor = vec4(col, circle * vTwinkle * 0.30);
     } else {
-      vec3 col = vec3(0.2, 0.4, 0.8);
-      gl_FragColor = vec4(col, circle * vTwinkle * 0.14);
+      // In light mode: deep slate-blue ambient dust dots with crisp visibility
+      vec3 col = vec3(0.14, 0.32, 0.68);
+      gl_FragColor = vec4(col, circle * vTwinkle * 0.42);
     }
   }
 `;

@@ -13,16 +13,17 @@ const { title, description = "Diego — Full-Stack Engineer" } = Astro.props;
     <meta name="description" content={description} />
     <title>{title}</title>
     <script is:inline>
+      // Keep in sync with resolveInitialTheme in src/lib/theme.ts.
       (() => {
         try {
           const stored = localStorage.getItem('theme');
           const dark = stored === 'dark' || ((stored !== 'light') && matchMedia('(prefers-color-scheme: dark)').matches);
           document.documentElement.classList.toggle('dark', dark);
-        } catch {}
+        } catch {} // localStorage may be blocked in private mode
       })();
     </script>
   </head>
-  <body class="min-h-screen bg-bg text-text-primary antialiased">
+  <body class="min-h-screen antialiased">
     <slot />
   </body>
 </html>

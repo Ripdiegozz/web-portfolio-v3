@@ -1,0 +1,16 @@
+---
+import { Reveal } from '@portfolio/ui';
+import { aboutText } from '../../data/site';
+---
+<section aria-labelledby="about-heading" class="border-t border-border-subtle">
+  <Reveal client:visible>
+    <div class="mx-auto w-full max-w-3xl px-6 py-24 md:py-32">
+      <h2 id="about-heading" class="font-mono-code text-xs tracking-[0.2em] text-text-muted">// about</h2>
+      <p class="mt-10 text-xl leading-relaxed text-text-primary md:text-2xl">{aboutText}</p>
+      <p class="mt-6 max-w-xl leading-relaxed text-text-muted">
+        I work across the stack, from API design to the last detail of the
+        <span class="font-serif-accent italic text-[1.05em]">interface</span>.
+      </p>
+    </div>
+  </Reveal>
+</section>

@@ -1,0 +1,27 @@
+---
+import { Reveal } from '@portfolio/ui';
+---
+<section class="relative">
+  <div class="mx-auto flex min-h-[85svh] w-full max-w-3xl flex-col justify-center px-6 py-32 md:py-40">
+    <p class="font-mono-code text-xs tracking-[0.2em] text-text-muted">// full-stack engineer</p>
+    <Reveal client:visible className="mt-6">
+      <h1 class="text-balance font-sans-display text-5xl font-medium tracking-tight text-text-primary md:text-7xl">
+        Diego builds <span class="font-serif-accent italic text-[1.05em]">software</span> that ships.
+      </h1>
+    </Reveal>
+    <Reveal client:visible delay={0.08}>
+      <p class="mt-8 max-w-xl text-lg leading-relaxed text-text-muted">
+        Currently building the Wazuh AI Assistant at Wazuh. My work spans agent
+        tooling, backend services, and the interfaces analysts rely on every day.
+      </p>
+    </Reveal>
+    <Reveal client:visible delay={0.16} className="mt-10">
+      <a
+        href="#contact"
+        class="inline-flex items-center justify-center rounded-md border border-border-subtle px-4 py-2 text-sm font-medium transition-colors hover:bg-bg-raised"
+      >
+        Get in touch
+      </a>
+    </Reveal>
+  </div>
+</section>

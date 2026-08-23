@@ -1,0 +1,24 @@
+---
+import { socials } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+<footer class="border-t border-border-subtle">
+  <div class="mx-auto flex w-full max-w-3xl flex-col gap-4 px-6 py-10 md:flex-row md:items-center md:justify-between">
+    <ul class="flex gap-6">
+      {socials.map((social) => (
+        <li>
+          <a
+            href={social.href}
+            class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {social.label.toLowerCase()} ↗
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="font-mono-code text-xs text-text-muted">© {year} Diego</p>
+  </div>
+</footer>

@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import type { ClassifiedContact } from './contact/schema';
+import { getActivityWithFallback } from './activity/store';
 
 export interface ContactDeps {
   /** Sole Request reader: returns the classified payload and the Turnstile token. */
@@ -17,7 +18,8 @@ export interface ActivityGrid {
 }
 
 export interface ActivityDeps {
-  fetchActivity(): Promise<ActivityGrid>;
+  /** Raw GitHub GraphQL payload; getActivityWithFallback maps it to ActivityGrid. */
+  fetchActivity(): Promise<unknown>;
   readCache(): Promise<ActivityGrid | undefined>;
   writeCache(grid: ActivityGrid): Promise<void>;
 }
@@ -61,9 +63,15 @@ export function createApp(deps: AppDeps) {
   });
 
   app.get('/api/activity', async (c) => {
-    // No-cache baseline; edge caching lands in Task 16.
-    const grid = await deps.activity.fetchActivity();
-    return c.json({ ok: true, grid });
+    // Fresh upstream, else stale cache, else empty grid, always 200. The
+    // three hooks on deps.activity compose into the fallback chain here so
+    // tests stay hook-based without a test-side run.
+    const { grid, source } = await getActivityWithFallback({
+      fetchFresh: deps.activity.fetchActivity,
+      readCache: deps.activity.readCache,
+      writeCache: deps.activity.writeCache,
+    });
+    return c.json({ ok: true, cached: source !== 'fresh', data: grid });
   });
 
   return app;

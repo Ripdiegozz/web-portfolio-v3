@@ -34,7 +34,31 @@ describe('createApp error handling', () => {
     expect(res.status).toBe(404);
     expect(await res.json()).toEqual({ ok: false, error: 'not_found' });
   });
-  it('never leaks internal error details', async () => {
+});
+
+describe('GET /api/activity', () => {
+  it('serves mapped fresh data as not cached', async () => {
+    const deps = makeDeps({
+      activity: {
+        ...activityDefaults(),
+        fetchActivity: async () => ({
+          data: {
+            viewer: {
+              contributionsCollection: {
+                totalContributions: 7,
+                contributionCalendar: { weeks: [] },
+              },
+            },
+          },
+        }),
+      },
+    });
+    const res = await createApp(deps).request('/api/activity');
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ ok: true, cached: false, data: { totalContributions: 7, weeks: [] } });
+  });
+
+  it('serves stale fallback instead of crashing when upstream fails', async () => {
     const deps = makeDeps({
       activity: {
         ...activityDefaults(),
@@ -45,9 +69,42 @@ describe('createApp error handling', () => {
     });
     const res = await createApp(deps).request('/api/activity');
     const body = await res.json();
-    expect(res.status).toBe(500);
+    expect(res.status).toBe(200);
     expect(JSON.stringify(body)).not.toContain('secret');
-    expect(body).toMatchObject({ ok: false });
+    expect(body).toMatchObject({ ok: true, cached: true });
+    expect(body.data).toEqual({ totalContributions: 0, weeks: [] });
+  });
+
+  it('serves the stale cache entry when upstream fails', async () => {
+    const deps = makeDeps({
+      activity: {
+        ...activityDefaults(),
+        fetchActivity: async () => {
+          throw new Error('upstream down');
+        },
+        readCache: async () => ({ totalContributions: 42, weeks: [] }),
+      },
+    });
+    const res = await createApp(deps).request('/api/activity');
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ ok: true, cached: true, data: { totalContributions: 42, weeks: [] } });
+  });
+
+  it('still serves empty fallback when the cache read itself fails', async () => {
+    const deps = makeDeps({
+      activity: {
+        ...activityDefaults(),
+        fetchActivity: async () => {
+          throw new Error('upstream down');
+        },
+        readCache: async () => {
+          throw new Error('cache boom');
+        },
+      },
+    });
+    const res = await createApp(deps).request('/api/activity');
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ ok: true, cached: true, data: { totalContributions: 0, weeks: [] } });
   });
 });
 

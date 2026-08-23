@@ -1,8 +1,10 @@
-import type { AppDeps } from './app';
+import { caches } from 'cloudflare:workers';
+import type { AppDeps, ActivityGrid } from './app';
 import { contactSchema, classifyContactAttempt, type ClassifiedContact } from './contact/schema';
 import { kvRateLimiter, memoryRateLimiter } from './contact/rate-limit';
 import { verifyTurnstile } from './contact/turnstile';
 import { makeSendContactEmail } from './contact/email';
+import { fetchGitHubActivity } from './activity/store';
 import type { WorkerBindings } from './types';
 
 const MAX_PER_DAY = 5;
@@ -31,6 +33,33 @@ const mockActivityDeps = (): AppDeps['activity'] => ({
   readCache: async () => undefined,
   writeCache: async () => {},
 });
+
+/**
+ * Production activity hooks: GitHub GraphQL upstream plus a Cloudflare edge
+ * cache. fetchActivity returns the raw GraphQL payload — createApp composes it
+ * with getActivityWithFallback, which maps and caches it.
+ */
+export function buildActivityDeps(bindings: WorkerBindings): AppDeps['activity'] {
+  const cache = caches.default;
+  const cacheReq = new Request('https://dagadev.tech/__cache/activity-grid.json');
+  return {
+    fetchActivity: async () => {
+      const token = bindings.GITHUB_TOKEN ?? '';
+      if (!token) throw new Error('missing_github_token');
+      return fetchGitHubActivity(token);
+    },
+    async readCache() {
+      const hit = await cache.match(cacheReq);
+      if (!hit) return undefined;
+      return (await hit.json()) as ActivityGrid;
+    },
+    async writeCache(grid) {
+      await cache.put(cacheReq, new Response(JSON.stringify(grid), {
+        headers: { 'content-type': 'application/json', 'cache-control': 'public, max-age=3600' },
+      }));
+    },
+  };
+}
 
 // Module-scope singleton: created once per Worker isolate, reused for every
 // request. Without this, a memoryRateLimiter built per request starts with an
@@ -71,8 +100,8 @@ function createDeps(bindings: WorkerBindings): AppDeps {
         if (!result.sent) throw new Error('email_delivery_failed');
       },
     },
-    // TODO(Task 17): replaced by the GitHub activity fetcher with edge cache.
-    activity: mockActivityDeps(),
+    // GitHub activity with edge cache: fresh upstream, stale cache, empty grid.
+    activity: buildActivityDeps(bindings),
   };
 }
 

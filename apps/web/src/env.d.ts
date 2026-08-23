@@ -2,6 +2,13 @@
 
 declare module 'cloudflare:workers' {
   export const env: Record<string, unknown>;
+  /** Structural Cache API surface (caches.default); same shape as CacheLike in server/types. */
+  export const caches: {
+    default: {
+      match(request: Request): Promise<Response | undefined>;
+      put(request: Request, response: Response): Promise<void>;
+    };
+  };
 }
 
 /**

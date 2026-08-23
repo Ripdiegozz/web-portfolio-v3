@@ -67,6 +67,9 @@ export function classifyContactPayload(raw: unknown): {
     return { classified: { kind: 'silent_bot' }, turnstileToken: '' };
   }
   const parsed = contactSchema.safeParse(raw);
+  if (!parsed.success) {
+    console.error('[contact/schema] Validation failed:', parsed.error.issues, 'Received payload:', raw);
+  }
   return {
     classified: classifyContactAttempt(parsed),
     turnstileToken:

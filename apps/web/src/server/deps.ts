@@ -1,4 +1,3 @@
-import { caches } from 'cloudflare:workers';
 import type { AppDeps, ActivityGrid } from './app';
 import { classifyContactPayload, type ClassifiedContact } from './contact/schema';
 import { kvRateLimiter, memoryRateLimiter } from './contact/rate-limit';
@@ -56,8 +55,6 @@ const mockActivityDeps = (): AppDeps['activity'] => ({
  * with getActivityWithFallback, which maps and caches it.
  */
 export function buildActivityDeps(bindings: WorkerBindings): AppDeps['activity'] {
-  const cache = caches.default;
-  const cacheReq = new Request('https://dagadev.net/__cache/activity-grid.json');
   return {
     fetchActivity: async () => {
       const token = bindings.GITHUB_TOKEN ?? '';
@@ -65,17 +62,36 @@ export function buildActivityDeps(bindings: WorkerBindings): AppDeps['activity']
       return fetchGitHubActivity(token);
     },
     async readCache() {
-      const hit = await cache.match(cacheReq);
-      if (!hit) return undefined;
-      return (await hit.json()) as ActivityGrid;
+      try {
+        const { caches } = await import('cloudflare:workers');
+        const cache = caches?.default;
+        if (!cache) return undefined;
+        const cacheReq = new Request('https://dagadev.net/__cache/activity-grid.json');
+        const hit = await cache.match(cacheReq);
+        if (!hit) return undefined;
+        return (await hit.json()) as ActivityGrid;
+      } catch {
+        return undefined;
+      }
     },
     async writeCache(grid) {
-      await cache.put(cacheReq, new Response(JSON.stringify(grid), {
-        headers: {
-          'content-type': 'application/json',
-          'cache-control': `public, max-age=${CACHE_MAX_AGE_SECONDS}`,
-        },
-      }));
+      try {
+        const { caches } = await import('cloudflare:workers');
+        const cache = caches?.default;
+        if (!cache) return;
+        const cacheReq = new Request('https://dagadev.net/__cache/activity-grid.json');
+        await cache.put(
+          cacheReq,
+          new Response(JSON.stringify(grid), {
+            headers: {
+              'content-type': 'application/json',
+              'cache-control': `public, max-age=${CACHE_MAX_AGE_SECONDS}`,
+            },
+          })
+        );
+      } catch {
+        // best-effort cache write
+      }
     },
   };
 }

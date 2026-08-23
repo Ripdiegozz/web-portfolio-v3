@@ -7,6 +7,21 @@ export interface SendResult {
 }
 
 export function makeSendContactEmail(apiKey: string, opts?: { to?: string; from?: string }) {
+  if (!apiKey && !import.meta.env.PROD) {
+    return async function mockDevSendContactEmail(input: {
+      name: string;
+      email: string;
+      message: string;
+    }): Promise<SendResult> {
+      console.log('📧 [DEV EMAIL] Simulated contact message delivery:', {
+        from: `${input.name} <${input.email}>`,
+        to: opts?.to ?? 'diegogarciag63@gmail.com',
+        message: input.message,
+      });
+      return { sent: true };
+    };
+  }
+
   const resend = new Resend(apiKey);
   return async function sendContactEmail(input: {
     name: string;
@@ -31,8 +46,12 @@ export function makeSendContactEmail(apiKey: string, opts?: { to?: string; from?
         html,
         replyTo: input.email,
       });
+      if (error) {
+        console.error('[resend] email send error:', error);
+      }
       return { sent: !error };
-    } catch {
+    } catch (err) {
+      console.error('[resend] email send exception:', err);
       return { sent: false };
     }
   };

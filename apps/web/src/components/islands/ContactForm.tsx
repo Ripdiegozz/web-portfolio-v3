@@ -1,4 +1,4 @@
-import { useState, type SubmitEvent } from 'react';
+import { useEffect, useRef, useState, type SubmitEvent } from 'react';
 import { Send, Loader2, CheckCircle2, AlertCircle } from '@portfolio/ui';
 
 type Status = 'idle' | 'sending' | 'sent' | 'error';
@@ -6,8 +6,89 @@ type Status = 'idle' | 'sending' | 'sent' | 'error';
 const inputClass =
   'w-full rounded-md border border-border-subtle bg-bg-raised px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none';
 
+function getTurnstileToken(form: HTMLFormElement, widgetId: string | null): string {
+  if (import.meta.env.PUBLIC_E2E_MOCKS === '1') return 'e2e';
+
+  // 1. Direct form field injected by Cloudflare Turnstile
+  const formEntry = new FormData(form).get('cf-turnstile-response');
+  if (typeof formEntry === 'string' && formEntry.trim().length > 0) {
+    return formEntry.trim();
+  }
+
+  // 2. Safe fallback to window.turnstile API with widgetId
+  try {
+    const t = (window as unknown as { turnstile?: { getResponse?: (id?: string) => string } })?.turnstile;
+    const resp = widgetId ? t?.getResponse?.(widgetId) : t?.getResponse?.();
+    if (typeof resp === 'string' && resp.trim().length > 0) {
+      return resp.trim();
+    }
+  } catch {
+    // ignore Turnstile widget lookup errors
+  }
+
+  // 3. In dev mode fallback so local developer testing is never blocked
+  if (!import.meta.env.PROD) {
+    return 'dev-token';
+  }
+
+  return '';
+}
+
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>('idle');
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (import.meta.env.PUBLIC_E2E_MOCKS === '1') return;
+
+    const renderWidget = () => {
+      const turnstile = (
+        window as unknown as {
+          turnstile?: {
+            render?: (el: HTMLElement, opts: unknown) => string;
+            remove?: (id: string) => void;
+          };
+        }
+      )?.turnstile;
+
+      if (turnstile?.render && turnstileContainerRef.current && !widgetIdRef.current) {
+        try {
+          widgetIdRef.current = turnstile.render(turnstileContainerRef.current, {
+            sitekey: import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA',
+            theme: 'auto',
+          });
+        } catch (err) {
+          console.warn('[turnstile] render warning:', err);
+        }
+      }
+    };
+
+    if ((window as unknown as { turnstile?: unknown }).turnstile) {
+      renderWidget();
+    } else {
+      const timer = setInterval(() => {
+        if ((window as unknown as { turnstile?: unknown }).turnstile) {
+          clearInterval(timer);
+          renderWidget();
+        }
+      }, 100);
+      return () => clearInterval(timer);
+    }
+
+    return () => {
+      if (widgetIdRef.current) {
+        try {
+          (
+            window as unknown as { turnstile?: { remove?: (id: string) => void } }
+          ).turnstile?.remove?.(widgetIdRef.current);
+          widgetIdRef.current = null;
+        } catch {
+          // ignore
+        }
+      }
+    };
+  }, []);
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -15,6 +96,8 @@ export default function ContactForm() {
     setStatus('sending');
     try {
       const payload = Object.fromEntries(new FormData(form).entries());
+      const turnstileToken = getTurnstileToken(form, widgetIdRef.current);
+
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
@@ -23,18 +106,28 @@ export default function ContactForm() {
           email: payload.email,
           message: payload.message,
           company: payload.company, // honeypot passthrough
-          turnstileToken:
-            import.meta.env.PUBLIC_E2E_MOCKS === '1'
-              ? 'e2e'
-              : (window as unknown as { turnstile?: { getResponse?: () => string } }).turnstile?.getResponse?.() ??
-                payload['cf-turnstile-response'] ??
-                '',
+          turnstileToken,
         }),
       });
-      const body = await res.json().catch(() => ({}));
-      setStatus(res.ok && body.ok ? 'sent' : 'error');
-      if (res.ok && body.ok) form.reset();
-    } catch {
+      const body = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (res.ok && body.ok) {
+        setStatus('sent');
+        form.reset();
+        if (widgetIdRef.current) {
+          try {
+            (
+              window as unknown as { turnstile?: { reset?: (id: string) => void } }
+            ).turnstile?.reset?.(widgetIdRef.current);
+          } catch {
+            // ignore
+          }
+        }
+      } else {
+        console.error('[contact-form] Submission failed:', res.status, body);
+        setStatus('error');
+      }
+    } catch (err) {
+      console.error('[contact-form] Network error:', err);
       setStatus('error'); // failures are shown, never faked (v2 bug fix)
     }
   }
@@ -78,7 +171,7 @@ export default function ContactForm() {
         className={`${inputClass} min-h-36 resize-y`}
       />
       {import.meta.env.PUBLIC_E2E_MOCKS !== '1' && (
-        <div className="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY} />
+        <div ref={turnstileContainerRef} className="my-2 min-h-[65px]" suppressHydrationWarning />
       )}
       <button
         type="submit"

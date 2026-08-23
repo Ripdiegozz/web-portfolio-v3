@@ -25,5 +25,12 @@ export default defineConfig({
       // duplicate Reacts break hooks (Invalid hook call in SSR).
       dedupe: ['react', 'react-dom'],
     },
+    optimizeDeps: {
+      // @portfolio/ui is a linked workspace package, so Vite doesn't scan its
+      // deps at startup. Without this, lucide-react is discovered lazily on
+      // the first page that mounts an island using it, forcing a full dev
+      // server reload mid-session that wipes client-side React state.
+      include: ['lucide-react'],
+    },
   },
 });

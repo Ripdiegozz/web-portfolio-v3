@@ -13,5 +13,7 @@ test('contact happy path with mocked externals', async ({ page }) => {
   await form.getByLabel(/email/i).fill('e2e@example.com');
   await form.getByLabel(/message/i).fill('Hello from the smoke suite.');
   await form.getByRole('button', { name: /send/i }).click();
-  await expect(page.getByRole('status')).toContainText(/sent/i);
+  // Generous timeout: first hydration + the mocked fetch round trip can be
+  // slow on a cold CI dev server.
+  await expect(page.getByRole('status')).toContainText(/sent/i, { timeout: 15_000 });
 });

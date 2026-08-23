@@ -12,7 +12,11 @@ interface Props {
 const { dict = en.contact } = Astro.props;
 ---
 <Section label="contact" number="07" title={dict.sectionTitle} description={dict.sectionDescription}>
-  <ContactForm client:visible labels={dict} />
+  {/* client:load, not client:visible: a submit button inside a <form> with
+     no JS attached yet falls back to a native browser form submission (full
+     page reload) if a user reaches and clicks it before the
+     intersection-triggered hydration finishes. */}
+  <ContactForm client:load labels={dict} />
 
   <p class="mt-12 flex items-center gap-2 font-mono-code text-xs text-text-muted">
     <span>{dict.preferEmail}</span>

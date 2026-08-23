@@ -1,0 +1,9 @@
+---
+export const prerender = false;
+import { Keystatic } from '@keystatic/core/ui';
+import type { Config } from '@keystatic/core';
+import config from '../../../keystatic.config';
+---
+{/* Boundary cast: our concrete Config generic does not satisfy the loose Config
+    record type under exactOptionalPropertyTypes (ui-key variance). */}
+<Keystatic config={config as unknown as Config} client:load />

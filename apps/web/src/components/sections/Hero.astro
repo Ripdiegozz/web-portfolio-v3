@@ -2,8 +2,10 @@
 import { Reveal } from '@portfolio/ui';
 import HeroBackground from '../islands/HeroBackground';
 ---
-<section class="relative">
-  <HeroBackground client:visible />
+<section class="relative overflow-hidden">
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <HeroBackground client:only="react" />
+  </div>
   <div class="mx-auto flex min-h-[85svh] w-full max-w-3xl flex-col justify-center px-6 py-32 md:py-40">
     <p class="font-mono-code text-xs tracking-[0.2em] text-text-muted"><span aria-hidden="true">//</span> full-stack engineer</p>
     <Reveal client:visible className="mt-6">

@@ -97,7 +97,7 @@ const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length > 1
     <div class={hasToc ? 'lg:grid lg:grid-cols-[1fr_220px] lg:gap-16' : ''}>
 
       <!-- Post body -->
-      <article class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-sans-display prose-a:text-accent-readable prose-a:underline-offset-4 prose-code:font-mono-code prose-pre:rounded-lg prose-pre:border prose-pre:border-border-subtle prose-img:rounded-lg">
+      <article class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-sans-display prose-headings:scroll-mt-28 prose-h2:mt-12 prose-h2:text-xl prose-h2:font-semibold prose-h3:mt-8 prose-h3:text-base prose-h3:font-medium prose-h3:text-text-primary/80 prose-a:text-accent-readable prose-a:underline-offset-4 prose-code:font-mono-code prose-pre:rounded-lg prose-pre:border prose-pre:border-border-subtle prose-img:rounded-lg">
         <Content />
       </article>
 

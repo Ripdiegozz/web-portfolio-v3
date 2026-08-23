@@ -68,7 +68,7 @@ const filtered = headings.filter((h) => h.depth === 2 || h.depth === 3);
       .filter(Boolean) as HTMLElement[];
 
     const highlight = () => {
-      const scrollY = window.scrollY + 96; // offset for sticky nav
+      const scrollY = window.scrollY + 128; // matches prose-headings:scroll-mt-28
       let current = headingEls[0];
       for (const el of headingEls) {
         if (el.offsetTop <= scrollY) current = el;

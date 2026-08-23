@@ -1,6 +1,6 @@
 # Portfolio v3 — Design Document
 
-**Date:** 2026-08-22 · **Status:** Approved by user (blocks 1–3) · **Replaces:** web-portfolio-v2 (dagadev.tech, static Astro on Vercel)
+**Date:** 2026-08-22 · **Status:** Approved by user (blocks 1–3) · **Replaces:** web-portfolio-v2 (dagadev.net, static Astro on Vercel)
 
 ## Goals
 
@@ -38,7 +38,7 @@ Single Cloudflare Worker. Hybrid rendering:
 ```
 web-portfolio-v3/
 ├── apps/web/
-│   ├── astro.config.mjs          # output: 'static' + cloudflare adapter, site=dagadev.tech
+│   ├── astro.config.mjs          # output: 'static' + cloudflare adapter, site=dagadev.net
 │   ├── wrangler.jsonc            # recent compat date, static assets binding
 │   └── src/
 │       ├── pages/                # public pages prerendered at build
@@ -138,7 +138,7 @@ Strict TDD mode active for implementation. Vitest unit coverage: validation sche
 2. Port content: experience data model from v2 `seedData.ts` (well-shaped, keep), projects NatGPT/Notewave, refreshed skills/about (v2 said "one year of experience" — stale; current: Wazuh Full-Stack Engineer building Wazuh AI Assistant), socials (GH Ripdiegozz, LinkedIn dagadev, CV PDF).
 3. Build UI sections, blog, API.
 4. Validate on CF Workers preview URL.
-5. DNS cutover `dagadev.tech`: Vercel → Cloudflare LAST; v2 stays live until v3 validated.
+5. DNS cutover `dagadev.net`: Vercel → Cloudflare LAST; v2 stays live until v3 validated.
 
 ## Known v2 debts consciously fixed here
 

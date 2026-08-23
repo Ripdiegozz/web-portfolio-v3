@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://dagadev.tech',
+  site: 'https://dagadev.net',
   // 'static' = prerender everything by default; /api and /admin opt out per-route
   output: 'static',
   adapter: cloudflare(),

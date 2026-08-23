@@ -41,7 +41,7 @@ const mockActivityDeps = (): AppDeps['activity'] => ({
  */
 export function buildActivityDeps(bindings: WorkerBindings): AppDeps['activity'] {
   const cache = caches.default;
-  const cacheReq = new Request('https://dagadev.tech/__cache/activity-grid.json');
+  const cacheReq = new Request('https://dagadev.net/__cache/activity-grid.json');
   return {
     fetchActivity: async () => {
       const token = bindings.GITHUB_TOKEN ?? '';

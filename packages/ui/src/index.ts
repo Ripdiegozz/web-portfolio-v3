@@ -14,6 +14,7 @@ export {
   Copy,
   Cpu,
   ExternalLink,
+  FileText,
   FolderGit2,
   Globe,
   Layers,

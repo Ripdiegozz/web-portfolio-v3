@@ -1,5 +1,5 @@
 ---
-import { Reveal, Mail, ArrowRight, ArrowUpRight, Terminal, SiGithub, SiLinkedin } from '@portfolio/ui';
+import { Reveal, Mail, ArrowRight, ArrowUpRight, Terminal, FileText, SiGithub, SiLinkedin } from '@portfolio/ui';
 import HeroBackground from '../islands/HeroBackground';
 import { socials } from '../../data/site';
 
@@ -74,6 +74,7 @@ const cv = socials.find((s) => s.label.toLowerCase() === 'cv');
             class="inline-flex h-9 items-center gap-1.5 rounded-md border border-border-subtle bg-bg/90 px-3 font-mono-code text-xs text-text-muted shadow-xs backdrop-blur-md transition-all hover:border-text-muted hover:bg-bg-raised hover:text-text-primary"
             aria-label="Download CV"
           >
+            <FileText className="size-3.5" />
             <span>CV</span>
             <ArrowUpRight className="size-3" />
           </a>

@@ -1,5 +1,5 @@
 ---
-import { SiGithub, SiLinkedin, ArrowUpRight } from '@portfolio/ui';
+import { SiGithub, SiLinkedin, FileText, ArrowUpRight } from '@portfolio/ui';
 import { socials } from '../data/site';
 
 const year = new Date().getFullYear();
@@ -10,6 +10,7 @@ const year = new Date().getFullYear();
       {socials.map((social) => {
         const isGithub = social.label.toLowerCase() === 'github';
         const isLinkedin = social.label.toLowerCase() === 'linkedin';
+        const isCv = social.label.toLowerCase() === 'cv';
         return (
           <li>
             <a
@@ -20,6 +21,7 @@ const year = new Date().getFullYear();
             >
               {isGithub && <SiGithub size={13} className="text-text-muted transition-colors group-hover:text-text-primary" />}
               {isLinkedin && <SiLinkedin size={13} className="text-text-muted transition-colors group-hover:text-text-primary" />}
+              {isCv && <FileText className="size-3.5 text-text-muted transition-colors group-hover:text-text-primary" />}
               <span>{social.label.toLowerCase()}</span>
               <ArrowUpRight className="size-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>

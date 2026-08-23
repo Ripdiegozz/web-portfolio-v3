@@ -79,6 +79,6 @@ describe('i18n core utilities', () => {
       }
     }
 
-    compareObjectKeys(en, es);
+    compareObjectKeys(en as Record<string, unknown>, es as Record<string, unknown>);
   });
 });

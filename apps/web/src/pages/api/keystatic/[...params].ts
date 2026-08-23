@@ -1,27 +1,11 @@
 export const prerender = false;
 import type { APIRoute } from 'astro';
 import { makeGenericAPIRouteHandler } from '@keystatic/core/api/generic';
-import type { KeystaticApiEnv } from '../../../server/env';
+import { getWorkerEnv } from '../../../server/env';
 import config from '../../../../keystatic.config';
 
-async function resolveEnv(locals: unknown): Promise<KeystaticApiEnv> {
-  // Astro v6 REMOVED locals.runtime.env: the adapter installs a getter that
-  // throws on access. The canonical source is now cloudflare:workers; keep the
-  // legacy path only as a fallback for older adapters.
-  try {
-    const mod = await import('cloudflare:workers');
-    return mod.env as unknown as KeystaticApiEnv;
-  } catch (err) {
-    // The import may fail in plain-node dev; log it so prod failures are never
-    // silently blamed on missing env vars downstream.
-    console.warn('[keystatic] cloudflare:workers env unavailable; falling back', err);
-    const runtimeEnv = (locals as { runtime?: { env?: KeystaticApiEnv } })?.runtime?.env;
-    return runtimeEnv ?? {};
-  }
-}
-
 export const GET: APIRoute = async ({ request, locals }) => {
-  const env = await resolveEnv(locals);
+  const env = await getWorkerEnv(locals);
   // Conditional spreads keep exactOptionalPropertyTypes happy: optional keys
   // must never be explicitly set to undefined.
   const handler = makeGenericAPIRouteHandler(

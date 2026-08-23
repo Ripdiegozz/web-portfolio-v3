@@ -62,11 +62,11 @@ function getLocalFileEnv(): Record<string, string> {
  * empty bindings object so routes degrade instead of crashing on resolution.
  */
 export async function getWorkerEnv(locals: unknown): Promise<WorkerBindings> {
-  let bindings: WorkerBindings = {};
+  let bindings: WorkerBindings;
   try {
     const mod = await import('cloudflare:workers');
     bindings = (mod.env as unknown as WorkerBindings) ?? {};
-  } catch (err) {
+  } catch {
     try {
       const runtimeEnv = (locals as { runtime?: { env?: WorkerBindings } })?.runtime?.env;
       bindings = runtimeEnv ?? {};

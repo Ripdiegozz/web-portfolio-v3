@@ -53,7 +53,7 @@ describe('i18n core utilities', () => {
   });
 
   it('maintains 100% key parity and structural equality between en and es dictionaries', () => {
-    function compareObjectKeys(obj1: Record<string, any>, obj2: Record<string, any>, path = ''): void {
+    function compareObjectKeys(obj1: Record<string, unknown>, obj2: Record<string, unknown>, path = ''): void {
       const keys1 = Object.keys(obj1).sort();
       const keys2 = Object.keys(obj2).sort();
       expect(keys2, `Key mismatch at ${path}`).toEqual(keys1);
@@ -67,14 +67,14 @@ describe('i18n core utilities', () => {
 
         if (Array.isArray(val1)) {
           expect(Array.isArray(val2), `Array mismatch at ${currentPath}`).toBe(true);
-          expect(val2.length, `Array length mismatch at ${currentPath}`).toBe(val1.length);
-          for (let i = 0; i < val1.length; i++) {
-            if (typeof val1[i] === 'object' && val1[i] !== null) {
-              compareObjectKeys(val1[i], val2[i], `${currentPath}[${i}]`);
+          expect((val2 as unknown[]).length, `Array length mismatch at ${currentPath}`).toBe((val1 as unknown[]).length);
+          for (let i = 0; i < (val1 as unknown[]).length; i++) {
+            if (typeof (val1 as unknown[])[i] === 'object' && (val1 as unknown[])[i] !== null) {
+              compareObjectKeys((val1 as unknown[])[i] as Record<string, unknown>, (val2 as unknown[])[i] as Record<string, unknown>, `${currentPath}[${i}]`);
             }
           }
         } else if (typeof val1 === 'object' && val1 !== null) {
-          compareObjectKeys(val1, val2, currentPath);
+          compareObjectKeys(val1 as Record<string, unknown>, val2 as Record<string, unknown>, currentPath);
         }
       }
     }

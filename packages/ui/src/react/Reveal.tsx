@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 
 export interface RevealProps {
   children: ReactNode;
@@ -24,17 +24,16 @@ export function revealPropsFor(reducedMotion: boolean) {
 }
 
 export function Reveal({ children, delay = 0, className }: RevealProps) {
-  // Gate animation behind mount so SSR output (static div) matches the first
-  // client render — reading matchMedia during render would cause a hydration
-  // mismatch. After mount, respect prefers-reduced-motion.
-  const [canAnimate, setCanAnimate] = useState(false);
-  useEffect(() => {
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setCanAnimate(true);
-    }
-  }, []);
+  // Gate animation behind mount so SSR output matches the first client render
+  // (reading media queries during render causes hydration mismatches).
+  // useReducedMotion tracks live OS preference changes; mounted alone gates SSR.
+  const [mounted, setMounted] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+  useEffect(() => setMounted(true), []);
 
-  if (!canAnimate) {
+  // Element-type swap remounts children post-hydration: avoid stateful
+  // children (inputs, media players) inside Reveal.
+  if (!mounted || prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
   const props = revealPropsFor(false);

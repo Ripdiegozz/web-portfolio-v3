@@ -11,7 +11,7 @@
     "test": "vitest run"
   },
   "peerDependencies": {
-    "react": "^19.2.8"
+    "react": "^19.0.0"
   },
   "dependencies": {
     "motion": "^13.1.1"

@@ -14,5 +14,9 @@
       "binding": "RATE_LIMIT_KV",
       "id": "862754f037ac4c8181c785a0d0f7a60b"
     }
+  ],
+  "routes": [
+    { "pattern": "dagadev.net/*", "zone_name": "dagadev.net" },
+    { "pattern": "www.dagadev.net/*", "zone_name": "dagadev.net" }
   ]
 }

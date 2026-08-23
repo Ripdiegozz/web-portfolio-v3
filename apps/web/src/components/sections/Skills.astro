@@ -1,5 +1,5 @@
 ---
-import { Reveal } from '@portfolio/ui';
+import { Reveal, TechIcon } from '@portfolio/ui';
 import Section from './Section.astro';
 import { skills } from '../../data/site';
 
@@ -9,14 +9,19 @@ import { skills } from '../../data/site';
   skills.length > 0 && (
     <Section label="skills">
       <Reveal client:visible>
-        <dl class="mt-12 space-y-10">
+        <dl class="mt-12 space-y-8">
           {skills.map((group) => (
-            <div class="grid gap-3 md:grid-cols-[9rem_1fr] md:gap-8">
-              <dt class="pt-0.5 font-sans-display text-sm font-medium text-text-primary">
+            <div class="grid gap-3 md:grid-cols-[9rem_1fr] md:gap-8 md:items-start">
+              <dt class="pt-1 font-sans-display text-sm font-medium text-text-primary">
                 {group.category}
               </dt>
-              <dd class="font-mono-code text-xs leading-loose text-text-muted">
-                {group.items.join(' · ')}
+              <dd class="flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <span class="inline-flex items-center gap-1.5 rounded-md border border-border-subtle bg-bg-raised/50 px-2.5 py-1 font-mono-code text-xs text-text-muted transition-colors hover:border-text-muted hover:text-text-primary">
+                    <TechIcon name={item} size={13} className="shrink-0 text-text-muted" />
+                    <span>{item}</span>
+                  </span>
+                ))}
               </dd>
             </div>
           ))}
@@ -25,3 +30,4 @@ import { skills } from '../../data/site';
     </Section>
   )
 }
+

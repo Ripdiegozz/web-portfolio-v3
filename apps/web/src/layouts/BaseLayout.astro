@@ -41,32 +41,159 @@ const { title, description = 'Full-Stack Engineer at Wazuh building the Wazuh AI
     >
       Skip to content
     </a>
-    <header class="mx-auto flex max-w-3xl items-center justify-between px-6 py-6">
-      <a href="/" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">dagadev.net</a>
-      <nav aria-label="Main" class="flex items-center gap-4">
-        <a href="/" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Home</a>
-        <a href="/blog/" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Blog</a>
-        <button
-          id="theme-toggle"
-          type="button"
-          class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary"
-          aria-label="Toggle color theme"
-        >
-          <span aria-hidden="true">☾</span>
-        </button>
-      </nav>
+    <header
+      id="site-header"
+      class="sticky top-0 z-40 w-full border-b border-transparent bg-transparent py-4 transition-all duration-200 data-[scrolled=true]:border-border-subtle/80 data-[scrolled=true]:bg-bg/85 data-[scrolled=true]:py-3 data-[scrolled=true]:shadow-xs data-[scrolled=true]:backdrop-blur-md"
+    >
+      <div class="mx-auto flex max-w-3xl items-center justify-between px-6">
+        <a href="/" class="font-mono-code text-xs font-medium text-text-muted transition-colors hover:text-text-primary">
+          dagadev.net
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav aria-label="Main" class="hidden items-center gap-5 md:flex">
+          <a href="/#about" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">About</a>
+          <a href="/#experience" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Experience</a>
+          <a href="/#projects" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Projects</a>
+          <a href="/#skills" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Skills</a>
+          <a href="/blog/" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Blog</a>
+          <a href="/#contact" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Contact</a>
+          <button
+            id="theme-toggle"
+            type="button"
+            class="flex size-7 items-center justify-center rounded-md border border-transparent text-text-muted transition-colors hover:border-border-subtle hover:bg-bg-raised hover:text-text-primary"
+            aria-label="Toggle color theme"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block dark:hidden" aria-hidden="true">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+          </button>
+        </nav>
+
+        <!-- Mobile Controls -->
+        <div class="flex items-center gap-2 md:hidden">
+          <button
+            id="theme-toggle-mobile"
+            type="button"
+            class="flex size-8 items-center justify-center rounded-md border border-border-subtle/80 bg-bg/80 text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary"
+            aria-label="Toggle color theme"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block dark:hidden" aria-hidden="true">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+          </button>
+
+          <button
+            id="mobile-menu-btn"
+            type="button"
+            class="flex size-8 items-center justify-center rounded-md border border-border-subtle/80 bg-bg/80 text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            aria-label="Toggle navigation menu"
+          >
+            <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
+            </svg>
+            <svg id="menu-icon-close" class="hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Menu -->
+      <div
+        id="mobile-menu"
+        class="hidden px-6 pt-3 pb-2 md:hidden"
+        aria-hidden="true"
+      >
+        <nav class="mx-auto flex max-w-3xl flex-col divide-y divide-border-subtle/50 rounded-xl border border-border-subtle/80 bg-bg/95 p-2 shadow-xl backdrop-blur-2xl">
+          <a href="/#about" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">About</a>
+          <a href="/#experience" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">Experience</a>
+          <a href="/#projects" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">Projects</a>
+          <a href="/#skills" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">Skills</a>
+          <a href="/blog/" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">Blog</a>
+          <a href="/#contact" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs font-medium text-accent-readable transition-colors hover:bg-bg-raised hover:underline">Contact →</a>
+        </nav>
+      </div>
     </header>
     <script is:inline>
-      // Mirrors resolveInitialTheme: flips html.dark and persists the choice.
+      // Sticky header scroll detection, mobile menu, & theme toggle persistence
       (() => {
-        const btn = document.getElementById('theme-toggle');
-        if (!btn) return;
-        btn.addEventListener('click', () => {
+        const header = document.getElementById('site-header');
+        if (header) {
+          const updateScroll = () => {
+            header.setAttribute('data-scrolled', window.scrollY > 15 ? 'true' : 'false');
+          };
+          window.addEventListener('scroll', updateScroll, { passive: true });
+          updateScroll();
+        }
+
+        // Mobile Burger Menu
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const iconOpen = document.getElementById('menu-icon-open');
+        const iconClose = document.getElementById('menu-icon-close');
+
+        if (menuBtn && mobileMenu && iconOpen && iconClose) {
+          const toggleMenu = (open) => {
+            const isOpen = typeof open === 'boolean' ? open : mobileMenu.classList.contains('hidden');
+            if (isOpen) {
+              mobileMenu.classList.remove('hidden');
+              menuBtn.setAttribute('aria-expanded', 'true');
+              mobileMenu.setAttribute('aria-hidden', 'false');
+              iconOpen.classList.add('hidden');
+              iconClose.classList.remove('hidden');
+            } else {
+              mobileMenu.classList.add('hidden');
+              menuBtn.setAttribute('aria-expanded', 'false');
+              mobileMenu.setAttribute('aria-hidden', 'true');
+              iconOpen.classList.remove('hidden');
+              iconClose.classList.add('hidden');
+            }
+          };
+
+          menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+          });
+
+          // Close on clicking any link inside mobile menu
+          mobileMenu.querySelectorAll('.mobile-nav-link').forEach((link) => {
+            link.addEventListener('click', () => toggleMenu(false));
+          });
+
+          // Close on clicking outside
+          document.addEventListener('click', (e) => {
+            if (!header.contains(e.target)) {
+              toggleMenu(false);
+            }
+          });
+
+          // Close on Escape
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') toggleMenu(false);
+          });
+        }
+
+        // Theme Toggle handlers (Desktop & Mobile)
+        const toggleTheme = () => {
           const next = document.documentElement.classList.toggle('dark') ? 'dark' : 'light';
           try {
             localStorage.setItem('theme', next);
-          } catch {} // storage may be blocked in private mode
-        });
+          } catch {}
+        };
+
+        const btnDesktop = document.getElementById('theme-toggle');
+        const btnMobile = document.getElementById('theme-toggle-mobile');
+        if (btnDesktop) btnDesktop.addEventListener('click', toggleTheme);
+        if (btnMobile) btnMobile.addEventListener('click', toggleTheme);
       })();
     </script>
     <slot />

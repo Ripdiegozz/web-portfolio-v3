@@ -1,24 +1,33 @@
 ---
+import { SiGithub, SiLinkedin, ArrowUpRight } from '@portfolio/ui';
 import { socials } from '../data/site';
 
 const year = new Date().getFullYear();
 ---
 <footer class="border-t border-border-subtle">
   <div class="mx-auto flex w-full max-w-3xl flex-col gap-4 px-6 py-10 md:flex-row md:items-center md:justify-between">
-    <ul class="flex gap-6">
-      {socials.map((social) => (
-        <li>
-          <a
-            href={social.href}
-            class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            {social.label.toLowerCase()} ↗
-          </a>
-        </li>
-      ))}
+    <ul class="flex flex-wrap items-center gap-6">
+      {socials.map((social) => {
+        const isGithub = social.label.toLowerCase() === 'github';
+        const isLinkedin = social.label.toLowerCase() === 'linkedin';
+        return (
+          <li>
+            <a
+              href={social.href}
+              class="group inline-flex items-center gap-1.5 font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {isGithub && <SiGithub size={13} className="text-text-muted transition-colors group-hover:text-text-primary" />}
+              {isLinkedin && <SiLinkedin size={13} className="text-text-muted transition-colors group-hover:text-text-primary" />}
+              <span>{social.label.toLowerCase()}</span>
+              <ArrowUpRight className="size-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+          </li>
+        );
+      })}
     </ul>
     <p class="font-mono-code text-xs text-text-muted">© {year} Diego</p>
   </div>
 </footer>
+

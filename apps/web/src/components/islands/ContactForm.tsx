@@ -1,4 +1,5 @@
 import { useState, type SubmitEvent } from 'react';
+import { Send, Loader2, CheckCircle2, AlertCircle } from '@portfolio/ui';
 
 type Status = 'idle' | 'sending' | 'sent' | 'error';
 
@@ -82,12 +83,33 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === 'sending'}
-        className="inline-flex items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-strong disabled:pointer-events-none disabled:opacity-50"
+        className="inline-flex items-center justify-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-strong disabled:pointer-events-none disabled:opacity-50"
       >
-        {status === 'sending' ? 'Sending…' : 'Send message'}
+        {status === 'sending' ? (
+          <>
+            <Loader2 className="size-4 animate-spin" />
+            <span>Sending…</span>
+          </>
+        ) : (
+          <>
+            <span>Send message</span>
+            <Send className="size-3.5" />
+          </>
+        )}
       </button>
-      {status === 'sent' && <p role="status">Message sent. I will reply soon.</p>}
-      {status === 'error' && <p role="alert">Something went wrong. Try again or reach me on LinkedIn.</p>}
+      {status === 'sent' && (
+        <p role="status" className="flex items-center gap-1.5 text-sm text-emerald-600 dark:text-emerald-400">
+          <CheckCircle2 className="size-4 shrink-0" />
+          <span>Message sent. I will reply soon.</span>
+        </p>
+      )}
+      {status === 'error' && (
+        <p role="alert" className="flex items-center gap-1.5 text-sm text-rose-600 dark:text-rose-400">
+          <AlertCircle className="size-4 shrink-0" />
+          <span>Something went wrong. Try again or reach me on LinkedIn.</span>
+        </p>
+      )}
     </form>
   );
 }
+

@@ -219,7 +219,7 @@ const DOT_WAVE_VERT = /* glsl */ `
     float mInfluence = smoothstep(6.0, 0.0, mDist);
     y += mInfluence * 0.35 * sin(mDist * 0.9 - uTime * 2.0) * env;
 
-    p.y = y - 0.4; // Center vertically in viewport
+    p.y = y - 1.3; // Offset downward so wave flows gracefully beneath headline and text
 
     vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mvPosition;
@@ -230,9 +230,9 @@ const DOT_WAVE_VERT = /* glsl */ `
 
     // Crisp, tiny dot sizing with perspective scaling
     // Scaled for high definition without blowing up into blobs
-    float baseSize = mix(1.15, 1.3, uIsDark);
+    float baseSize = mix(1.05, 1.25, uIsDark);
     float pSize = baseSize * (0.85 + 0.45 * vElevation) * uPixelRatio * (280.0 / -mvPosition.z);
-    gl_PointSize = clamp(pSize, 1.0, 4.0);
+    gl_PointSize = clamp(pSize, 1.0, 3.6);
   }
 `;
 
@@ -258,16 +258,16 @@ const DOT_WAVE_FRAG = /* glsl */ `
       vec3 darkCrest = vec3(1.0, 1.0, 1.0);
       vec3 col = mix(darkBase, darkCrest, vElevation);
 
-      float alpha = circle * vAlpha * mix(0.45, 0.95, vElevation);
+      float alpha = circle * vAlpha * mix(0.40, 0.90, vElevation);
       gl_FragColor = vec4(col, alpha);
     } else {
       // --- LIGHT MODE ---
-      // Sharp, vibrant royal blue dots (#2563eb)
-      vec3 lightBase = vec3(0.25, 0.52, 0.95);
-      vec3 lightCrest = vec3(0.09, 0.28, 0.78);
+      // Soft, refined azure dots (#3b82f6 / #2563eb) that remain ambient and never collide with text
+      vec3 lightBase = vec3(0.28, 0.54, 0.94);
+      vec3 lightCrest = vec3(0.14, 0.38, 0.84);
       vec3 col = mix(lightBase, lightCrest, vElevation);
 
-      float alpha = circle * vAlpha * mix(0.55, 0.95, vElevation);
+      float alpha = circle * vAlpha * mix(0.22, 0.58, vElevation);
       gl_FragColor = vec4(col, alpha);
     }
   }
@@ -307,7 +307,7 @@ const STARS_FRAG = /* glsl */ `
       gl_FragColor = vec4(col, circle * vTwinkle * 0.22);
     } else {
       vec3 col = vec3(0.2, 0.4, 0.8);
-      gl_FragColor = vec4(col, circle * vTwinkle * 0.2);
+      gl_FragColor = vec4(col, circle * vTwinkle * 0.14);
     }
   }
 `;
@@ -333,7 +333,7 @@ export function AmbientBackground() {
   return (
     <Canvas
       className="pointer-events-none h-full w-full"
-      camera={{ position: [0, 2.4, 8.8], fov: 48, rotation: [-0.18, 0, 0] }}
+      camera={{ position: [0, 2.6, 9.4], fov: 48, rotation: [-0.20, 0, 0] }}
       dpr={[1, 2]}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
     >

@@ -1,12 +1,17 @@
 ---
-import { Reveal } from '@portfolio/ui';
+import { Reveal, Mail, ArrowRight, ArrowUpRight, SiGithub, SiLinkedin } from '@portfolio/ui';
 import HeroBackground from '../islands/HeroBackground';
+import { socials } from '../../data/site';
+
+const github = socials.find((s) => s.label.toLowerCase() === 'github');
+const linkedin = socials.find((s) => s.label.toLowerCase() === 'linkedin');
+const cv = socials.find((s) => s.label.toLowerCase() === 'cv');
 ---
 <section class="relative overflow-hidden">
   <!-- Atmospheric background: subtle technical grid + ambient radial glow + 3D dot wave -->
   <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,var(--color-accent)_0%,transparent_70%)] opacity-[0.06] dark:opacity-[0.14]" />
-    <div class="absolute inset-0 bg-[linear-gradient(to_right,var(--color-border-subtle)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border-subtle)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_65%_at_50%_45%,#000_45%,transparent_90%)] opacity-40 dark:opacity-25" />
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,var(--color-accent)_0%,transparent_70%)] opacity-[0.04] dark:opacity-[0.12]" />
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,var(--color-border-subtle)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border-subtle)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_75%_60%_at_50%_45%,#000_30%,transparent_85%)] opacity-15 dark:opacity-10" />
     <HeroBackground client:only="react" />
   </div>
   <div class="mx-auto flex min-h-[85svh] w-full max-w-3xl flex-col justify-center px-6 py-32 md:py-40">
@@ -22,13 +27,51 @@ import HeroBackground from '../islands/HeroBackground';
         tooling, backend services, and the interfaces analysts rely on every day.
       </p>
     </Reveal>
-    <Reveal client:visible delay={0.16} className="mt-10">
+    <Reveal client:visible delay={0.16} className="mt-10 flex flex-wrap items-center gap-3">
       <a
         href="#contact"
-        class="inline-flex items-center justify-center rounded-md border border-border-subtle px-4 py-2 text-sm font-medium transition-colors hover:bg-bg-raised"
+        class="group inline-flex items-center justify-center gap-2 rounded-md border border-border-subtle bg-bg/90 px-4 py-2 text-sm font-medium text-text-primary shadow-xs backdrop-blur-md transition-all hover:border-text-muted hover:bg-bg-raised"
       >
-        Get in touch
+        <Mail className="size-4 text-text-muted transition-colors group-hover:text-text-primary" />
+        <span>Get in touch</span>
+        <ArrowRight className="size-3.5 text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-text-primary" />
       </a>
+      <div class="flex items-center gap-2">
+        {github && (
+          <a
+            href={github.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex size-9 items-center justify-center rounded-md border border-border-subtle bg-bg/90 text-text-muted shadow-xs backdrop-blur-md transition-all hover:border-text-muted hover:bg-bg-raised hover:text-text-primary"
+            aria-label="GitHub profile"
+          >
+            <SiGithub size={15} />
+          </a>
+        )}
+        {linkedin && (
+          <a
+            href={linkedin.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex size-9 items-center justify-center rounded-md border border-border-subtle bg-bg/90 text-text-muted shadow-xs backdrop-blur-md transition-all hover:border-text-muted hover:bg-bg-raised hover:text-text-primary"
+            aria-label="LinkedIn profile"
+          >
+            <SiLinkedin size={15} />
+          </a>
+        )}
+        {cv && (
+          <a
+            href={cv.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex h-9 items-center gap-1.5 rounded-md border border-border-subtle bg-bg/90 px-3 font-mono-code text-xs text-text-muted shadow-xs backdrop-blur-md transition-all hover:border-text-muted hover:bg-bg-raised hover:text-text-primary"
+            aria-label="Download CV"
+          >
+            <span>CV</span>
+            <ArrowUpRight className="size-3" />
+          </a>
+        )}
+      </div>
     </Reveal>
   </div>
 </section>

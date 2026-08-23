@@ -1,4 +1,5 @@
 ---
+import { Mail } from '@portfolio/ui';
 import Section from './Section.astro';
 import ContactForm from '../islands/ContactForm';
 ---
@@ -11,16 +12,18 @@ import ContactForm from '../islands/ContactForm';
 
   <ContactForm client:visible />
 
-  <p class="mt-12 font-mono-code text-xs text-text-muted">
-    prefer email?
+  <p class="mt-12 flex items-center gap-2 font-mono-code text-xs text-text-muted">
+    <span>prefer email?</span>
     <a
       href="mailto:hello@dagadev.net"
-      class="underline decoration-border-subtle underline-offset-4 transition-colors hover:text-text-primary"
+      class="inline-flex items-center gap-1.5 underline decoration-border-subtle underline-offset-4 transition-colors hover:text-text-primary"
     >
-      hello@dagadev.net
+      <Mail className="size-3.5" />
+      <span>hello@dagadev.net</span>
     </a>
   </p>
 </Section>
 {import.meta.env.PUBLIC_E2E_MOCKS !== '1' && (
   <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
 )}
+

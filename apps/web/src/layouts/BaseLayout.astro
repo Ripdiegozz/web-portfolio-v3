@@ -74,69 +74,77 @@ const navPrefix = locale === 'es' ? '/es' : '';
         </a>
 
         <!-- Desktop Navigation -->
-        <nav aria-label="Main" class="hidden items-center gap-5 md:flex">
-          <a href={`${navPrefix}#about`} class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.about}</a>
+        <nav aria-label="Main" class="hidden items-center gap-4 md:flex">
           <a href={`${navPrefix}#experience`} class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.experience}</a>
           <a href={`${navPrefix}#skills`} class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.skills}</a>
           <a href={`${navPrefix}#projects`} class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.projects}</a>
-          <a href={`${navPrefix}#activity`} class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.activity}</a>
           <a href="/blog/" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.blog}</a>
           <a href={`${navPrefix}#contact`} class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.contact}</a>
-          <a
-            href={targetPath}
-            data-lang-toggle
-            class="flex h-7 items-center gap-1 rounded-md border border-transparent px-1.5 font-mono-code text-[11px] font-medium text-text-muted transition-colors hover:border-border-subtle hover:bg-bg-raised hover:text-text-primary"
-            aria-label={dict.nav.toggleLanguageLabel}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
-            </svg>
-            <span class="uppercase">{targetLocale}</span>
-          </a>
-          <button
-            id="theme-toggle"
-            type="button"
-            class="flex size-7 items-center justify-center rounded-md border border-transparent text-text-muted transition-colors hover:border-border-subtle hover:bg-bg-raised hover:text-text-primary"
-            aria-label={dict.nav.toggleThemeLabel}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block" aria-hidden="true">
-              <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block dark:hidden" aria-hidden="true">
-              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-            </svg>
-          </button>
+          
+          <!-- Compact Controls Pill -->
+          <div class="ml-1 flex items-center gap-0.5 rounded-full border border-border-subtle/80 bg-bg-raised/60 p-0.5 shadow-2xs backdrop-blur-xs">
+            <a
+              href={targetPath}
+              data-lang-toggle
+              class="flex h-6 items-center gap-1 rounded-full px-2 font-mono-code text-[11px] font-medium text-text-muted transition-colors hover:bg-bg hover:text-text-primary"
+              aria-label={dict.nav.toggleLanguageLabel}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
+              </svg>
+              <span class="uppercase">{targetLocale}</span>
+            </a>
+            <span class="h-3 w-px bg-border-subtle" aria-hidden="true"></span>
+            <button
+              id="theme-toggle"
+              type="button"
+              class="flex size-6 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-bg hover:text-text-primary"
+              aria-label={dict.nav.toggleThemeLabel}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block dark:hidden" aria-hidden="true">
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+              </svg>
+            </button>
+          </div>
         </nav>
 
         <!-- Mobile Controls -->
         <div class="flex items-center gap-2 md:hidden">
-          <a
-            href={targetPath}
-            data-lang-toggle
-            class="flex size-8 items-center justify-center rounded-md border border-border-subtle/80 bg-bg/80 font-mono-code text-xs font-medium text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary"
-            aria-label={dict.nav.toggleLanguageLabel}
-          >
-            <span class="uppercase">{targetLocale}</span>
-          </a>
-
-          <button
-            id="theme-toggle-mobile"
-            type="button"
-            class="flex size-8 items-center justify-center rounded-md border border-border-subtle/80 bg-bg/80 text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary"
-            aria-label={dict.nav.toggleThemeLabel}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block" aria-hidden="true">
-              <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block dark:hidden" aria-hidden="true">
-              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-            </svg>
-          </button>
+          <div class="flex items-center gap-0.5 rounded-full border border-border-subtle/80 bg-bg-raised/60 p-0.5 shadow-2xs backdrop-blur-xs">
+            <a
+              href={targetPath}
+              data-lang-toggle
+              class="flex h-7 items-center gap-1 rounded-full px-2 font-mono-code text-[11px] font-medium text-text-muted transition-colors hover:bg-bg hover:text-text-primary"
+              aria-label={dict.nav.toggleLanguageLabel}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
+              </svg>
+              <span class="uppercase">{targetLocale}</span>
+            </a>
+            <span class="h-3 w-px bg-border-subtle" aria-hidden="true"></span>
+            <button
+              id="theme-toggle-mobile"
+              type="button"
+              class="flex size-7 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-bg hover:text-text-primary"
+              aria-label={dict.nav.toggleThemeLabel}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block dark:hidden" aria-hidden="true">
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+              </svg>
+            </button>
+          </div>
 
           <button
             id="mobile-menu-btn"
             type="button"
-            class="flex size-8 items-center justify-center rounded-md border border-border-subtle/80 bg-bg/80 text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary"
+            class="flex size-8 items-center justify-center rounded-md border border-border-subtle/80 bg-bg-raised/60 text-text-muted transition-colors hover:bg-bg hover:text-text-primary"
             aria-expanded="false"
             aria-controls="mobile-menu"
             aria-label="Toggle navigation menu"

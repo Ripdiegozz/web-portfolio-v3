@@ -128,6 +128,7 @@ export interface FooterTranslations {
 
 export interface ExperienceItem {
   company: string;
+  companyUrl?: string;
   role: string;
   period: string;
   current?: boolean;

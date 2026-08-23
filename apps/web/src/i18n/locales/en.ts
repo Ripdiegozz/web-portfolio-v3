@@ -47,6 +47,7 @@ export const en: TranslationDictionary = {
     items: [
       {
         company: 'Wazuh',
+        companyUrl: 'https://wazuh.com',
         role: 'Full-Stack Engineer',
         period: 'Current',
         current: true,
@@ -65,6 +66,7 @@ export const en: TranslationDictionary = {
       },
       {
         company: 'Tres Pi Medios / Stanley Black & Decker',
+        companyUrl: 'https://www.stanleyblackanddecker.com',
         role: 'Full-stack Developer',
         period: 'Jul 2024 – Jan 2026',
         location: 'Remote',
@@ -82,6 +84,7 @@ export const en: TranslationDictionary = {
       },
       {
         company: 'SuperGIROS',
+        companyUrl: 'https://www.supergiros.com.co',
         role: 'Full-stack Developer Intern',
         period: 'Aug 2023 – Jul 2024',
         location: 'On-site / Hybrid',

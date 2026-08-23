@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, MapPin, Sparkles, TechIcon } from '@portfolio/ui';
+import { Calendar, MapPin, Sparkles, TechIcon, ArrowUpRight } from '@portfolio/ui';
 import type { ExperienceItem, ExperienceDashboardLabels } from '../../i18n/types';
 
 export type { ExperienceDashboardLabels };
@@ -79,7 +79,19 @@ export default function ExperienceDashboard({ items, labels }: ExperienceDashboa
             </h3>
             <p className="mt-1 flex flex-wrap items-center gap-2 font-mono-code text-xs text-text-muted">
               <span>{atLabel}</span>
-              <span className="font-medium text-text-primary text-sm">{activeJob.company}</span>
+              {activeJob.companyUrl ? (
+                <a
+                  href={activeJob.companyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/link inline-flex items-center gap-1 font-medium text-text-primary text-sm transition-colors hover:text-accent underline decoration-border-subtle underline-offset-4 hover:decoration-accent"
+                >
+                  <span>{activeJob.company}</span>
+                  <ArrowUpRight className="size-3 text-text-muted transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 group-hover/link:text-accent" />
+                </a>
+              ) : (
+                <span className="font-medium text-text-primary text-sm">{activeJob.company}</span>
+              )}
               {activeJob.location && (
                 <>
                   <span className="text-border-subtle" aria-hidden="true">•</span>

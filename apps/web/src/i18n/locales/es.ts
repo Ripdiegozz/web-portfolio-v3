@@ -23,8 +23,8 @@ export const es: TranslationDictionary = {
     kicker: 'Ingeniero Full-Stack',
     headlineStart: 'Construyo ',
     headlineEmphasis: 'software',
-    headlineEnd: ' que se entrega.',
-    lead: 'Ingeniero full-stack en Wazuh desarrollando el Wazuh AI Assistant. Trabajando en herramientas LLM, servicios backend y paneles web para más de 90.000 usuarios.',
+    headlineEnd: ' que llega a producción.',
+    lead: 'Ingeniero full-stack en Wazuh. Desarrollo el asistente de IA y trabajo en herramientas LLM, servicios backend y dashboards para más de 90.000 usuarios.',
     contactButton: 'Escríbeme',
     githubAriaLabel: 'Perfil de GitHub',
     linkedinAriaLabel: 'Perfil de LinkedIn',
@@ -32,13 +32,13 @@ export const es: TranslationDictionary = {
     cvAriaLabel: 'Descargar CV',
   },
   about: {
-    sectionTitle: 'Un poco sobre mí.',
-    lead: 'Ingeniero full-stack construyendo aplicaciones web en producción, herramientas LLM y sistemas distribuidos.',
+    sectionTitle: 'Sobre mí.',
+    lead: 'Ingeniero full-stack especializado en aplicaciones web de alto rendimiento, herramientas LLM y sistemas distribuidos.',
     support:
-      'Actualmente en Wazuh desarrollando el Wazuh AI Assistant para más de 90.000 analistas de seguridad. Anteriormente construí herramientas empresariales para Stanley Black & Decker (Italia y EE. UU.) y software financiero para más de 1.100 puntos de atención de SuperGIROS en Colombia. Mi enfoque es práctico: backends confiables, bases de datos limpias e interfaces rápidas y accesibles.',
+      'Actualmente en Wazuh desarrollando el Wazuh AI Assistant para más de 90.000 analistas de seguridad. Anteriormente construí herramientas empresariales para Stanley Black & Decker (Italia y EE. UU.) y software financiero para más de 1.100 puntos de atención de SuperGIROS en Colombia. Mi enfoque es práctico: backends confiables, bases de datos eficientes e interfaces rápidas y accesibles.',
   },
   experience: {
-    sectionTitle: 'Donde he construido y entregado.',
+    sectionTitle: 'Trayectoria profesional.',
     activeLabel: 'Activo',
     atLabel: 'en',
     contributionsHeading: 'Contribuciones clave e impacto',
@@ -47,13 +47,14 @@ export const es: TranslationDictionary = {
     items: [
       {
         company: 'Wazuh',
+        companyUrl: 'https://wazuh.com',
         role: 'Ingeniero Full-Stack',
         period: 'Actual',
         current: true,
         location: 'Remoto',
         highlights: [
           'Desarrollo del Wazuh AI Assistant: herramientas backend que permiten a analistas de seguridad consultar datos mediante lenguaje natural.',
-          'Creación de funcionalidades full-stack, integraciones con OpenSearch y lanzamientos del dashboard web de Wazuh.',
+          'Desarrollo de funcionalidades full-stack, integraciones con OpenSearch y lanzamientos del dashboard web de Wazuh.',
           'Automatización de pipelines CI/CD con GitHub Actions para pruebas y empaquetado Linux en más de 90.000 despliegues.',
         ],
         skills: ['TypeScript', 'React', 'Node.js', 'Elasticsearch', 'OpenSearch', 'OpenAI', 'Docker', 'Linux'],
@@ -65,13 +66,14 @@ export const es: TranslationDictionary = {
       },
       {
         company: 'Tres Pi Medios / Stanley Black & Decker',
+        companyUrl: 'https://www.stanleyblackanddecker.com',
         role: 'Desarrollador Full-stack',
         period: 'Jul 2024 – Ene 2026',
         location: 'Remoto',
         highlights: [
-          'Desarrollé una aplicación interna de préstamo y reparación de herramientas para Stanley Black & Decker Italia, reduciendo el tiempo de gestión en un 50%.',
-          'Creé una Azure Function con IA generativa para automatizar respuestas de soporte en Zendesk para EE. UU. y Canadá.',
-          'Construí fuentes de datos en tiempo real para paneles operativos en Power BI e integré soporte multi-idioma (italiano e inglés).',
+          'Desarrollo de una plataforma web para gestión y reparación de herramientas en Stanley Black & Decker Italia, reduciendo el tiempo de atención en un 50%.',
+          'Creación de una Azure Function con IA generativa para automatizar respuestas de soporte técnico en Zendesk (EE. UU. y Canadá).',
+          'Integración de flujos de datos en tiempo real para dashboards de Power BI y soporte multi-idioma (italiano e inglés).',
         ],
         skills: ['TypeScript', 'Node.js', 'React', 'Azure', 'OpenAI', 'Docker', 'Git'],
         kpis: [
@@ -82,17 +84,18 @@ export const es: TranslationDictionary = {
       },
       {
         company: 'SuperGIROS',
-        role: 'Pasante de Desarrollo Full-stack',
+        companyUrl: 'https://www.supergiros.com.co',
+        role: 'Desarrollador Full-stack',
         period: 'Ago 2023 – Jul 2024',
         location: 'Presencial / Híbrido',
         highlights: [
-          'Construí herramientas internas de back-office para más de 1.100 puntos de atención de servicios financieros en Norte de Santander.',
-          'Desarrollé un chatbot de ventas en Node.js que redujo las llamadas al centro de soporte en un 60%.',
-          'Optimicé la velocidad de carga web en un 40% mediante refactorización, migración de Angular y microservicios Java/Spring Boot con bases Oracle.',
+          'Desarrollo de herramientas internas de back-office para más de 1.100 puntos de atención en Norte de Santander.',
+          'Creación de un chatbot en Node.js que redujo las llamadas a la mesa de ayuda en un 60%.',
+          'Optimización del rendimiento web en un 40% mediante refactorización, actualización de Angular y microservicios en Java/Spring Boot con Oracle SQL.',
         ],
         skills: ['Node.js', 'TypeScript', 'Angular', 'Java', 'Spring Boot', 'PostgreSQL', 'Oracle SQL', 'Docker'],
         kpis: [
-          { value: '+1.100 puntos', label: 'Back-office financiero' },
+          { value: '+1.100 puntos', label: 'Puntos de atención' },
           { value: '-60% llamadas', label: 'Mesa de ayuda interna' },
           { value: '+40% velocidad', label: 'Rendimiento web' },
         ],
@@ -100,10 +103,10 @@ export const es: TranslationDictionary = {
     ],
   },
   skills: {
-    sectionTitle: 'Arsenal técnico y stack.',
+    sectionTitle: 'Stack técnico y herramientas.',
     sectionDescription: 'Tecnologías y herramientas que utilizo para construir software en producción.',
     coreStackTitle: 'Stack Principal y Herramientas Diarias',
-    coreStackSubtitle: 'Herramientas clave para sistemas en producción y herramientas de agentes',
+    coreStackSubtitle: 'Herramientas y tecnologías que uso a diario en producción',
     coreSkills: [
       { name: 'TypeScript', role: 'Lenguaje Principal' },
       { name: 'React', role: 'Arquitectura Frontend' },
@@ -141,7 +144,7 @@ export const es: TranslationDictionary = {
     ],
   },
   projects: {
-    sectionTitle: 'Proyectos seleccionados y código abierto.',
+    sectionTitle: 'Proyectos destacados.',
     liveLabel: 'en vivo',
     sourceLabel: 'código',
     items: [
@@ -164,7 +167,7 @@ export const es: TranslationDictionary = {
     ],
   },
   activity: {
-    sectionTitle: 'Registro de ingeniería y contribuciones.',
+    sectionTitle: 'Actividad y código abierto.',
     totalContributions: 'Contribuciones totales',
     longestStreak: 'Racha más larga',
     currentStreak: 'Racha actual',
@@ -181,9 +184,9 @@ export const es: TranslationDictionary = {
     months: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
   },
   contact: {
-    sectionTitle: 'Construyamos juntos.',
+    sectionTitle: 'Hablemos.',
     sectionDescription:
-      '¿Tienes un proyecto en mente, preguntas sobre mi trabajo o una oportunidad para charlar? Escríbeme abajo.',
+      '¿Tienes un proyecto en mente, preguntas sobre mi trabajo o quieres explorar una oportunidad? Escríbeme abajo.',
     nameLabel: 'Nombre',
     namePlaceholder: 'Tu nombre',
     emailLabel: 'Correo electrónico',

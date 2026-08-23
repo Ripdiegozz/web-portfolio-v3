@@ -5,8 +5,15 @@
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
-  "scripts": {},
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
   "peerDependencies": {
     "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^10.9.0",
+    "typescript": "^7.0.2"
   }
 }

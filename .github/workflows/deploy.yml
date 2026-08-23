@@ -1,0 +1,42 @@
+# ⚠️ MANUAL checklist (do once, in order) — Diego only
+# 1. Cloudflare: API token (Edit Cloudflare Workers) → GH secrets CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID; create GH Environment 'production'.
+# 2. KV (local, from apps/web): bunx wrangler kv namespace create RATE_LIMIT_KV → paste id into apps/web/wrangler.jsonc kv_namespaces.
+# 3. Resend: create account, verify dagadev.net (DKIM); bunx wrangler secret put RESEND_API_KEY. Sender in email.tsx uses portfolio@dagadev.net (verified domain).
+# 4. Turnstile: widget for dagadev.net (+localhost); secret via wrangler secret put TURNSTILE_SECRET_KEY; sitekey → GH variable PUBLIC_TURNSTILE_SITE_KEY.
+# 5. GitHub token: fine-grained PAT with user:read → wrangler secret put GITHUB_TOKEN.
+# 6. Keystatic OAuth App: callback https://dagadev.net/api/keystatic/login; wrangler secret put KEYSTATIC_GITHUB_CLIENT_ID/CLIENT_SECRET; KEYSTATIC_SECRET = openssl rand -hex 32; optional slug → variable PUBLIC_KEYSTATIC_GITHUB_APP_SLUG.
+# 7. Mirror each secret locally in apps/web/.dev.vars for dev parity (never committed).
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production   # GH Environment holding the secrets below
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+      - run: cd apps/web && bunx astro sync
+      - run: bunx turbo lint typecheck test build
+        env:
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+          PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: ${{ vars.PUBLIC_KEYSTATIC_GITHUB_APP_SLUG }}
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: apps/web
+          command: deploy
+          secrets: |
+            RESEND_API_KEY
+            TURNSTILE_SECRET_KEY
+            GITHUB_TOKEN
+            KEYSTATIC_GITHUB_CLIENT_ID
+            KEYSTATIC_GITHUB_CLIENT_SECRET
+            KEYSTATIC_SECRET

@@ -248,12 +248,60 @@ const navPrefix = locale === 'es' ? '/es' : '';
           });
         }
 
-        // Theme Toggle handlers (Desktop & Mobile)
-        const toggleTheme = () => {
-          const next = document.documentElement.classList.toggle('dark') ? 'dark' : 'light';
-          try {
-            localStorage.setItem('theme', next);
-          } catch {}
+        // Theme Toggle handlers (Desktop & Mobile) with View Transitions Circular Ripple
+        const toggleTheme = (event) => {
+          const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          
+          if (!document.startViewTransition || isReducedMotion) {
+            const next = document.documentElement.classList.toggle('dark') ? 'dark' : 'light';
+            try {
+              localStorage.setItem('theme', next);
+            } catch {}
+            return;
+          }
+
+          // Exact click coordinates with button bounding box fallback
+          const btn = event?.currentTarget || event?.target;
+          const rect = btn?.getBoundingClientRect?.();
+          const x = (typeof event?.clientX === 'number' && event.clientX > 0)
+            ? event.clientX
+            : (rect ? rect.left + rect.width / 2 : window.innerWidth - 40);
+          const y = (typeof event?.clientY === 'number' && event.clientY > 0)
+            ? event.clientY
+            : (rect ? rect.top + rect.height / 2 : 40);
+
+          const endRadius = Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+          );
+
+          const isDark = document.documentElement.classList.contains('dark');
+          const nextTheme = isDark ? 'light' : 'dark';
+
+          const transition = document.startViewTransition(() => {
+            document.documentElement.classList.toggle('dark', nextTheme === 'dark');
+            try {
+              localStorage.setItem('theme', nextTheme);
+            } catch {}
+          });
+
+          transition.ready.then(() => {
+            const clipPath = [
+              'polygon(50% -71%, -50% 71%, -50% 71%, 50% -71%)',
+              'polygon(50% -71%, -50% 71%, 50% 171%, 171% 50%)'
+            ];
+
+            document.documentElement.animate(
+              {
+                clipPath: clipPath,
+              },
+              {
+                duration: 800,
+                easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+                pseudoElement: '::view-transition-new(root)',
+              }
+            );
+          });
         };
 
         const btnDesktop = document.getElementById('theme-toggle');

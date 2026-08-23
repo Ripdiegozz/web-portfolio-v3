@@ -1,25 +1,88 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { isPublished, sortPostsByDateDesc } from '../../lib/blog';
+import { isPublished, sortPostsByDateDesc, getReadingTime, formatBlogDate } from '../../lib/blog';
+import { getTranslations } from '../../i18n';
+import type { Locale } from '../../i18n/types';
 import '../../styles/global.css';
+
+interface Props {
+  locale?: Locale;
+}
+
+const locale: Locale = (Astro.params.locale as Locale) ?? 'en';
+const dict = getTranslations(locale);
+const t = dict.blogPage;
 
 const entries = sortPostsByDateDesc((await getCollection('posts')).filter(isPublished));
 ---
-<BaseLayout title="Blog | Diego">
-  <main id="main">
-    <ul class="mx-auto max-w-2xl divide-y divide-border-subtle px-6 py-16 md:py-24">
-      {entries.map((entry) => (
-        <li class="py-6">
-          <a href={`/blog/${entry.id}/`} class="group block">
-            <h2 class="font-sans-display text-xl group-hover:text-accent-readable">{entry.data.title}</h2>
-            <p class="text-text-muted">{entry.data.description}</p>
-            <time datetime={entry.data.pubDate.toISOString()} class="font-mono-code text-xs text-text-muted">
-              {entry.data.pubDate.toDateString()}
-            </time>
-          </a>
-        </li>
-      ))}
-    </ul>
+<BaseLayout title={`${t.title} | Diego`} description={t.description} locale={locale} dict={dict}>
+  <main id="main" class="mx-auto max-w-3xl px-6 py-16 md:py-24">
+
+    <!-- Back link -->
+    <a
+      href="/"
+      class="mb-10 inline-flex items-center gap-1.5 font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary"
+    >
+      {t.backHome}
+    </a>
+
+    <!-- Page header -->
+    <header class="mb-14">
+      <h1 class="font-sans-display text-4xl font-semibold tracking-tight text-text-primary md:text-5xl">
+        {t.title}<span class="text-accent-readable">.</span>
+      </h1>
+      <p class="mt-4 max-w-xl leading-relaxed text-text-muted">{t.description}</p>
+    </header>
+
+    <!-- Posts list -->
+    {entries.length === 0 ? (
+      <p class="font-mono-code text-sm text-text-muted">{t.emptyState}</p>
+    ) : (
+      <ul class="divide-y divide-border-subtle">
+        {entries.map((entry) => {
+          const mins = getReadingTime(entry.body ?? '');
+          const readTime = t.readTime.replace('{n}', String(mins));
+          const dateStr = formatBlogDate(entry.data.pubDate, locale);
+          return (
+            <li class="group py-8 first:pt-0 last:pb-0">
+              <a href={`/blog/${entry.id}/`} class="block">
+                <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                  <h2 class="font-sans-display text-xl font-medium text-text-primary transition-colors group-hover:text-accent-readable">
+                    {entry.data.title}
+                  </h2>
+                  <span class="shrink-0 font-mono-code text-xs text-text-muted">{readTime}</span>
+                </div>
+
+                {entry.data.description && (
+                  <p class="mt-2 max-w-2xl leading-relaxed text-text-muted line-clamp-2">
+                    {entry.data.description}
+                  </p>
+                )}
+
+                <div class="mt-3 flex flex-wrap items-center gap-3">
+                  <time
+                    datetime={entry.data.pubDate.toISOString()}
+                    class="font-mono-code text-xs text-text-muted"
+                  >
+                    {dateStr}
+                  </time>
+
+                  {entry.data.tags.length > 0 && (
+                    <ul class="flex flex-wrap gap-1.5" aria-label="Tags">
+                      {entry.data.tags.map((tag) => (
+                        <li class="rounded-md border border-border-subtle bg-bg-raised/60 px-2 py-0.5 font-mono-code text-xs text-text-muted transition-colors hover:border-text-muted hover:text-text-primary">
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    )}
   </main>
 </BaseLayout>

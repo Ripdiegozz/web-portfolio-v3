@@ -128,6 +128,27 @@ export interface ContactTranslations {
   emailAddress: string;
 }
 
+export interface WritingTranslations {
+  sectionTitle: string;
+  lead: string;
+  viewAll: string;
+  readTime: string;
+  readArticle: string;
+  emptyState: string;
+}
+
+export interface BlogPageTranslations {
+  title: string;
+  description: string;
+  backHome: string;
+  backBlog: string;
+  allArticles: string;
+  readTime: string;
+  publishedOn: string;
+  tagsLabel: string;
+  emptyState: string;
+}
+
 export interface FooterTranslations {
   copyright: string;
   socials: SocialLink[];
@@ -200,6 +221,8 @@ export interface TranslationDictionary {
   skills: SkillsTranslations;
   projects: ProjectsTranslations;
   activity: ActivityTranslations;
+  writing: WritingTranslations;
+  blogPage: BlogPageTranslations;
   contact: ContactTranslations;
   footer: FooterTranslations;
 }

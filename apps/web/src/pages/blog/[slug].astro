@@ -1,7 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { isPublished } from '../../lib/blog';
+import { isPublished, getReadingTime, formatBlogDate } from '../../lib/blog';
+import { getTranslations } from '../../i18n';
+import type { Locale } from '../../i18n/types';
 import '../../styles/global.css';
 
 export async function getStaticPaths() {
@@ -11,15 +13,89 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+
+const locale: Locale = 'en';
+const dict = getTranslations(locale);
+const t = dict.blogPage;
+
+const mins = getReadingTime(entry.body ?? '');
+const readTime = t.readTime.replace('{n}', String(mins));
+const dateStr = formatBlogDate(entry.data.pubDate, locale);
 ---
-<BaseLayout title={`${entry.data.title} | Diego`} description={entry.data.description}>
-  <main id="main">
-    <article class="prose prose-neutral dark:prose-invert mx-auto max-w-2xl px-6 py-16 md:py-24">
-      {entry.data.heroImage && (
-        <img src={entry.data.heroImage} alt="" width="1200" height="630" loading="eager" />
+<BaseLayout
+  title={`${entry.data.title} | Diego`}
+  description={entry.data.description}
+  locale={locale}
+  dict={dict}
+>
+  <main id="main" class="mx-auto max-w-3xl px-6 py-16 md:py-24">
+
+    <!-- Back link -->
+    <a
+      href="/blog/"
+      class="mb-10 inline-flex items-center gap-1.5 font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary"
+    >
+      {t.backBlog}
+    </a>
+
+    <!-- Article header -->
+    <header class="mb-12">
+      {entry.data.tags.length > 0 && (
+        <ul class="mb-4 flex flex-wrap gap-1.5" aria-label={t.tagsLabel}>
+          {entry.data.tags.map((tag) => (
+            <li class="rounded-md border border-border-subtle bg-bg-raised/60 px-2 py-0.5 font-mono-code text-xs text-text-muted">
+              {tag}
+            </li>
+          ))}
+        </ul>
       )}
-      <h1>{entry.data.title}</h1>
+
+      <h1 class="font-sans-display text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
+        {entry.data.title}
+      </h1>
+
+      {entry.data.description && (
+        <p class="mt-4 max-w-2xl text-lg leading-relaxed text-text-muted">
+          {entry.data.description}
+        </p>
+      )}
+
+      <div class="mt-6 flex flex-wrap items-center gap-4 border-t border-border-subtle pt-6">
+        <span class="font-mono-code text-xs text-text-muted">
+          {t.publishedOn}{' '}
+          <time datetime={entry.data.pubDate.toISOString()} class="text-text-primary">
+            {dateStr}
+          </time>
+        </span>
+        <span class="font-mono-code text-xs text-text-muted">{readTime}</span>
+      </div>
+    </header>
+
+    <!-- Hero image -->
+    {entry.data.heroImage && (
+      <img
+        src={entry.data.heroImage}
+        alt=""
+        width="1200"
+        height="630"
+        loading="eager"
+        class="mb-12 w-full rounded-lg object-cover"
+      />
+    )}
+
+    <!-- Post body -->
+    <article class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-sans-display prose-a:text-accent-readable prose-a:underline-offset-4 prose-code:font-mono-code prose-pre:rounded-lg prose-pre:border prose-pre:border-border-subtle prose-img:rounded-lg">
       <Content />
     </article>
+
+    <!-- Footer nav -->
+    <footer class="mt-16 border-t border-border-subtle pt-8">
+      <a
+        href="/blog/"
+        class="inline-flex items-center gap-1.5 font-mono-code text-sm text-text-muted transition-colors hover:text-text-primary"
+      >
+        {t.backBlog}
+      </a>
+    </footer>
   </main>
 </BaseLayout>

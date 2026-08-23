@@ -14,6 +14,11 @@ const e2eMocks = import.meta.env.PUBLIC_E2E_MOCKS === '1' && !import.meta.env.PR
 async function defaultParseBody(
   request: Request
 ): Promise<{ classified: ClassifiedContact; turnstileToken: string }> {
+  // Require JSON: a JSON content-type forces a CORS preflight, removing the
+  // simple-request path used by cross-origin form posts.
+  if (!request.headers.get('content-type')?.includes('application/json')) {
+    return { classified: { kind: 'rejected' }, turnstileToken: '' };
+  }
   const raw = await request.json().catch(() => null);
   return {
     classified: classifyContactAttempt(contactSchema.safeParse(raw)),

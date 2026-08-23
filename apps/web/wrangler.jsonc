@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "web-portfolio-v3",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist"
+  },
+  "observability": { "enabled": true }
+  // [Task 15] RATE_LIMIT_KV binding (manual step — never automated):
+  //   cd apps/web && bunx wrangler kv namespace create RATE_LIMIT_KV
+  // Paste the printed id below to enable the KV-backed fixed-window limiter.
+  // Without the binding the app degrades to an in-memory limiter.
+  // "kv_namespaces": [{ "binding": "RATE_LIMIT_KV", "id": "<paste-id>" }]
+}

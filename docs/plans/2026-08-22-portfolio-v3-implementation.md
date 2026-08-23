@@ -2,11 +2,11 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Full-stack rewrite of dagadev.tech as a single Cloudflare Worker: prerendered Astro 7 portfolio + Keystatic-managed blog + Hono API (contact email via Resend, GitHub activity grid), replacing the static v2 on Vercel.
+**Goal:** Full-stack rewrite of dagadev.net as a single Cloudflare Worker: prerendered Astro 7 portfolio + Keystatic-managed blog + Hono API (contact email via Resend, GitHub activity grid), replacing the static v2 on Vercel.
 
 **Architecture:** Bun-workspace monorepo (`apps/web`, `packages/ui`, `packages/email`, `packages/config`) driven by Turborepo. `apps/web` builds with `output: 'static'` + `@astrojs/cloudflare`; every public route is prerendered HTML at the edge; only `/api/*` and `/admin/*` set `prerender = false` and run SSR in the Worker. Hono mounts through one catch-all API route; Keystatic (GitHub storage) commits posts to `src/content/posts/` which the Astro Content Layer mirrors with a Zod schema.
 
-**Tech Stack:** bun 1.4.0 · turbo@latest (v2) · astro@latest (7.x) · @astrojs/cloudflare@latest · react@latest (19) + @astrojs/react · hono@latest (4) · tailwindcss@latest (4, CSS-first `@theme`) · motion@latest (13) · three@latest (0.185+) + @react-three/fiber · @keystatic/core@latest (0.x — spike-gated) · resend + @react-email/components · zod@latest (v4 API) · vitest · Playwright (smoke only). TypeScript strict; never hardcode patch versions in code — install with `bun add pkg@latest` and let the lockfile pin.
+**Tech Stack:** bun 1.4.0 · turbo (v2) · astro (7.x) · @astrojs/cloudflare · react (19) + @astrojs/react · hono (4) · tailwindcss (4, CSS-first `@theme`) · motion (13) · three (0.185+) + @react-three/fiber · @keystatic/core (0.x — spike-gated) · resend + @react-email/components · zod (v4 API) · vitest · Playwright (smoke only). TypeScript strict. **Version policy (user decision 2026-08-22): install `pkg@latest` ONCE at the moment a dependency is introduced, then immediately record the resolved caret range (`^x.y.z`) in the manifest — never commit literal `"latest"` ranges; bun.lock pins exact versions.
 
 **Source of truth:** `docs/plans/2026-08-22-portfolio-v3-design.md`. Do not add features beyond it.
 
@@ -253,7 +253,7 @@ import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://dagadev.tech',
+  site: 'https://dagadev.net',
   // 'static' = prerender everything by default; /api and /admin opt out per-route
   output: 'static',
   adapter: cloudflare(),
@@ -1295,7 +1295,7 @@ export const GET: APIRoute = async (context) => {
 User-agent: *
 Allow: /
 
-Sitemap: https://dagadev.tech/sitemap-index.xml
+Sitemap: https://dagadev.net/sitemap-index.xml
 ```
 
 **Step 3: Verify**
@@ -1907,7 +1907,7 @@ export function makeSendContactEmail(apiKey: string, opts?: { to?: string; from?
       );
       const { error } = await resend.emails.send({
         from: opts?.from ?? 'Portfolio <onboarding@resend.dev>',
-        to: opts?.to ?? 'diego@dagadev.tech', // TODO(Diego): confirm inbox; domain must be verified in Resend
+        to: opts?.to ?? 'diego@dagadev.net', // TODO(Diego): confirm inbox; domain must be verified in Resend
         subject: `New portfolio message from ${input.name}`,
         html,
         replyTo: input.email,
@@ -2296,7 +2296,7 @@ import { caches } from 'cloudflare:workers'; // adapter shims this outside worke
 
 export function buildActivityDeps(bindings: WorkerBindings): ActivityDeps {
   const cache = caches.default;
-  const cacheReq = new Request('https://dagadev.tech/__cache/activity-grid.json');
+  const cacheReq = new Request('https://dagadev.net/__cache/activity-grid.json');
   return {
     async readCache() {
       const hit = await cache.match(cacheReq);
@@ -2446,10 +2446,10 @@ jobs:
 
 1. **Cloudflare**: create API token with "Edit Cloudflare Workers" template; note Account ID. Set GH secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`; create GH Environment `production`.
 2. **KV**: `cd apps/web; bunx wrangler kv namespace create RATE_LIMIT_KV` → paste id into `wrangler.jsonc` (done in Task 15).
-3. **Resend**: create account, verify `dagadev.tech` domain (DKIM records), then `bunx wrangler secret put RESEND_API_KEY` (run from `apps/web`, target the Worker `web-portfolio-v3`). Update sender address in `email.tsx` to a verified domain sender.
-4. **Turnstile**: create widget for `dagadev.tech` (+`localhost`) → secret via `wrangler secret put TURNSTILE_SECRET_KEY`; sitekey goes to GH **variable** `PUBLIC_TURNSTILE_SITE_KEY` (it's baked at build time).
+3. **Resend**: create account, verify `dagadev.net` domain (DKIM records), then `bunx wrangler secret put RESEND_API_KEY` (run from `apps/web`, target the Worker `web-portfolio-v3`). Update sender address in `email.tsx` to a verified domain sender.
+4. **Turnstile**: create widget for `dagadev.net` (+`localhost`) → secret via `wrangler secret put TURNSTILE_SECRET_KEY`; sitekey goes to GH **variable** `PUBLIC_TURNSTILE_SITE_KEY` (it's baked at build time).
 5. **GitHub token**: fine-grained PAT with `user:read` (contributions) → `wrangler secret put GITHUB_TOKEN`.
-6. **Keystatic OAuth**: create GitHub OAuth App — callback `https://dagadev.tech/api/keystatic/login`, homepage repo URL. Client ID → `wrangler secret put KEYSTATIC_GITHUB_CLIENT_ID`; secret → `KEYSTATIC_GITHUB_CLIENT_SECRET`; session key → `openssl rand -hex 32` → `KEYSTATIC_SECRET`. Optional GitHub **App** slug → variable `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`.
+6. **Keystatic OAuth**: create GitHub OAuth App — callback `https://dagadev.net/api/keystatic/login`, homepage repo URL. Client ID → `wrangler secret put KEYSTATIC_GITHUB_CLIENT_ID`; secret → `KEYSTATIC_GITHUB_CLIENT_SECRET`; session key → `openssl rand -hex 32` → `KEYSTATIC_SECRET`. Optional GitHub **App** slug → variable `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`.
 7. Repeat each `wrangler secret put` also locally in `.env` for dev parity (never committed).
 
 Verify: merge a docs-only PR to main → deploy job green → worker reachable at `web-portfolio-v3.<account>.workers.dev` showing the site.
@@ -2561,17 +2561,17 @@ git commit -m "test(e2e): playwright smoke covering contact happy path and blog 
 
 ---
 
-### Task 22: ⚠️ MANUAL — DNS cutover dagadev.tech (LAST STEP, Diego only)
+### Task 22: ⚠️ MANUAL — DNS cutover dagadev.net (LAST STEP, Diego only)
 
 Do NOT touch DNS until Milestones 0–6 are validated on the workers.dev preview URL.
 
 Checklist:
 1. Validate `https://web-portfolio-v3.<account>.workers.dev`: home, blog, post page, RSS, sitemap, contact form real send (verified Resend domain), admin login + test post publishing to GitHub `main`, activity grid live.
-2. In Cloudflare dashboard: add custom domain `dagadev.tech` to the Worker (`Workers & Pages → web-portfolio-v3 → Settings → Domains & Routes`).
+2. In Cloudflare dashboard: add custom domain `dagadev.net` to the Worker (`Workers & Pages → web-portfolio-v3 → Settings → Domains & Routes`).
 3. At the domain's DNS provider: remove Vercel records (`A 76.76.21.21`, `CNAME cname.vercel-dns.com`) and point apex to Cloudflare per the custom-domain prompt (Cloudflare manages it once the zone is on CF).
 4. Wait for propagation; verify HTTPS cert issued.
 5. Keep v2 (Vercel deployment) intact for rollback until step 6.
-6. Final: browse `https://dagadev.tech`, confirm v3; archive/pause the Vercel project.
+6. Final: browse `https://dagadev.net`, confirm v3; archive/pause the Vercel project.
 Rollback: re-add Vercel DNS records — v2 was never deleted.
 
 No code changes; commit nothing. Record completion date in the design doc's Migration Plan section.

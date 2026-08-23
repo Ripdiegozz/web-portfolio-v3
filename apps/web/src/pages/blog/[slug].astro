@@ -1,0 +1,122 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import { isPublished, getReadingTime, formatBlogDate } from '../../lib/blog';
+import { getTranslations } from '../../i18n';
+import type { Locale } from '../../i18n/types';
+import '../../styles/global.css';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('posts')).filter(isPublished);
+  return posts.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+
+const locale: Locale = 'en';
+const dict = getTranslations(locale);
+const t = dict.blogPage;
+
+const mins = getReadingTime(entry.body ?? '');
+const readTime = t.readTime.replace('{n}', String(mins));
+const dateStr = formatBlogDate(entry.data.pubDate, locale);
+
+const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length > 1;
+---
+<BaseLayout
+  title={`${entry.data.title} | Diego`}
+  description={entry.data.description}
+  locale={locale}
+  dict={dict}
+>
+  <div id="main" class="mx-auto w-full max-w-6xl px-6 pt-28 pb-16 md:pt-32 md:pb-24">
+
+    <!-- Back link -->
+    <a
+      href="/blog/"
+      class="mb-10 inline-flex items-center gap-1.5 font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary"
+    >
+      {t.backBlog}
+    </a>
+
+    <!-- Article header (full width) -->
+    <header class="mb-12 max-w-3xl">
+      {entry.data.tags.length > 0 && (
+        <ul class="mb-4 flex flex-wrap gap-1.5" aria-label={t.tagsLabel}>
+          {entry.data.tags.map((tag) => (
+            <li class="rounded-md border border-border-subtle bg-bg-raised/60 px-2 py-0.5 font-mono-code text-xs text-text-muted">
+              {tag}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <h1 class="font-sans-display text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
+        {entry.data.title}
+      </h1>
+
+      {entry.data.description && (
+        <p class="mt-4 max-w-2xl text-lg leading-relaxed text-text-muted">
+          {entry.data.description}
+        </p>
+      )}
+
+      <div class="mt-6 flex flex-wrap items-center gap-4 border-t border-border-subtle pt-6">
+        <span class="font-mono-code text-xs text-text-muted">
+          {t.publishedOn}{' '}
+          <time datetime={entry.data.pubDate.toISOString()} class="text-text-primary">
+            {dateStr}
+          </time>
+        </span>
+        <span class="font-mono-code text-xs text-text-muted">{readTime}</span>
+      </div>
+    </header>
+
+    <!-- Hero image (full width) -->
+    {entry.data.heroImage && (
+      <img
+        src={entry.data.heroImage}
+        alt=""
+        width="1200"
+        height="630"
+        loading="eager"
+        class="mb-12 max-w-3xl w-full rounded-lg object-cover"
+      />
+    )}
+
+    <!-- Mobile ToC (before content) -->
+    {hasToc && (
+      <div class="mb-8 lg:hidden">
+        <TableOfContents headings={headings} label={t.tableOfContents ?? 'On this page'} />
+      </div>
+    )}
+
+    <!-- Two-column layout: article + sticky sidebar -->
+    <div class={hasToc ? 'lg:grid lg:grid-cols-[1fr_220px] lg:gap-16' : ''}>
+
+      <!-- Post body -->
+      <article class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-sans-display prose-h2:mt-12 prose-h2:text-xl prose-h2:font-semibold prose-h3:mt-8 prose-h3:text-base prose-h3:font-medium prose-a:text-accent-readable prose-a:underline-offset-4 prose-code:font-mono-code prose-pre:rounded-lg prose-pre:border prose-pre:border-border-subtle prose-img:rounded-lg">
+        <Content />
+      </article>
+
+      <!-- Desktop ToC sidebar -->
+      {hasToc && (
+        <div class="hidden lg:block">
+          <TableOfContents headings={headings} label={t.tableOfContents ?? 'On this page'} />
+        </div>
+      )}
+    </div>
+
+    <!-- Footer nav -->
+    <footer class="mt-16 max-w-3xl border-t border-border-subtle pt-8">
+      <a
+        href="/blog/"
+        class="inline-flex items-center gap-1.5 font-mono-code text-sm text-text-muted transition-colors hover:text-text-primary"
+      >
+        {t.backBlog}
+      </a>
+    </footer>
+  </div>
+</BaseLayout>

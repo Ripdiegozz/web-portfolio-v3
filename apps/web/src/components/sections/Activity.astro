@@ -1,0 +1,18 @@
+---
+import Section from './Section.astro';
+import ContributionGrid from '../islands/ContributionGrid';
+import type { ActivityTranslations } from '../../i18n';
+import { en } from '../../i18n/locales/en';
+
+interface Props {
+  dict?: ActivityTranslations;
+}
+
+const { dict = en.activity } = Astro.props;
+---
+{/* The island is a sibling of the slot content, never wrapped in a Reveal:
+    Reveal swaps its child element post-hydration, which would remount the
+    grid and re-fetch the activity endpoint. */}
+<Section label="activity" number="05" title={dict.sectionTitle}>
+  <ContributionGrid client:visible labels={dict} months={dict.months} />
+</Section>

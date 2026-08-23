@@ -1,0 +1,73 @@
+@import 'tailwindcss';
+
+/* dark: tracks the html.dark toggle (see FOUC script), not prefers-color-scheme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --font-sans-display: 'Geist Variable', 'Geist Sans', -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui, sans-serif;
+  --font-serif-accent: 'Instrument Serif', 'Times New Roman', Times, serif;
+  --font-mono-code: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace;
+  --color-accent: #2563eb; /* electric blue accent; also drives the grim-style grid */
+  --color-accent-strong: #1d4ed8;
+  /* Accent tuned for small text: meets WCAG AA on both theme backgrounds. */
+  --color-accent-readable: var(--tk-accent-readable);
+
+  /* semantic tokens mapped to per-theme variables (see :root/.dark below) */
+  --color-bg: var(--tk-bg);
+  --color-bg-raised: var(--tk-bg-raised);
+  --color-text-primary: var(--tk-text-primary);
+  --color-text-muted: var(--tk-text-muted);
+  --color-border-subtle: var(--tk-border-subtle);
+}
+
+:root {
+  --tk-bg: #ffffff;
+  --tk-bg-raised: #f4f4f5;
+  --tk-text-primary: #101014;
+  --tk-text-muted: #52525b;
+  --tk-border-subtle: #e4e4e7;
+  --tk-accent-readable: #2563eb;
+  color-scheme: light;
+}
+
+html.dark {
+  --tk-bg: #09090d;
+  --tk-bg-raised: #14141c;
+  --tk-text-primary: #f4f4f5;
+  --tk-text-muted: #a1a1aa;
+  --tk-border-subtle: #26262e;
+  --tk-accent-readable: #60a5fa;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+/* View Transitions Circular Theme Ripple */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+/* Anchor links must clear the sticky navbar (~60px) + breathing room */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  scroll-margin-top: 5.5rem;
+}

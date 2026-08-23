@@ -1,0 +1,31 @@
+{
+  "name": "@portfolio/email",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./templates/*": "./src/templates/*.tsx"
+  },
+  "peerDependencies": {
+    "react": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "react": "^19.2.8",
+    "eslint": "^10.9.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.11"
+  },
+  "dependencies": {
+    "@react-email/components": "^1.0.12",
+    "resend": "^6.22.0"
+  }
+}

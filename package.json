@@ -1,0 +1,30 @@
+{
+  "name": "web-portfolio-v3",
+  "private": true,
+  "type": "module",
+  "workspaces": ["apps/*", "packages/*"],
+  "devEngines": {
+    "packageManager": {
+      "name": "bun",
+      "version": "1.4.0"
+    }
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "prettier": "^3.9.6",
+    "turbo": "^2.10.11",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.67.0"
+  },
+  "overrides": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  }
+}

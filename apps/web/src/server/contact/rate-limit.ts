@@ -18,15 +18,26 @@ function kvCounterLimiter(kv: KVLike, ttlSeconds: number, max: number): RateLimi
   };
 }
 
-/** Same algorithm against an in-memory store — used by tests and E2E mocks. */
-export function memoryRateLimiter(max: number): RateLimiter & { counts: Map<string, number> } {
-  const counts = new Map<string, number>();
+/**
+ * Fixed-window rate limiter against an in-memory store. Used as the fallback
+ * when the KV binding is missing and by E2E mocks. Unlike the KV variant, the
+ * window is tracked per key with timestamps so counts actually reset.
+ */
+export function memoryRateLimiter(max: number, ttlMs = 86_400_000): RateLimiter & {
+  counts: Map<string, { count: number; expiresAt: number }>;
+} {
+  const counts = new Map<string, { count: number; expiresAt: number }>();
   return {
     counts,
     async allow(clientKey) {
-      const next = (counts.get(clientKey) ?? 0) + 1;
-      counts.set(clientKey, next);
-      return next <= max;
+      const now = Date.now();
+      const entry = counts.get(clientKey);
+      if (!entry || entry.expiresAt <= now) {
+        counts.set(clientKey, { count: 1, expiresAt: now + ttlMs });
+        return 1 <= max;
+      }
+      entry.count += 1;
+      return entry.count <= max;
     },
   };
 }

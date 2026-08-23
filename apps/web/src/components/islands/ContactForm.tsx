@@ -40,7 +40,7 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="mt-12 space-y-4">
-      {/* honeypot — visually hidden */}
+      {/* honeypot: visually hidden */}
       <input
         name="company"
         tabIndex={-1}
@@ -86,7 +86,7 @@ export default function ContactForm() {
       >
         {status === 'sending' ? 'Sending…' : 'Send message'}
       </button>
-      {status === 'sent' && <p role="status">Message sent — I will reply soon.</p>}
+      {status === 'sent' && <p role="status">Message sent. I will reply soon.</p>}
       {status === 'error' && <p role="alert">Something went wrong. Try again or reach me on LinkedIn.</p>}
     </form>
   );

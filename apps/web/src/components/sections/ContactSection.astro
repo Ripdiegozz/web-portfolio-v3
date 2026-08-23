@@ -1,34 +1,26 @@
 ---
-import { Reveal } from '@portfolio/ui';
-import ContactForm from '../../components/islands/ContactForm';
+import Section from './Section.astro';
+import ContactForm from '../islands/ContactForm';
 ---
-<section id="contact" aria-labelledby="contact-heading" class="border-t border-border-subtle">
-  <div class="mx-auto w-full max-w-3xl px-6 py-24 md:py-32">
-    <Reveal client:visible>
-      <h2 id="contact-heading" class="font-mono-code text-xs tracking-[0.2em] text-text-muted"><span aria-hidden="true">//</span> contact</h2>
-      <p class="mt-10 font-sans-display text-4xl font-medium tracking-tight text-text-primary md:text-5xl">
-        Let's build something.
-      </p>
-    </Reveal>
+<Section label="contact">
+  <!-- No Reveal here: the form must stay stable (no remount on hydration), and
+       the section heading follows the shell's static kicker like Activity. -->
+  <p class="mt-10 font-sans-display text-4xl font-medium tracking-tight text-text-primary md:text-5xl">
+    Let's build something.
+  </p>
 
-    {/*
-      Form stays OUTSIDE the Reveal island: Reveal swaps its child element type
-      post-hydration, which remounts stateful children (this form) and would
-      wipe input state. Heading reveals, form renders stable.
-    */}
-    <ContactForm client:visible />
+  <ContactForm client:visible />
 
-    <p class="mt-12 font-mono-code text-xs text-text-muted">
-      prefer email?
-      <a
-          href="mailto:hello@dagadev.net"
-        class="underline decoration-border-subtle underline-offset-4 transition-colors hover:text-text-primary"
-      >
-          hello@dagadev.net
-      </a>
-    </p>
-  </div>
-  {import.meta.env.PUBLIC_E2E_MOCKS !== '1' && (
-    <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-  )}
-</section>
+  <p class="mt-12 font-mono-code text-xs text-text-muted">
+    prefer email?
+    <a
+      href="mailto:hello@dagadev.net"
+      class="underline decoration-border-subtle underline-offset-4 transition-colors hover:text-text-primary"
+    >
+      hello@dagadev.net
+    </a>
+  </p>
+</Section>
+{import.meta.env.PUBLIC_E2E_MOCKS !== '1' && (
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+)}

@@ -6,7 +6,7 @@ import { isPublished, sortPostsByDateDesc } from '../lib/blog';
 export const GET: APIRoute = async (context) => {
   const posts = sortPostsByDateDesc((await getCollection('posts')).filter(isPublished));
   return rss({
-    title: 'Diego — blog',
+    title: 'Diego blog',
     description: 'Writing about full-stack engineering.',
     site: context.site!,
     items: posts.map((post) => ({

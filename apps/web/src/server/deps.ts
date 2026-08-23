@@ -1,6 +1,6 @@
 import { caches } from 'cloudflare:workers';
 import type { AppDeps, ActivityGrid } from './app';
-import { contactSchema, classifyContactAttempt, type ClassifiedContact } from './contact/schema';
+import { classifyContactPayload, type ClassifiedContact } from './contact/schema';
 import { kvRateLimiter, memoryRateLimiter } from './contact/rate-limit';
 import { verifyTurnstile } from './contact/turnstile';
 import { makeSendContactEmail } from './contact/email';
@@ -8,12 +8,14 @@ import { fetchGitHubActivity } from './activity/store';
 import type { WorkerBindings } from './types';
 
 const MAX_PER_DAY = 5;
+const DAY_SECONDS = 86_400;
+const CACHE_MAX_AGE_SECONDS = 3600;
 
-/** Mock mode for Playwright E2E only — hard-disabled in production builds. */
+/** Mock mode for Playwright E2E only - hard-disabled in production builds. */
 const e2eMocks = import.meta.env.PUBLIC_E2E_MOCKS === '1' && !import.meta.env.PROD;
 
 /** Sole request body reader: classifies the payload and extracts the Turnstile token. */
-async function defaultParseBody(
+async function parseJsonContactBody(
   request: Request
 ): Promise<{ classified: ClassifiedContact; turnstileToken: string }> {
   // Require JSON: a JSON content-type forces a CORS preflight, removing the
@@ -22,10 +24,7 @@ async function defaultParseBody(
     return { classified: { kind: 'rejected' }, turnstileToken: '' };
   }
   const raw = await request.json().catch(() => null);
-  return {
-    classified: classifyContactAttempt(contactSchema.safeParse(raw)),
-    turnstileToken: (raw as { turnstileToken?: string } | null)?.turnstileToken ?? '',
-  };
+  return classifyContactPayload(raw);
 }
 
 const mockActivityDeps = (): AppDeps['activity'] => ({
@@ -36,7 +35,7 @@ const mockActivityDeps = (): AppDeps['activity'] => ({
 
 /**
  * Production activity hooks: GitHub GraphQL upstream plus a Cloudflare edge
- * cache. fetchActivity returns the raw GraphQL payload — createApp composes it
+ * cache. fetchActivity returns the raw GraphQL payload - createApp composes it
  * with getActivityWithFallback, which maps and caches it.
  */
 export function buildActivityDeps(bindings: WorkerBindings): AppDeps['activity'] {
@@ -55,7 +54,10 @@ export function buildActivityDeps(bindings: WorkerBindings): AppDeps['activity']
     },
     async writeCache(grid) {
       await cache.put(cacheReq, new Response(JSON.stringify(grid), {
-        headers: { 'content-type': 'application/json', 'cache-control': 'public, max-age=3600' },
+        headers: {
+          'content-type': 'application/json',
+          'cache-control': `public, max-age=${CACHE_MAX_AGE_SECONDS}`,
+        },
       }));
     },
   };
@@ -72,7 +74,7 @@ function createDeps(bindings: WorkerBindings): AppDeps {
     const limiter = memoryRateLimiter(MAX_PER_DAY);
     return {
       contact: {
-        parseBody: defaultParseBody,
+        parseBody: parseJsonContactBody,
         verifyTurnstile: async () => true,
         rateLimit: async (ip) => limiter.allow(ip ?? 'anon'),
         sendEmail: async () => {},
@@ -85,14 +87,14 @@ function createDeps(bindings: WorkerBindings): AppDeps {
   // NOTE: without the KV namespace wired in wrangler.jsonc, the fallback limiter
   // is per-isolate only; provision RATE_LIMIT_KV before production deploy.
   const limiter = kv
-    ? kvRateLimiter(kv, 86_400, MAX_PER_DAY)
+    ? kvRateLimiter(kv, DAY_SECONDS, MAX_PER_DAY)
     : memoryRateLimiter(MAX_PER_DAY);
   const secret = bindings.TURNSTILE_SECRET_KEY ?? '';
   const sendEmail = makeSendContactEmail(bindings.RESEND_API_KEY ?? '');
 
   return {
     contact: {
-      parseBody: defaultParseBody,
+      parseBody: parseJsonContactBody,
       verifyTurnstile: (token, ip) => verifyTurnstile(token ?? '', ip, secret),
       rateLimit: (ip) => limiter.allow(ip ?? 'anon'),
       sendEmail: async (input) => {

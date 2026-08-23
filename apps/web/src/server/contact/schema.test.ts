@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { classifyContactAttempt, contactSchema } from './schema';
+import { classifyContactAttempt, classifyContactPayload, contactSchema } from './schema';
 
 const valid = {
   name: 'Jane Doe',
@@ -39,5 +39,31 @@ describe('classifyContactAttempt', () => {
     if (result.kind === 'accepted') {
       expect(result.data.name).toBe('Jane Doe');
     }
+  });
+  it('rejects names and messages containing control characters', () => {
+    expect(contactSchema.safeParse({ ...valid, name: 'Evil\nHeader' }).success).toBe(false);
+    expect(contactSchema.safeParse({ ...valid, message: 'Line\nbreak in message' }).success).toBe(false);
+  });
+  it('enforces length boundaries', () => {
+    expect(contactSchema.safeParse({ ...valid, name: '' }).success).toBe(false);
+    expect(contactSchema.safeParse({ ...valid, name: 'x'.repeat(101) }).success).toBe(false);
+    expect(contactSchema.safeParse({ ...valid, message: 'short' }).success).toBe(false);
+    expect(contactSchema.safeParse({ ...valid, email: 'a'.repeat(196) + '@x.co' }).success).toBe(false);
+  });
+});
+
+describe('classifyContactPayload', () => {
+  it('honeypot wins over validation even without a turnstile token', () => {
+    const { classified } = classifyContactPayload({ ...valid, company: 'SpamCorp Inc', turnstileToken: '' });
+    expect(classified).toEqual({ kind: 'silent_bot' });
+  });
+  it('returns accepted with the token extracted from a valid payload', () => {
+    const { classified, turnstileToken } = classifyContactPayload(valid);
+    expect(classified.kind).toBe('accepted');
+    expect(turnstileToken).toBe('tok');
+  });
+  it('returns rejected for invalid payloads without a honeypot', () => {
+    const { classified } = classifyContactPayload({ ...valid, email: 'x' });
+    expect(classified).toEqual({ kind: 'rejected' });
   });
 });

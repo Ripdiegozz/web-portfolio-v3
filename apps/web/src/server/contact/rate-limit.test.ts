@@ -25,4 +25,12 @@ describe('rate limiter', () => {
     expect(await limiter.allow('ip-x')).toBe(true);
     expect(await limiter.allow('ip-x')).toBe(false);
   });
+  it('memory limiter resets after the window elapses', async () => {
+    const limiter = memoryRateLimiter(2, 50);
+    expect(await limiter.allow('ip-a')).toBe(true);
+    expect(await limiter.allow('ip-a')).toBe(true);
+    expect(await limiter.allow('ip-a')).toBe(false);
+    await new Promise((resolve) => setTimeout(resolve, 60));
+    expect(await limiter.allow('ip-a')).toBe(true); // window expired, count restarts
+  });
 });

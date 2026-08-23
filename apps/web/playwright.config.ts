@@ -1,8 +1,8 @@
 import { defineConfig } from '@playwright/test';
 
-// CI runs the webServer itself (bun run dev acts normally on Linux). On
-// Windows, bunx wrapping through Playwright's process spawn exits early, so
-// local runs reuse the Astro daemon started externally (see scripts/e2e-local).
+// Local runs against an external Astro daemon (pre-started because bunx
+// wrapping through Playwright's process spawn is flaky on Windows); CI
+// (ubuntu) spawns the dev server itself via webServer.command.
 export default defineConfig({
   testDir: './tests/e2e',
   timeout: 30_000,

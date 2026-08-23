@@ -34,7 +34,11 @@ export type ApiApp = ReturnType<typeof createApp>;
 export function createApp(deps: AppDeps) {
   const app = new Hono();
 
-  app.onError(() => Response.json({ ok: false, error: 'internal_error' }, { status: 500 }));
+  app.onError((err, c) => {
+    // Non-HTTP OK to log the message here; responses stay generic to clients.
+    console.error('[api]', err);
+    return c.json({ ok: false, error: 'internal_error' }, 500);
+  });
   app.notFound((c) => c.json({ ok: false, error: 'not_found' }, 404));
 
   app.post('/api/contact', async (c) => {

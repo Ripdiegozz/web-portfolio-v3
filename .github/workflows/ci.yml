@@ -17,3 +17,6 @@ jobs:
       # Fresh checkout has no .astro/types.d.ts; astro check needs it.
       - run: cd apps/web && bunx astro sync
       - run: bunx turbo lint typecheck test build
+      # E2E: Playwright smoke against the built worker (dev server works on Linux).
+      - run: cd apps/web && bunx playwright install --with-deps chromium
+      - run: cd apps/web && bunx playwright test

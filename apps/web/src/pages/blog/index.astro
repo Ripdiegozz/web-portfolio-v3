@@ -6,7 +6,7 @@ import '../../styles/global.css';
 
 const entries = sortPostsByDateDesc((await getCollection('posts')).filter(isPublished));
 ---
-<BaseLayout title="Blog — Diego">
+<BaseLayout title="Blog | Diego">
   <main id="main">
     <ul class="mx-auto max-w-2xl divide-y divide-border-subtle px-6 py-16 md:py-24">
       {entries.map((entry) => (

@@ -31,16 +31,20 @@ export const en: TranslationDictionary = {
     cvLabel: 'CV',
     cvAriaLabel: 'Download CV',
   },
+  marquee: {
+    kicker: "TEAMS & CLIENTS I'VE WORKED WITH",
+  },
   about: {
     sectionTitle: 'A bit about me.',
     lead: 'Full-stack engineer building production web applications, LLM tooling, and distributed systems.',
     support:
-      'Currently at Wazuh building the Wazuh AI Assistant for 90,000+ security users. Before that, built business tools for Stanley Black & Decker (Italy and US) and financial software serving 1,100+ SuperGIROS service points in Colombia. My focus is practical: reliable backends, clean databases, and fast, accessible interfaces.',
+      'Currently at Wazuh building the Wazuh AI Assistant for 90,000+ security users. Before that, built business tools at Tres Pi Medios for Stanley Black & Decker (Italy and US) and financial software serving 1,100+ SuperGIROS service points in Colombia. My focus is practical: reliable backends, clean databases, and fast, accessible interfaces.',
   },
   experience: {
     sectionTitle: "Where I've built & shipped.",
     activeLabel: 'Active',
     atLabel: 'at',
+    clientLabel: 'Client:',
     contributionsHeading: 'Key Contributions & Impact',
     technologiesHeading: 'Technologies & Tooling',
     tablistAriaLabel: 'Work Experience by Company',
@@ -65,14 +69,16 @@ export const en: TranslationDictionary = {
         ],
       },
       {
-        company: 'Tres Pi Medios / Stanley Black & Decker',
-        companyUrl: 'https://www.stanleyblackanddecker.com',
+        company: 'Tres Pi Medios',
+        companyUrl: 'https://www.trespimedios.co/',
+        client: 'Stanley Black & Decker',
+        clientUrl: 'https://www.stanleyblackanddecker.com',
         role: 'Full-stack Developer',
         period: 'Jul 2024 – Jan 2026',
         location: 'Remote',
         highlights: [
-          'Built an internal tool loan and repair app for Stanley Black & Decker Italy, cutting task completion time by 50%.',
-          'Developed an Azure Function integrating generative AI to automate Zendesk customer support replies in the US and Canada.',
+          'Built an internal tool loan and repair app for client Stanley Black & Decker Italy, cutting task completion time by 50%.',
+          'Developed an Azure Function integrating generative AI to automate Zendesk customer support replies for Stanley Black & Decker in the US and Canada.',
           'Built real-time data feeds for Power BI operational dashboards and set up i18n support for Italian and English.',
         ],
         skills: ['TypeScript', 'Node.js', 'React', 'Azure', 'OpenAI', 'Docker', 'Git'],

@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/global.css';
 import Hero from './sections/Hero.astro';
+import BrandMarquee from './sections/BrandMarquee.astro';
 import About from './sections/About.astro';
 import Experience from './sections/Experience.astro';
 import Skills from './sections/Skills.astro';
@@ -27,6 +28,7 @@ const dict = getTranslations(locale);
 >
   <main id="main">
     <Hero dict={dict.hero} locale={locale} socials={dict.footer.socials} />
+    <BrandMarquee kicker={dict.marquee.kicker} />
     <About dict={dict.about} />
     <Experience dict={dict.experience} />
     <Skills dict={dict.skills} />

@@ -33,6 +33,10 @@ export interface HeroTranslations {
   cvAriaLabel: string;
 }
 
+export interface MarqueeTranslations {
+  kicker: string;
+}
+
 export interface AboutTranslations {
   sectionTitle: string;
   lead: string;
@@ -43,6 +47,7 @@ export interface ExperienceTranslations {
   sectionTitle: string;
   activeLabel: string;
   atLabel: string;
+  clientLabel: string;
   contributionsHeading: string;
   technologiesHeading: string;
   tablistAriaLabel: string;
@@ -129,6 +134,8 @@ export interface FooterTranslations {
 export interface ExperienceItem {
   company: string;
   companyUrl?: string;
+  client?: string;
+  clientUrl?: string;
   role: string;
   period: string;
   current?: boolean;
@@ -144,11 +151,12 @@ export interface SocialLink {
 }
 
 export interface ExperienceDashboardLabels {
-  active?: string;
-  at?: string;
-  keyContributions?: string;
-  technologies?: string;
-  tablistAriaLabel?: string;
+  active?: string | undefined;
+  at?: string | undefined;
+  clientLabel?: string | undefined;
+  keyContributions?: string | undefined;
+  technologies?: string | undefined;
+  tablistAriaLabel?: string | undefined;
 }
 
 export interface ContributionGridLabels {
@@ -184,6 +192,7 @@ export interface TranslationDictionary {
   meta: MetaTranslations;
   nav: NavTranslations;
   hero: HeroTranslations;
+  marquee: MarqueeTranslations;
   about: AboutTranslations;
   experience: ExperienceTranslations;
   skills: SkillsTranslations;

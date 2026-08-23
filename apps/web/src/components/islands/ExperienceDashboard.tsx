@@ -16,6 +16,7 @@ export default function ExperienceDashboard({ items, labels }: ExperienceDashboa
   const tablistAriaLabel = labels?.tablistAriaLabel ?? 'Work Experience by Company';
   const activeLabel = labels?.active ?? 'Active';
   const atLabel = labels?.at ?? 'at';
+  const clientLabel = labels?.clientLabel ?? 'Client:';
   const contributionsHeading = labels?.keyContributions ?? 'Key Contributions & Impact';
   const technologiesHeading = labels?.technologies ?? 'Technologies & Tooling';
 
@@ -91,6 +92,25 @@ export default function ExperienceDashboard({ items, labels }: ExperienceDashboa
                 </a>
               ) : (
                 <span className="font-medium text-text-primary text-sm">{activeJob.company}</span>
+              )}
+              {activeJob.client && (
+                <>
+                  <span className="text-border-subtle" aria-hidden="true">•</span>
+                  <span className="text-text-muted">{clientLabel}</span>
+                  {activeJob.clientUrl ? (
+                    <a
+                      href={activeJob.clientUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group/link inline-flex items-center gap-1 font-medium text-text-primary text-sm transition-colors hover:text-accent underline decoration-border-subtle underline-offset-4 hover:decoration-accent"
+                    >
+                      <span>{activeJob.client}</span>
+                      <ArrowUpRight className="size-3 text-text-muted transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 group-hover/link:text-accent" />
+                    </a>
+                  ) : (
+                    <span className="font-medium text-text-primary text-sm">{activeJob.client}</span>
+                  )}
+                </>
               )}
               {activeJob.location && (
                 <>

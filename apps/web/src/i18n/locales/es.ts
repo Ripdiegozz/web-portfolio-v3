@@ -31,16 +31,20 @@ export const es: TranslationDictionary = {
     cvLabel: 'CV',
     cvAriaLabel: 'Descargar CV',
   },
+  marquee: {
+    kicker: 'EMPRESAS Y CLIENTES CON LOS QUE HE TRABAJADO',
+  },
   about: {
     sectionTitle: 'Sobre mí.',
     lead: 'Ingeniero full-stack especializado en aplicaciones web de alto rendimiento, herramientas LLM y sistemas distribuidos.',
     support:
-      'Actualmente en Wazuh desarrollando el Wazuh AI Assistant para más de 90.000 analistas de seguridad. Anteriormente construí herramientas empresariales para Stanley Black & Decker (Italia y EE. UU.) y software financiero para más de 1.100 puntos de atención de SuperGIROS en Colombia. Mi enfoque es práctico: backends confiables, bases de datos eficientes e interfaces rápidas y accesibles.',
+      'Actualmente en Wazuh desarrollando el Wazuh AI Assistant para más de 90.000 analistas de seguridad. Anteriormente construí herramientas empresariales en Tres Pi Medios para Stanley Black & Decker (Italia y EE. UU.) y software financiero para más de 1.100 puntos de atención de SuperGIROS en Colombia. Mi enfoque es práctico: backends confiables, bases de datos eficientes e interfaces rápidas y accesibles.',
   },
   experience: {
     sectionTitle: 'Trayectoria profesional.',
     activeLabel: 'Activo',
     atLabel: 'en',
+    clientLabel: 'Cliente:',
     contributionsHeading: 'Contribuciones clave e impacto',
     technologiesHeading: 'Tecnologías y herramientas',
     tablistAriaLabel: 'Experiencia laboral por empresa',
@@ -65,14 +69,16 @@ export const es: TranslationDictionary = {
         ],
       },
       {
-        company: 'Tres Pi Medios / Stanley Black & Decker',
-        companyUrl: 'https://www.stanleyblackanddecker.com',
+        company: 'Tres Pi Medios',
+        companyUrl: 'https://www.trespimedios.co/',
+        client: 'Stanley Black & Decker',
+        clientUrl: 'https://www.stanleyblackanddecker.com',
         role: 'Desarrollador Full-stack',
         period: 'Jul 2024 – Ene 2026',
         location: 'Remoto',
         highlights: [
-          'Desarrollo de una plataforma web para gestión y reparación de herramientas en Stanley Black & Decker Italia, reduciendo el tiempo de atención en un 50%.',
-          'Creación de una Azure Function con IA generativa para automatizar respuestas de soporte técnico en Zendesk (EE. UU. y Canadá).',
+          'Desarrollo de una plataforma web para gestión y reparación de herramientas para el cliente Stanley Black & Decker Italia, reduciendo el tiempo de atención en un 50%.',
+          'Creación de una Azure Function con IA generativa para automatizar respuestas de soporte técnico para Stanley Black & Decker (EE. UU. y Canadá).',
           'Integración de flujos de datos en tiempo real para dashboards de Power BI y soporte multi-idioma (italiano e inglés).',
         ],
         skills: ['TypeScript', 'Node.js', 'React', 'Azure', 'OpenAI', 'Docker', 'Git'],

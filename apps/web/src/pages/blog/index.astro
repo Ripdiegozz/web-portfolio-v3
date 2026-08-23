@@ -17,7 +17,7 @@ const t = dict.blogPage;
 const entries = sortPostsByDateDesc((await getCollection('posts')).filter(isPublished));
 ---
 <BaseLayout title={`${t.title} | Diego`} description={t.description} locale={locale} dict={dict}>
-  <main id="main" class="mx-auto max-w-3xl px-6 py-16 md:py-24">
+  <main id="main" class="mx-auto max-w-3xl px-6 pt-28 pb-16 md:pt-32 md:pb-24">
 
     <!-- Back link -->
     <a

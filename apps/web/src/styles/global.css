@@ -1,1 +1,39 @@
 @import 'tailwindcss';
+
+@theme {
+  --font-display: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-serif-accent: 'Instrument Serif', 'Times New Roman', Times, serif;
+  --font-mono-code: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace;
+  --color-accent: #2563eb; /* electric blue — single saturated accent, grim-style grid uses this too */
+  --color-accent-strong: #1d4ed8;
+
+  /* semantic tokens mapped to per-theme variables (see :root/.dark below) */
+  --color-bg: var(--tk-bg);
+  --color-bg-raised: var(--tk-bg-raised);
+  --color-text-primary: var(--tk-text-primary);
+  --color-text-muted: var(--tk-text-muted);
+  --color-border-subtle: var(--tk-border-subtle);
+}
+
+:root {
+  --tk-bg: #ffffff;
+  --tk-bg-raised: #f4f4f5;
+  --tk-text-primary: #101014;
+  --tk-text-muted: #52525b;
+  --tk-border-subtle: #e4e4e7;
+  color-scheme: light;
+}
+
+html.dark {
+  --tk-bg: #09090d;
+  --tk-bg-raised: #14141c;
+  --tk-text-primary: #f4f4f5;
+  --tk-text-muted: #a1a1aa;
+  --tk-border-subtle: #26262e;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+}

@@ -12,8 +12,17 @@ const { title, description = "Diego — Full-Stack Engineer" } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title}</title>
+    <script is:inline>
+      (() => {
+        try {
+          const stored = localStorage.getItem('theme');
+          const dark = stored === 'dark' || ((stored !== 'light') && matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', dark);
+        } catch {}
+      })();
+    </script>
   </head>
-  <body class="min-h-screen bg-white text-neutral-900 antialiased">
+  <body class="min-h-screen bg-bg text-text-primary antialiased">
     <slot />
   </body>
 </html>

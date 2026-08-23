@@ -6,7 +6,8 @@ interface Props {
   title: string;
   description?: string;
 }
-const { title, description = "Diego — Full-Stack Engineer" } = Astro.props;
+const SITE = 'https://dagadev.net';
+const { title, description = 'Full-Stack Engineer at Wazuh building the Wazuh AI Assistant' } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -14,6 +15,13 @@ const { title, description = "Diego — Full-Stack Engineer" } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={`${SITE}/`} />
+    <!-- Pending manual asset: public/og-default.png (1200x630). Not generated yet. -->
+    <meta property="og:image" content={`${SITE}/og-default.png`} />
+    <meta name="twitter:card" content="summary_large_image" />
     <title>{title}</title>
     <script is:inline>
       // Keep in sync with resolveInitialTheme in src/lib/theme.ts.

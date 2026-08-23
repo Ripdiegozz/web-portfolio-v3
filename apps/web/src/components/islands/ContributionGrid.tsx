@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import { Sparkles, Calendar, ExternalLink } from '@portfolio/ui';
 
 export interface ActivityDay {
   date: string;
@@ -18,16 +19,16 @@ const MONTHS = [
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
-const CELL_CLASS = 'h-2.5 w-2.5 rounded-[3px]';
-const COLUMN_GAP = 'gap-[3px]';
+const CELL_CLASS = 'w-full aspect-square rounded-[2px] transition-transform hover:scale-125';
+const COLUMN_GAP = 'gap-[2px] sm:gap-[2.5px]';
 
-/** Level ramp drives the grim-style grid: raised slate for zero, accent at 25% steps. */
+/** GitHub-inspired green emerald ramp with dark mode balance. */
 const LEVEL_CLASS: Record<number, string> = {
-  0: 'bg-bg-raised ring-1 ring-inset ring-border-subtle',
-  1: 'bg-accent/20',
-  2: 'bg-accent/40',
-  3: 'bg-accent/70',
-  4: 'bg-accent',
+  0: 'bg-bg-raised/70 border border-border-subtle/50',
+  1: 'bg-emerald-500/25 dark:bg-emerald-500/30 border border-emerald-500/30',
+  2: 'bg-emerald-500/50 dark:bg-emerald-500/55 border border-emerald-500/40',
+  3: 'bg-emerald-500/75 dark:bg-emerald-500/80 border border-emerald-500/60',
+  4: 'bg-emerald-500 dark:bg-emerald-400 border border-emerald-400',
 };
 
 /**
@@ -58,7 +59,7 @@ export function formatRange(firstIso: string, lastIso: string): string | null {
 
 /** Caption beneath the grid, e.g. "98 contributions in the last year · Aug 2025 - Aug 2026". */
 export function captionFor(total: number, range: string | null): string {
-  const count = `${total} ${total === 1 ? 'contribution' : 'contributions'}`;
+  const count = `${total.toLocaleString()} ${total === 1 ? 'contribution' : 'contributions'}`;
   return range ? `${count} in the last year · ${range}` : count;
 }
 
@@ -72,6 +73,45 @@ export function weekPadding(days: ActivityDay[]): { before: number; after: numbe
   if (!first) return { before: 0, after: 0 };
   const before = new Date(`${first.date}T00:00:00Z`).getUTCDay();
   return { before, after: Math.max(0, 7 - before - days.length) };
+}
+
+/** Calculate streak metrics from the activity days array */
+function calculateMetrics(grid: ContributionGridData) {
+  const allDays = grid.weeks.flatMap((w) => w.days).filter((d) => Boolean(d.date));
+
+  let longestStreak = 0;
+  let tempStreak = 0;
+  let activeDays = 0;
+
+  for (const day of allDays) {
+    if (day.count > 0) {
+      activeDays++;
+      tempStreak++;
+      if (tempStreak > longestStreak) longestStreak = tempStreak;
+    } else {
+      tempStreak = 0;
+    }
+  }
+
+  let currentStreak = 0;
+  for (let i = allDays.length - 1; i >= 0; i--) {
+    const day = allDays[i];
+    if (!day) continue;
+    if (day.count > 0) {
+      currentStreak++;
+    } else {
+      // If the very latest day (today) is 0, allow counting streak from yesterday
+      if (i === allDays.length - 1) continue;
+      break;
+    }
+  }
+
+  return {
+    total: grid.totalContributions,
+    longestStreak,
+    currentStreak,
+    activeDays,
+  };
 }
 
 export default function ContributionGrid() {
@@ -95,32 +135,62 @@ export default function ContributionGrid() {
     };
   }, []);
 
+  const metrics = useMemo(() => (grid ? calculateMetrics(grid) : null), [grid]);
+
   if (failed || (grid !== null && isEmptyGrid(grid))) {
-    // min-h matches the skeleton footprint so the empty/fallback path causes
-    // no layout shift of the content below (Skills, contact, footer).
     return (
-      <div className="mt-10 min-h-[156px]">
-        <p className="text-sm text-text-muted">Nothing to chart yet</p>
-        <p className="mt-2 font-mono-code text-xs text-text-muted">{captionFor(0, null)}</p>
+      <div className="rounded-2xl border border-border-subtle/80 bg-bg-raised/30 p-5 sm:p-7 backdrop-blur-xs">
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <Calendar className="size-8 text-text-muted/60 mb-2" />
+          <p className="text-sm font-medium text-text-primary">GitHub activity is syncing</p>
+          <p className="mt-1 font-mono-code text-xs text-text-muted">
+            Configure your GITHUB_TOKEN to display real-time contribution analytics.
+          </p>
+          <a
+            href="https://github.com/Ripdiegozz"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-md border border-border-subtle bg-bg px-3 py-1.5 font-mono-code text-xs text-text-muted transition-colors hover:border-text-muted hover:text-text-primary"
+          >
+            <span>View on GitHub</span>
+            <ExternalLink className="size-3" />
+          </a>
+        </div>
       </div>
     );
   }
 
-  if (grid === null) {
-    // Skeleton mirrors the real footprint (7 rows) so hydration causes no shift.
-    // One pulse layer only; cells stay static muted.
+  if (grid === null || !metrics) {
+    // Full-width Skeleton with KPI cards and 52-column grid
     return (
-      <div className="mt-10 animate-pulse" aria-hidden="true">
-        <div className="flex gap-[3px]">
-          {Array.from({ length: 8 }, (_, column) => (
-            <div key={column} className={`flex flex-col ${COLUMN_GAP}`}>
-              {Array.from({ length: 7 }, (_, row) => (
-                <div key={row} className={`${CELL_CLASS} bg-bg-raised`} />
-              ))}
+      <div className="rounded-2xl border border-border-subtle/80 bg-bg-raised/30 p-5 sm:p-7 backdrop-blur-xs animate-pulse" aria-hidden="true">
+        {/* KPI Skeleton Row */}
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 mb-6">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="flex flex-col rounded-xl border border-border-subtle/60 bg-bg/60 p-3 h-18">
+              <div className="h-5 w-16 rounded bg-bg-raised mb-2" />
+              <div className="h-3 w-24 rounded bg-bg-raised/60" />
             </div>
           ))}
         </div>
-        <div className="mt-3 h-4 w-48 rounded-sm bg-bg-raised" />
+
+        {/* Grid Skeleton */}
+        <div className="w-full overflow-x-auto pb-1 sm:overflow-x-visible">
+          <div className="flex w-full justify-between gap-[2px] sm:gap-[2.5px] min-w-[500px] sm:min-w-0">
+            {Array.from({ length: 52 }, (_, column) => (
+              <div key={column} className={`flex flex-1 flex-col ${COLUMN_GAP} max-w-[11px]`}>
+                {Array.from({ length: 7 }, (_, row) => (
+                  <div key={row} className={`${CELL_CLASS} bg-bg-raised/60`} />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 flex items-center justify-between border-t border-border-subtle/40 pt-3">
+          <div className="h-3 w-48 rounded bg-bg-raised/60" />
+          <div className="h-3 w-24 rounded bg-bg-raised/60" />
+        </div>
       </div>
     );
   }
@@ -132,31 +202,88 @@ export default function ContributionGrid() {
   const label = captionFor(grid.totalContributions, range);
 
   return (
-    <div className="mt-10">
-      <div role="img" aria-label={label} className={`flex ${COLUMN_GAP} overflow-x-auto`}>
-        {grid.weeks.map((week, weekIndex) => {
-          if (week.days.length === 0) return null;
-          const { before, after } = weekPadding(week.days);
-          return (
-            <div key={weekIndex} className={`flex flex-col ${COLUMN_GAP}`}>
-              {Array.from({ length: before }, (_, padIndex) => (
-                <div key={`lead-${padIndex}`} className={CELL_CLASS} aria-hidden="true" />
-              ))}
-              {week.days.map((day, dayIndex) => (
-                <div
-                  key={dayIndex}
-                  title={`${day.count} on ${day.date}`}
-                  className={`${CELL_CLASS} ${LEVEL_CLASS[day.level] ?? 'bg-bg-raised'}`}
-                />
-              ))}
-              {Array.from({ length: after }, (_, padIndex) => (
-                <div key={`trail-${padIndex}`} className={CELL_CLASS} aria-hidden="true" />
-              ))}
-            </div>
-          );
-        })}
+    <div className="rounded-2xl border border-border-subtle/80 bg-bg-raised/30 p-5 sm:p-7 backdrop-blur-xs">
+      {/* Top GitHub Readme KPI Metrics */}
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 mb-6">
+        <div className="flex flex-col rounded-xl border border-border-subtle/70 bg-bg/80 p-3 shadow-2xs">
+          <span className="flex items-center gap-1 font-mono-code text-base font-bold text-text-primary">
+            <Sparkles className="size-3.5 text-accent shrink-0" />
+            <span>{metrics.total.toLocaleString()}</span>
+          </span>
+          <span className="mt-1 font-mono-code text-[11px] text-text-muted">Total Contributions</span>
+        </div>
+
+        <div className="flex flex-col rounded-xl border border-border-subtle/70 bg-bg/80 p-3 shadow-2xs">
+          <span className="font-mono-code text-base font-bold text-text-primary">
+            {metrics.longestStreak} <span className="text-xs font-normal text-text-muted">days</span>
+          </span>
+          <span className="mt-1 font-mono-code text-[11px] text-text-muted">Longest Streak</span>
+        </div>
+
+        <div className="flex flex-col rounded-xl border border-border-subtle/70 bg-bg/80 p-3 shadow-2xs">
+          <span className="font-mono-code text-base font-bold text-text-primary">
+            {metrics.currentStreak} <span className="text-xs font-normal text-text-muted">days</span>
+          </span>
+          <span className="mt-1 font-mono-code text-[11px] text-text-muted">Current Streak</span>
+        </div>
+
+        <div className="flex flex-col rounded-xl border border-border-subtle/70 bg-bg/80 p-3 shadow-2xs">
+          <span className="font-mono-code text-base font-bold text-text-primary">
+            {metrics.activeDays} <span className="text-xs font-normal text-text-muted">days</span>
+          </span>
+          <span className="mt-1 font-mono-code text-[11px] text-text-muted">Active Days in Year</span>
+        </div>
       </div>
-      <p className="mt-3 font-mono-code text-xs text-text-muted">{label}</p>
+
+      {/* Full Width GitHub Activity Heatmap Grid */}
+      <div className="w-full overflow-x-auto pb-1 sm:overflow-x-visible">
+        <div role="img" aria-label={label} className="flex w-full justify-between gap-[2px] sm:gap-[2.5px] min-w-[500px] sm:min-w-0">
+          {grid.weeks.map((week, weekIndex) => {
+            if (week.days.length === 0) return null;
+            const { before, after } = weekPadding(week.days);
+            return (
+              <div key={weekIndex} className={`flex flex-1 flex-col ${COLUMN_GAP} max-w-[11px]`}>
+                {Array.from({ length: before }, (_, padIndex) => (
+                  <div key={`lead-${padIndex}`} className={CELL_CLASS} aria-hidden="true" />
+                ))}
+                {week.days.map((day, dayIndex) => (
+                  <div
+                    key={dayIndex}
+                    title={`${day.count} contributions on ${day.date}`}
+                    className={`${CELL_CLASS} ${LEVEL_CLASS[day.level] ?? 'bg-bg-raised'}`}
+                  />
+                ))}
+                {Array.from({ length: after }, (_, padIndex) => (
+                  <div key={`trail-${padIndex}`} className={CELL_CLASS} aria-hidden="true" />
+                ))}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Footer Details: Range & Legend */}
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border-subtle/40 pt-3.5 font-mono-code text-xs text-text-muted">
+        <a
+          href="https://github.com/Ripdiegozz"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-1 text-text-muted transition-colors hover:text-text-primary"
+        >
+          <span>{label}</span>
+          <ExternalLink className="size-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </a>
+
+        <div className="flex items-center gap-1.5 text-[11px]">
+          <span>Less</span>
+          <span className="size-2.5 rounded-[2px] bg-bg-raised/70 border border-border-subtle/50" />
+          <span className="size-2.5 rounded-[2px] bg-emerald-500/25 dark:bg-emerald-500/30 border border-emerald-500/30" />
+          <span className="size-2.5 rounded-[2px] bg-emerald-500/50 dark:bg-emerald-500/55 border border-emerald-500/40" />
+          <span className="size-2.5 rounded-[2px] bg-emerald-500/75 dark:bg-emerald-500/80 border border-emerald-500/60" />
+          <span className="size-2.5 rounded-[2px] bg-emerald-500 dark:bg-emerald-400 border border-emerald-400" />
+          <span>More</span>
+        </div>
+      </div>
     </div>
   );
 }

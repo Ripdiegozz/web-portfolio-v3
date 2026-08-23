@@ -35,10 +35,23 @@ export async function getActivityWithFallback(
 
 const QUERY = /* GraphQL */ `
   query {
+    user(login: "Ripdiegozz") {
+      contributionsCollection {
+        contributionCalendar {
+          totalContributions
+          weeks {
+            contributionDays {
+              date
+              contributionCount
+            }
+          }
+        }
+      }
+    }
     viewer {
       contributionsCollection {
-        totalContributions
         contributionCalendar {
+          totalContributions
           weeks {
             contributionDays {
               date
@@ -52,14 +65,20 @@ const QUERY = /* GraphQL */ `
 `;
 
 export async function fetchGitHubActivity(githubToken: string, fetchImpl: typeof fetch = fetch) {
+  const token = githubToken.trim();
   const res = await fetchImpl('https://api.github.com/graphql', {
     method: 'POST',
     headers: {
-      authorization: `Bearer ${githubToken}`,
+      authorization: `Bearer ${token}`,
       'content-type': 'application/json',
+      'user-agent': 'dagadev-portfolio',
     },
     body: JSON.stringify({ query: QUERY }),
   });
-  if (!res.ok) throw new Error(`github_graphql_${res.status}`);
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    console.error(`[github-graphql] failed (${res.status}): ${text}`);
+    throw new Error(`github_graphql_${res.status}`);
+  }
   return res.json();
 }

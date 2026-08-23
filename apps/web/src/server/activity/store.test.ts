@@ -8,8 +8,10 @@ describe('getActivityWithFallback', () => {
     data: {
       viewer: {
         contributionsCollection: {
-          totalContributions: 5,
-          contributionCalendar: { weeks: [] },
+          contributionCalendar: {
+            totalContributions: 5,
+            weeks: [],
+          },
         },
       },
     },

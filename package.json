@@ -1,0 +1,23 @@
+{
+  "name": "web-portfolio-v3",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "devEngines": {
+    "packageManager": {
+      "name": "bun",
+      "version": "1.4.0"
+    }
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test"
+  },
+  "devDependencies": {
+    "prettier": "latest",
+    "turbo": "latest",
+    "typescript": "latest"
+  }
+}

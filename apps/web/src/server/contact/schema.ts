@@ -22,7 +22,8 @@ export function classifyContactAttempt(
   result: ReturnType<typeof contactSchema.safeParse>
 ): ClassifiedContact {
   if (!result.success) return { kind: 'rejected' };
-  const { company, turnstileToken: _drop, ...data } = result.data;
+  const { company } = result.data;
   if (company) return { kind: 'silent_bot' };
-  return { kind: 'accepted', data };
+  const { name, email, message } = result.data;
+  return { kind: 'accepted', data: { name, email, message } };
 }

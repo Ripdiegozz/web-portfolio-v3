@@ -1,32 +1,27 @@
 ---
 import { Reveal } from '@portfolio/ui';
+import Section from './Section.astro';
 import { skills } from '../../data/site';
 
-// No groups yet: the section stays out of the page instead of rendering an empty shell.
-const hasGroups = skills.length > 0;
+// No groups yet: omit the section entirely instead of rendering an empty shell.
 ---
 {
-  hasGroups && (
-    <section aria-labelledby="skills-heading" class="border-t border-border-subtle">
+  skills.length > 0 && (
+    <Section label="skills" headingId="skills">
       <Reveal client:visible>
-        <div class="mx-auto w-full max-w-3xl px-6 py-24 md:py-32">
-          <h2 id="skills-heading" class="font-mono-code text-xs tracking-[0.2em] text-text-muted">
-            // skills
-          </h2>
-          <dl class="mt-12 space-y-10">
-            {skills.map((group) => (
-              <div class="grid gap-3 md:grid-cols-[9rem_1fr] md:gap-8">
-                <dt class="pt-0.5 font-sans-display text-sm font-medium text-text-primary">
-                  {group.category}
-                </dt>
-                <dd class="font-mono-code text-xs leading-loose text-text-muted">
-                  {group.items.join(' · ')}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+        <dl class="mt-12 space-y-10">
+          {skills.map((group) => (
+            <div class="grid gap-3 md:grid-cols-[9rem_1fr] md:gap-8">
+              <dt class="pt-0.5 font-sans-display text-sm font-medium text-text-primary">
+                {group.category}
+              </dt>
+              <dd class="font-mono-code text-xs leading-loose text-text-muted">
+                {group.items.join(' · ')}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </Reveal>
-    </section>
+    </Section>
   )
 }

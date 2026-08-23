@@ -39,5 +39,7 @@ export const socials: SocialLink[] = [
   { label: 'GitHub', href: 'https://github.com/Ripdiegozz' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/dagadev' },
 ];
-export const aboutText =
+export const aboutTextLead =
   'Full-Stack Engineer at Wazuh building the Wazuh AI Assistant.';
+export const aboutTextSupport =
+  'Previously Tres Pi Medios / Stanley Black & Decker, and SuperGIROS. Currently building the Wazuh AI Assistant.';

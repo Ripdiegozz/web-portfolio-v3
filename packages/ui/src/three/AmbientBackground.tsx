@@ -1,15 +1,31 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-function WavePlane() {
-  const ref = useRef<THREE.Mesh>(null!);
+function WaveDots() {
+  const ref = useRef<THREE.Points>(null!);
   const mouse = useRef(new THREE.Vector2(0, 0));
   const targetMouse = useRef(new THREE.Vector2(0, 0));
 
+  const positions = useMemo(() => {
+    const cols = 64;
+    const rows = 64;
+    const arr = new Float32Array(cols * rows * 3);
+    let idx = 0;
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        const x = (i / (cols - 1) - 0.5) * 30;
+        const y = (j / (rows - 1) - 0.5) * 30;
+        arr[idx++] = x;
+        arr[idx++] = y;
+        arr[idx++] = 0;
+      }
+    }
+    return arr;
+  }, []);
+
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
-      // Normalized to plane space (-15..15 matches planeGeometry 30x30)
       targetMouse.current.set(
         (e.clientX / window.innerWidth - 0.5) * 30,
         -(e.clientY / window.innerHeight - 0.5) * 30,
@@ -21,19 +37,25 @@ function WavePlane() {
 
   useFrame(({ clock }) => {
     if (document.visibilityState === 'hidden') return;
-    const mesh = ref.current;
-    if (!mesh) return;
-    const mat = mesh.material as THREE.ShaderMaterial;
-    // Smooth follow for mouse
+    const points = ref.current;
+    if (!points) return;
+    const mat = points.material as THREE.ShaderMaterial;
     mouse.current.lerp(targetMouse.current, 0.04);
     mat.uniforms.uTime.value = clock.elapsedTime;
     mat.uniforms.uMouse.value.copy(mouse.current);
   });
+
   return (
-    <mesh ref={ref}>
-      <planeGeometry args={[30, 30, 64, 64]} />
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          args={[positions, 3]}
+        />
+      </bufferGeometry>
       <shaderMaterial
         transparent
+        depthWrite={false}
         uniforms={{
           uTime: { value: 0 },
           uMouse: { value: new THREE.Vector2(0, 0) },
@@ -42,7 +64,7 @@ function WavePlane() {
         vertexShader={VERT}
         fragmentShader={FRAG}
       />
-    </mesh>
+    </points>
   );
 }
 
@@ -52,14 +74,14 @@ const VERT = /* glsl */ `
   varying vec3 vPos;
   void main() {
     vec3 p = position;
-    // Base wave
     p.z += sin(p.x * 0.6 + uTime) * cos(p.y * 0.6 + uTime * 0.8) * 0.9;
-    // Mouse pull: nearby vertices lift toward cursor
     float d = distance(p.xy, uMouse);
     float influence = smoothstep(8.0, 0.0, d);
     p.z += influence * 1.4 * sin(uTime * 2.0);
     vPos = p;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+    vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
+    gl_Position = projectionMatrix * mvPosition;
+    gl_PointSize = 3.8 * (320.0 / -mvPosition.z);
   }
 `;
 const FRAG = /* glsl */ `
@@ -67,10 +89,14 @@ const FRAG = /* glsl */ `
   uniform vec2 uMouse;
   varying vec3 vPos;
   void main() {
+    vec2 c = gl_PointCoord - vec2(0.5);
+    float dist = length(c);
+    if (dist > 0.5) discard;
     float glow = smoothstep(-1.0, 2.0, vPos.z);
-    float mouseGlow = smoothstep(6.0, 0.0, distance(vPos.xy, uMouse)) * 0.28;
-    float alpha = clamp(glow * 0.35 + mouseGlow, 0.0, 0.62);
-    gl_FragColor = vec4(uColor, alpha);
+    float mouseGlow = smoothstep(6.0, 0.0, distance(vPos.xy, uMouse)) * 0.32;
+    float alpha = clamp(glow * 0.78 + mouseGlow, 0.0, 0.92);
+    float circle = 1.0 - smoothstep(0.32, 0.5, dist);
+    gl_FragColor = vec4(uColor, alpha * circle);
   }
 `;
 
@@ -88,7 +114,7 @@ export function AmbientBackground() {
       dpr={[1, 1.5]}
       gl={{ antialias: false, alpha: true }}
     >
-      <WavePlane />
+      <WaveDots />
     </Canvas>
   );
 }

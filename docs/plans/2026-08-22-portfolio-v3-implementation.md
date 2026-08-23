@@ -6,7 +6,7 @@
 
 **Architecture:** Bun-workspace monorepo (`apps/web`, `packages/ui`, `packages/email`, `packages/config`) driven by Turborepo. `apps/web` builds with `output: 'static'` + `@astrojs/cloudflare`; every public route is prerendered HTML at the edge; only `/api/*` and `/admin/*` set `prerender = false` and run SSR in the Worker. Hono mounts through one catch-all API route; Keystatic (GitHub storage) commits posts to `src/content/posts/` which the Astro Content Layer mirrors with a Zod schema.
 
-**Tech Stack:** bun 1.4.0 · turbo@latest (v2) · astro@latest (7.x) · @astrojs/cloudflare@latest · react@latest (19) + @astrojs/react · hono@latest (4) · tailwindcss@latest (4, CSS-first `@theme`) · motion@latest (13) · three@latest (0.185+) + @react-three/fiber · @keystatic/core@latest (0.x — spike-gated) · resend + @react-email/components · zod@latest (v4 API) · vitest · Playwright (smoke only). TypeScript strict; never hardcode patch versions in code — install with `bun add pkg@latest` and let the lockfile pin.
+**Tech Stack:** bun 1.4.0 · turbo (v2) · astro (7.x) · @astrojs/cloudflare · react (19) + @astrojs/react · hono (4) · tailwindcss (4, CSS-first `@theme`) · motion (13) · three (0.185+) + @react-three/fiber · @keystatic/core (0.x — spike-gated) · resend + @react-email/components · zod (v4 API) · vitest · Playwright (smoke only). TypeScript strict. **Version policy (user decision 2026-08-22): install `pkg@latest` ONCE at the moment a dependency is introduced, then immediately record the resolved caret range (`^x.y.z`) in the manifest — never commit literal `"latest"` ranges; bun.lock pins exact versions.
 
 **Source of truth:** `docs/plans/2026-08-22-portfolio-v3-design.md`. Do not add features beyond it.
 

@@ -1,11 +1,11 @@
 ---
 import { getCollection, render } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import TableOfContents from '../../components/TableOfContents.astro';
-import { isPublished, getReadingTime, formatBlogDate } from '../../lib/blog';
-import { getTranslations } from '../../i18n';
-import type { Locale } from '../../i18n/types';
-import '../../styles/global.css';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TableOfContents from '../../../components/TableOfContents.astro';
+import { isPublished, getReadingTime, formatBlogDate } from '../../../lib/blog';
+import { getTranslations } from '../../../i18n';
+import type { Locale } from '../../../i18n/types';
+import '../../../styles/global.css';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('posts')).filter(isPublished);
@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 
-const locale: Locale = 'en';
+const locale: Locale = 'es';
 const dict = getTranslations(locale);
 const t = dict.blogPage;
 
@@ -30,13 +30,13 @@ const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length > 1
   description={entry.data.description}
   locale={locale}
   dict={dict}
-  alternatePath={`/es/blog/${entry.id}/`}
+  alternatePath={`/blog/${entry.id}/`}
 >
   <div id="main" class="mx-auto w-full max-w-6xl px-6 pt-28 pb-16 md:pt-32 md:pb-24">
 
     <!-- Back link -->
     <a
-      href="/blog/"
+      href="/es/blog/"
       class="mb-10 inline-flex items-center gap-1.5 font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary"
     >
       {t.backBlog}
@@ -90,7 +90,7 @@ const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length > 1
     <!-- Mobile ToC (before content) -->
     {hasToc && (
       <div class="mb-8 lg:hidden">
-        <TableOfContents headings={headings} label={t.tableOfContents ?? 'On this page'} />
+        <TableOfContents headings={headings} label={t.tableOfContents ?? 'En esta página'} />
       </div>
     )}
 
@@ -105,7 +105,7 @@ const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length > 1
       <!-- Desktop ToC sidebar -->
       {hasToc && (
         <div class="hidden lg:block">
-          <TableOfContents headings={headings} label={t.tableOfContents ?? 'On this page'} />
+          <TableOfContents headings={headings} label={t.tableOfContents ?? 'En esta página'} />
         </div>
       )}
     </div>
@@ -113,7 +113,7 @@ const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length > 1
     <!-- Footer nav -->
     <footer class="mt-16 max-w-3xl border-t border-border-subtle pt-8">
       <a
-        href="/blog/"
+        href="/es/blog/"
         class="inline-flex items-center gap-1.5 font-mono-code text-sm text-text-muted transition-colors hover:text-text-primary"
       >
         {t.backBlog}

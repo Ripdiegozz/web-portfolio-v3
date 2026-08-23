@@ -1,5 +1,5 @@
 ---
-import { User, Sparkles, Code2, Terminal, Cpu, Mail } from '@portfolio/ui';
+import { User, Sparkles, Code2, Terminal, Cpu, Mail, FileText } from '@portfolio/ui';
 
 interface Props {
   /** Section slug used for the aria id pair; also the kicker label. */
@@ -17,6 +17,8 @@ const ICONS = {
   projects: Code2,
   activity: Terminal,
   skills: Cpu,
+  writing: FileText,
+  blog: FileText,
   contact: Mail,
 } as const;
 

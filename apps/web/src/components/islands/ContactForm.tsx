@@ -74,7 +74,7 @@ export default function ContactForm({ labels }: ContactFormProps = {}) {
       if (turnstile?.render && turnstileContainerRef.current && !widgetIdRef.current) {
         try {
           widgetIdRef.current = turnstile.render(turnstileContainerRef.current, {
-            sitekey: import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA',
+            sitekey: import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAAEZirQtgOSbDAmlZ',
             theme: 'auto',
           });
         } catch (err) {

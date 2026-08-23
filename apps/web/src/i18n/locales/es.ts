@@ -200,7 +200,7 @@ export const es: TranslationDictionary = {
     months: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
   },
   writing: {
-    sectionTitle: 'Escritura.',
+    sectionTitle: 'Blog.',
     lead: 'Notas sobre ingeniería, sistemas y software que llega a producción.',
     viewAll: 'Ver todos los artículos',
     readTime: '{n} min de lectura',

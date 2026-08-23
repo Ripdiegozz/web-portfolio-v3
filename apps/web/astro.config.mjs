@@ -32,5 +32,13 @@ export default defineConfig({
       // server reload mid-session that wipes client-side React state.
       include: ['lucide-react'],
     },
+    ssr: {
+      // hono and zod (used by the /api/contact route) are otherwise only
+      // discovered on the first request that hits that route, forcing a dev
+      // server reload mid-request that can crash with a missing-chunk error.
+      optimizeDeps: {
+        include: ['hono', 'zod'],
+      },
+    },
   },
 });

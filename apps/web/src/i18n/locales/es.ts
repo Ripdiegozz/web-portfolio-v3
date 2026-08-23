@@ -37,6 +37,8 @@ export const es: TranslationDictionary = {
   about: {
     sectionTitle: 'Sobre mí.',
     lead: 'Ingeniero full-stack especializado en aplicaciones web de alto rendimiento, herramientas LLM y sistemas distribuidos.',
+    philosophyQuote: '« Backends confiables, arquitecturas de datos limpias e interfaces rápidas y accesibles. »',
+    philosophyLabel: '— Enfoque de ingeniería',
     support:
       'Actualmente en Wazuh desarrollando el Wazuh AI Assistant para más de 90.000 analistas de seguridad. Anteriormente construí herramientas empresariales en Tres Pi Medios para Stanley Black & Decker (Italia y EE. UU.) y software financiero para más de 1.100 puntos de atención de SuperGIROS en Colombia. Mi enfoque es práctico: backends confiables, bases de datos eficientes e interfaces rápidas y accesibles.',
   },
@@ -128,9 +130,9 @@ export const es: TranslationDictionary = {
     categories: [
       {
         id: 'frontend',
-        title: 'Frontend y Sistemas UI',
+        title: 'Frontend y Sistemas de UI',
         iconName: 'Layers',
-        description: 'Arquitectura de componentes, gestión de estado y diseño de interfaces accesibles.',
+        description: 'Arquitectura de componentes, gestión de estado y diseño accesible.',
         skills: ['React', 'Next.js', 'TypeScript', 'Angular', 'Tailwind CSS', 'Astro', 'Redux', 'Vite', 'HTML5', 'CSS3', 'Sass'],
       },
       {
@@ -154,6 +156,14 @@ export const es: TranslationDictionary = {
     liveLabel: 'en vivo',
     sourceLabel: 'código',
     items: [
+      {
+        name: 'wazuh-dashboard',
+        description:
+          'Interfaz web de código abierto para la plataforma de seguridad Wazuh. Detección de amenazas en tiempo real, visualización y analíticas SIEM/XDR.',
+        stack: ['TypeScript', 'React', 'Node.js', 'OpenSearch', 'Docker'],
+        repoUrl: 'https://github.com/wazuh/wazuh-dashboard',
+        liveUrl: 'https://wazuh.com',
+      },
       {
         name: 'NatGPT',
         description:
@@ -190,7 +200,7 @@ export const es: TranslationDictionary = {
     months: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
   },
   contact: {
-    sectionTitle: 'Hablemos.',
+    sectionTitle: '¿Hablamos de un proyecto?',
     sectionDescription:
       '¿Tienes un proyecto en mente, preguntas sobre mi trabajo o quieres explorar una oportunidad? Escríbeme abajo.',
     nameLabel: 'Nombre',

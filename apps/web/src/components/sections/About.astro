@@ -12,7 +12,21 @@ const { dict = en.about } = Astro.props;
 ---
 <Section label="about" number="01" title={dict.sectionTitle}>
   <Reveal client:visible>
-    <p class="text-xl leading-relaxed text-text-primary md:text-2xl">{dict.lead}</p>
-    <p class="mt-6 max-w-xl leading-relaxed text-text-muted">{dict.support}</p>
+    <p class="text-xl leading-relaxed text-text-primary md:text-2xl font-light">{dict.lead}</p>
+    
+    {dict.philosophyQuote && (
+      <div class="my-8 relative overflow-hidden rounded-2xl border border-border-subtle/70 bg-bg-raised/30 p-6 sm:p-7 backdrop-blur-xs">
+        <p class="font-serif-accent italic text-2xl sm:text-3xl text-text-primary leading-snug tracking-tight">
+          {dict.philosophyQuote}
+        </p>
+        {dict.philosophyLabel && (
+          <p class="mt-3 font-mono-code text-[11px] font-semibold uppercase tracking-widest text-accent-readable">
+            {dict.philosophyLabel}
+          </p>
+        )}
+      </div>
+    )}
+
+    <p class="max-w-2xl leading-relaxed text-text-muted">{dict.support}</p>
   </Reveal>
 </Section>

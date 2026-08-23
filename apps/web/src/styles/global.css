@@ -6,7 +6,7 @@
 @plugin '@tailwindcss/typography';
 
 @theme {
-  --font-sans-display: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans-display: 'Geist Variable', 'Geist Sans', -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui, sans-serif;
   --font-serif-accent: 'Instrument Serif', 'Times New Roman', Times, serif;
   --font-mono-code: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace;
   --color-accent: #2563eb; /* electric blue accent; also drives the grim-style grid */

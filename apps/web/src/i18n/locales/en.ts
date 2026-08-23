@@ -37,6 +37,8 @@ export const en: TranslationDictionary = {
   about: {
     sectionTitle: 'A bit about me.',
     lead: 'Full-stack engineer building production web applications, LLM tooling, and distributed systems.',
+    philosophyQuote: '“Reliable backends, clean data architectures, and fast, accessible interfaces.”',
+    philosophyLabel: '— Core Engineering Focus',
     support:
       'Currently at Wazuh building the Wazuh AI Assistant for 90,000+ security users. Before that, built business tools at Tres Pi Medios for Stanley Black & Decker (Italy and US) and financial software serving 1,100+ SuperGIROS service points in Colombia. My focus is practical: reliable backends, clean databases, and fast, accessible interfaces.',
   },
@@ -117,10 +119,10 @@ export const en: TranslationDictionary = {
       { name: 'TypeScript', role: 'Primary Language' },
       { name: 'React', role: 'Frontend Architecture' },
       { name: 'Next.js', role: 'Production Framework' },
-      { name: 'Node.js', role: 'Backend Runtime' },
-      { name: 'PostgreSQL', role: 'Relational Database' },
+      { name: 'Node.js', role: 'Runtime Backend' },
+      { name: 'PostgreSQL', role: 'Relational DB' },
       { name: 'Elasticsearch', role: 'Distributed Search & SIEM' },
-      { name: 'OpenAI', role: 'AI Agent Tooling' },
+      { name: 'OpenAI', role: 'Agent Tooling' },
       { name: 'Tailwind CSS', role: 'Design Systems' },
       { name: 'Docker', role: 'Containerization' },
       { name: 'Git', role: 'Version Control' },
@@ -130,7 +132,7 @@ export const en: TranslationDictionary = {
         id: 'frontend',
         title: 'Frontend & UI Systems',
         iconName: 'Layers',
-        description: 'Component architecture, state management, and accessible UI design.',
+        description: 'Component architecture, state management, and accessible design system implementations.',
         skills: ['React', 'Next.js', 'TypeScript', 'Angular', 'Tailwind CSS', 'Astro', 'Redux', 'Vite', 'HTML5', 'CSS3', 'Sass'],
       },
       {
@@ -154,6 +156,14 @@ export const en: TranslationDictionary = {
     liveLabel: 'live',
     sourceLabel: 'source',
     items: [
+      {
+        name: 'wazuh-dashboard',
+        description:
+          'Open-source web user interface for the Wazuh security platform. Real-time threat detection, visualization, and SIEM/XDR analytics.',
+        stack: ['TypeScript', 'React', 'Node.js', 'OpenSearch', 'Docker'],
+        repoUrl: 'https://github.com/wazuh/wazuh-dashboard',
+        liveUrl: 'https://wazuh.com',
+      },
       {
         name: 'NatGPT',
         description:

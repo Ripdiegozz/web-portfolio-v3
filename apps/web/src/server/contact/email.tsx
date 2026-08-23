@@ -40,7 +40,7 @@ export function makeSendContactEmail(apiKey: string, opts?: { to?: string; from?
       const { error } = await resend.emails.send({
         // dagadev.net is the verified Resend domain.
         from: opts?.from ?? 'Portfolio <portfolio@dagadev.net>',
-        // Diego's real inbox, from the v2 contact pipeline.
+        // Diego's real inbox where client contact notifications are delivered.
         to: opts?.to ?? 'diegogarciag63@gmail.com',
         subject: `New portfolio message from ${input.name}`,
         html,

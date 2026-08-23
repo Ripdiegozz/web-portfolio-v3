@@ -32,33 +32,32 @@ export const experience: ExperienceItem[] = [
     current: true,
     location: 'Remote',
     highlights: [
-      'Building the Wazuh AI Assistant, agent tooling, and scalable backend microservices.',
-      'Architecting intuitive UI workflows and real-time interfaces relied upon daily by security analysts worldwide.',
+      'Building the Wazuh AI Assistant: backend tooling that lets security analysts query platform data using natural language.',
+      'Developing full-stack features, OpenSearch integrations, and releases for the Wazuh web dashboard.',
+      'Automating CI/CD pipelines with GitHub Actions to test and build Linux packages for 90,000+ deployments.',
     ],
-    skills: ['TypeScript', 'Python', 'React', 'Docker', 'Linux', 'OpenAI'],
+    skills: ['TypeScript', 'React', 'Node.js', 'Elasticsearch', 'OpenSearch', 'OpenAI', 'Docker', 'Linux'],
     kpis: [
-      { value: 'AI Assistant', label: 'GenAI Agent Tooling' },
-      { value: 'Full-Stack', label: 'Analyst UX & Services' },
-      { value: 'Global', label: 'Enterprise Security' },
+      { value: '90k+ users', label: 'Platform deployments' },
+      { value: 'AI Assistant', label: 'GenAI Tooling' },
+      { value: 'XDR / SIEM', label: 'Security Dashboard' },
     ],
   },
   {
     company: 'Tres Pi Medios / Stanley Black & Decker',
     role: 'Full-stack Developer',
-    period: 'Jul 2024 – Jan 2025',
+    period: 'Jul 2024 – Jan 2026',
     location: 'Remote',
     highlights: [
-      'Built a tool loan and repair management application for Stanley Black & Decker in Italy, cutting task time by 50%.',
-      'Developed an Azure Cloud Function automating generative AI integration, enabling automated response generation for Stanley Black & Decker customers on Zendesk in the U.S.',
-      'Developed chatbot features for customer support workflows in the U.S. and Canada, improving response efficiency across multiple markets.',
-      'Implemented real-time data delivery for a Power BI dashboard, improving visibility into operational metrics and reporting workflows.',
-      'Integrated internationalization across frontend and backend for web applications in Italy and the Middle East, enabling support for both Italian and English.',
+      'Built an internal tool loan and repair app for Stanley Black & Decker Italy, cutting task completion time by 50%.',
+      'Developed an Azure Function integrating generative AI to automate Zendesk customer support replies in the US and Canada.',
+      'Built real-time data feeds for Power BI operational dashboards and set up i18n support for Italian and English.',
     ],
-    skills: ['TypeScript', 'Node.js', 'OpenAI', 'Python', 'Docker', 'Git'],
+    skills: ['TypeScript', 'Node.js', 'React', 'Azure', 'OpenAI', 'Docker', 'Git'],
     kpis: [
-      { value: '-50%', label: 'Task time in Italy' },
-      { value: 'GenAI', label: 'Zendesk US/CA bot' },
-      { value: 'Real-time', label: 'Power BI analytics' },
+      { value: '-50% time', label: 'Tool repair app (Italy)' },
+      { value: 'Zendesk AI', label: 'Support bot (US/CA)' },
+      { value: 'Power BI', label: 'Real-time telemetry' },
     ],
   },
   {
@@ -67,18 +66,15 @@ export const experience: ExperienceItem[] = [
     period: 'Aug 2023 – Jul 2024',
     location: 'On-site / Hybrid',
     highlights: [
-      'Developed a Node.js chatbot to assist sales personnel, reducing helpdesk calls by 60%.',
-      'Improved the performance of the main web application by 40% through refactoring, optimization, and an Angular upgrade.',
-      'Built an inventory and purchasing management application from scratch, reducing task time by 50%.',
-      'Created RESTful APIs to integrate new functionalities into the company Intranet and web applications using Java, Spring, and Hibernate with remote OracleSQL databases.',
-      'Implemented RESTful APIs in the microservices environment using Docker and Linux servers, supporting scalable service delivery.',
-      'Developed a Java desktop service to manage matrix printers, improving the printing workflow with real-time WebSocket updates.',
+      'Built internal back-office tools serving 1,100+ financial service points in Norte de Santander.',
+      'Built a Node.js sales chatbot that reduced helpdesk support calls by 60%.',
+      'Improved web app load speed by 40% through code refactoring, Angular upgrades, and Java/Spring Boot microservices connected to Oracle databases.',
     ],
-    skills: ['Node.js', 'TypeScript', 'Docker', 'Linux', 'PostgreSQL', 'Git'],
+    skills: ['Node.js', 'TypeScript', 'Angular', 'Java', 'Spring Boot', 'PostgreSQL', 'Oracle SQL', 'Docker'],
     kpis: [
-      { value: '-60%', label: 'Helpdesk calls' },
-      { value: '+40%', label: 'App performance' },
-      { value: '-50%', label: 'Inventory task time' },
+      { value: '1,100+ points', label: 'Financial back-office' },
+      { value: '-60% calls', label: 'Internal helpdesk' },
+      { value: '+40% speed', label: 'Web performance' },
     ],
   },
 ];
@@ -86,7 +82,7 @@ export const projects: ProjectItem[] = [
   {
     name: 'NatGPT',
     description:
-      'AI-powered chat platform for text and voice conversations, with real-time messaging, voice recording with transcription, and AI-generated responses.',
+      'AI chat platform with voice recording, transcription, and real-time response streaming.',
     stack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Convex', 'OpenAI', 'Clerk'],
     repoUrl: 'https://github.com/Ripdiegozz/nat-gpt',
     liveUrl: 'https://nat-gpt.vercel.app/',
@@ -94,7 +90,7 @@ export const projects: ProjectItem[] = [
   {
     name: 'Notewave',
     description:
-      'Note-taking app with rich text editing, task management, and responsive design for capturing and sharing ideas.',
+      'Note-taking web app with rich-text markdown editing and task management.',
     stack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'JavaScript', 'HTML', 'CSS'],
     repoUrl: 'https://github.com/Ripdiegozz/Notewave',
     liveUrl: 'https://notewave-lake.vercel.app/',
@@ -131,21 +127,21 @@ export const skillCategories: SkillCategoryGroup[] = [
     id: 'frontend',
     title: 'Frontend & UI Systems',
     iconName: 'Layers',
-    description: 'Performant, accessible user interfaces, atomic design systems, and reactive state management.',
+    description: 'Component architecture, state management, and accessible UI design.',
     skills: ['React', 'Next.js', 'TypeScript', 'Angular', 'Tailwind CSS', 'Astro', 'Redux', 'Vite', 'HTML5', 'CSS3', 'Sass'],
   },
   {
     id: 'backend',
     title: 'Backend & Data Architecture',
     iconName: 'Cpu',
-    description: 'AI agent tool orchestration, scalable microservices, distributed search pipelines, relational SQL and NoSQL storage.',
+    description: 'REST microservices, database design, distributed search, and LLM integrations.',
     skills: ['Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'Elasticsearch', 'OpenSearch', 'MySQL', 'Oracle SQL', 'OpenAI', 'Java', 'Spring Boot', 'Bash'],
   },
   {
     id: 'devops',
     title: 'Cloud, CI/CD & Testing',
     iconName: 'Shield',
-    description: 'Automated CI/CD pipelines, container orchestration, cloud platforms (AWS, Azure), and end-to-end quality assurance.',
+    description: 'CI/CD pipelines, containerized environments, cloud hosting, and automated testing.',
     skills: ['Docker', 'Linux', 'GitHub Actions', 'AWS', 'Azure', 'Vitest', 'Jest', 'Playwright', 'Turborepo', 'NPM', 'Yarn'],
   },
 ];
@@ -164,6 +160,7 @@ export const socials: SocialLink[] = [
   { label: 'CV', href: '/cv.pdf' },
 ];
 export const aboutTextLead =
-  'Full-Stack Engineer at Wazuh building the Wazuh AI Assistant.';
+  'Full-stack engineer building production web applications, LLM tooling, and distributed systems.';
 export const aboutTextSupport =
-  'Previously at Tres Pi Medios (Stanley Black & Decker) and SuperGIROS, building back-office software used by 1,100+ service points.';
+  'Currently at Wazuh building the Wazuh AI Assistant for 90,000+ security users. Before that, built business tools for Stanley Black & Decker (Italy and US) and financial software serving 1,100+ SuperGIROS service points in Colombia. My focus is practical: reliable backends, clean databases, and fast, accessible interfaces.';
+

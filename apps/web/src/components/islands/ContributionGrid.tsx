@@ -96,8 +96,10 @@ export default function ContributionGrid() {
   }, []);
 
   if (failed || (grid !== null && isEmptyGrid(grid))) {
+    // min-h matches the skeleton footprint so the empty/fallback path causes
+    // no layout shift of the content below (Skills, contact, footer).
     return (
-      <div className="mt-10">
+      <div className="mt-10 min-h-[156px]">
         <p className="text-sm text-text-muted">Nothing to chart yet</p>
         <p className="mt-2 font-mono-code text-xs text-text-muted">{captionFor(0, null)}</p>
       </div>

@@ -42,4 +42,4 @@ export const socials: SocialLink[] = [
 export const aboutTextLead =
   'Full-Stack Engineer at Wazuh building the Wazuh AI Assistant.';
 export const aboutTextSupport =
-  'Previously Tres Pi Medios / Stanley Black & Decker, and SuperGIROS. Currently building the Wazuh AI Assistant.';
+  'Previously at Tres Pi Medios (Stanley Black & Decker) and SuperGIROS, building back-office software used by 1,100+ service points.';

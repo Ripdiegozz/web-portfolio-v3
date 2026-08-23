@@ -1,14 +1,13 @@
 ---
 interface Props {
-  id?: string;
-  label: string; // mono kicker text, lowercased
-  headingId: string; // unique id used for aria-labelledby
+  /** Section slug used for the aria id pair; also the kicker label. */
+  label: string;
 }
-const { id, label, headingId } = Astro.props;
+const { label } = Astro.props;
 ---
-<section id={id} aria-labelledby={`${headingId}-heading`} class="border-t border-border-subtle">
+<section id={label} aria-labelledby={`${label}-heading`} class="border-t border-border-subtle">
   <div class="mx-auto w-full max-w-3xl px-6 py-24 md:py-32">
-    <h2 id={`${headingId}-heading`} class="font-mono-code text-xs tracking-[0.2em] text-text-muted">
+    <h2 id={`${label}-heading`} class="font-mono-code text-xs tracking-[0.2em] text-text-muted">
       <span aria-hidden="true">//</span> {label}
     </h2>
     <slot />

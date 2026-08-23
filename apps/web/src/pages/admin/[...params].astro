@@ -5,5 +5,9 @@ import type { Config } from '@keystatic/core';
 import config from '../../../keystatic.config';
 ---
 {/* Boundary cast: our concrete Config generic does not satisfy the loose Config
-    record type under exactOptionalPropertyTypes (ui-key variance). */}
+    record type under exactOptionalPropertyTypes (ui-key variance).
+    NOTE: Astro serializes client:load props as JSON — function-valued config
+    fields (e.g. itemLabel, slug generators) are silently dropped on the
+    hydrated client. Keep config serialization-safe; any function-valued field
+    must not be load-bearing for client-side rendering. */}
 <Keystatic config={config as unknown as Config} client:load />

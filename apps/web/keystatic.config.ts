@@ -1,8 +1,10 @@
 import { config, collection, fields } from '@keystatic/core';
 
 // Local dev writes straight to the working copy; production commits to GitHub.
-// The `process` guard keeps this module safe inside the client bundle (the
-// Admin island imports it) where `process` does not exist.
+// The `process` guard matters at prod worker SSR (process may not exist there);
+// it also keeps the config safe when the Admin island's props are serialized,
+// since functions like `itemLabel` are dropped during Astro client:load prop
+// serialization (see the boundary note in the admin route).
 const storage =
   typeof process !== 'undefined' && process.env?.KEYSTATIC_DEV_LOCAL === '1'
     ? ({ kind: 'local' as const })

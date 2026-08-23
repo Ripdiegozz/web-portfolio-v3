@@ -11,7 +11,10 @@ async function resolveEnv(locals: unknown): Promise<KeystaticApiEnv> {
   try {
     const mod = await import('cloudflare:workers');
     return mod.env as unknown as KeystaticApiEnv;
-  } catch {
+  } catch (err) {
+    // The import may fail in plain-node dev; log it so prod failures are never
+    // silently blamed on missing env vars downstream.
+    console.warn('[keystatic] cloudflare:workers env unavailable; falling back', err);
     const runtimeEnv = (locals as { runtime?: { env?: KeystaticApiEnv } })?.runtime?.env;
     return runtimeEnv ?? {};
   }

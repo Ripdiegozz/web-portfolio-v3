@@ -14,6 +14,8 @@
   "dependencies": {
     "@astrojs/cloudflare": "^14.2.3",
     "@astrojs/react": "^6.0.4",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@fontsource-variable/space-grotesk": "^5.3.0",
     "@fontsource/instrument-serif": "^5.3.0",

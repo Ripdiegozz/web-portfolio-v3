@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { captionFor, formatRange, isEmptyGrid, weekPadding } from './ContributionGrid';
+import { es } from '../../i18n/locales/es';
 
 describe('isEmptyGrid', () => {
   it('treats absence of data as empty', () => {
@@ -31,6 +32,11 @@ describe('formatRange', () => {
   it('rejects malformed dates', () => {
     expect(formatRange('not-a-date', '2026-08-23')).toBeNull();
   });
+
+  it('formats range using custom Spanish months', () => {
+    expect(formatRange('2025-08-01', '2026-08-23', es.activity.months)).toBe('Ago 2025 - Ago 2026');
+    expect(formatRange('2026-01-01', '2026-12-31', es.activity.months)).toBe('Ene 2026 - Dic 2026');
+  });
 });
 
 describe('captionFor', () => {
@@ -46,6 +52,14 @@ describe('captionFor', () => {
 
   it('omits the range suffix when absent', () => {
     expect(captionFor(0, null)).toBe('0 contributions');
+  });
+
+  it('formats caption in Spanish with localized labels', () => {
+    expect(captionFor(98, 'Ago 2025 - Ago 2026', es.activity)).toBe(
+      '98 contribuciones en el último año · Ago 2025 - Ago 2026',
+    );
+    expect(captionFor(1, null, es.activity)).toBe('1 contribución');
+    expect(captionFor(0, null, es.activity)).toBe('0 contribuciones');
   });
 });
 

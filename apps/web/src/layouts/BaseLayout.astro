@@ -2,15 +2,33 @@
 import '@fontsource-variable/space-grotesk';
 import '@fontsource/instrument-serif';
 import '@fontsource-variable/jetbrains-mono';
+import type { Locale, TranslationDictionary } from '../i18n';
+import { getAlternateLocale, getTranslations } from '../i18n';
+
 interface Props {
   title: string;
   description?: string;
+  locale?: Locale;
+  alternatePath?: string;
+  dict?: TranslationDictionary;
 }
+
 const SITE = 'https://dagadev.net';
-const { title, description = 'Full-Stack Engineer at Wazuh building the Wazuh AI Assistant' } = Astro.props;
+const {
+  title,
+  locale = 'en',
+  alternatePath,
+} = Astro.props;
+
+const dict = Astro.props.dict ?? getTranslations(locale);
+const description = Astro.props.description ?? dict.meta.description;
+
+const targetLocale = getAlternateLocale(locale);
+const targetPath = alternatePath ?? (targetLocale === 'es' ? '/es' : '/');
+const navPrefix = locale === 'es' ? '/es' : '';
 ---
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,7 +36,12 @@ const { title, description = 'Full-Stack Engineer at Wazuh building the Wazuh AI
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={`${SITE}/`} />
+    <meta property="og:url" content={locale === 'es' ? `${SITE}/es` : `${SITE}/`} />
+    <link rel="alternate" hreflang="en" href={`${SITE}/`} />
+    <link rel="alternate" hreflang="es" href={`${SITE}/es`} />
+    <link rel="alternate" hreflang="x-default" href={`${SITE}/`} />
+    <meta property="og:locale" content={dict.meta.ogLocale} />
+    <meta property="og:locale:alternate" content={locale === 'es' ? 'en_US' : 'es_ES'} />
     <!-- Pending manual asset: public/og-default.png (1200x630). Not generated yet. -->
     <meta property="og:image" content={`${SITE}/og-default.png`} />
     <meta name="twitter:card" content="summary_large_image" />
@@ -39,31 +62,42 @@ const { title, description = 'Full-Stack Engineer at Wazuh building the Wazuh AI
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:border focus:border-border-subtle focus:bg-bg-raised focus:px-4 focus:py-2 focus:text-sm focus:text-text-primary"
     >
-      Skip to content
+      {dict.nav.skipToContent}
     </a>
     <header
       id="site-header"
       class="sticky top-0 z-40 w-full border-b border-transparent bg-transparent py-4 transition-all duration-200 data-[scrolled=true]:border-border-subtle/80 data-[scrolled=true]:bg-bg/85 data-[scrolled=true]:py-3 data-[scrolled=true]:shadow-xs data-[scrolled=true]:backdrop-blur-md"
     >
       <div class="mx-auto flex max-w-3xl items-center justify-between px-6">
-        <a href="/" class="font-mono-code text-xs font-medium text-text-muted transition-colors hover:text-text-primary">
+        <a href={locale === 'es' ? '/es' : '/'} class="font-mono-code text-xs font-medium text-text-muted transition-colors hover:text-text-primary">
           dagadev.net
         </a>
 
         <!-- Desktop Navigation -->
         <nav aria-label="Main" class="hidden items-center gap-5 md:flex">
-          <a href="/#about" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">About</a>
-          <a href="/#experience" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Experience</a>
-          <a href="/#skills" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Skills</a>
-          <a href="/#projects" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Projects</a>
-          <a href="/#activity" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Activity</a>
-          <a href="/blog/" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Blog</a>
-          <a href="/#contact" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Contact</a>
+          <a href={`${navPrefix}#about`} class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.about}</a>
+          <a href={`${navPrefix}#experience`} class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.experience}</a>
+          <a href={`${navPrefix}#skills`} class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.skills}</a>
+          <a href={`${navPrefix}#projects`} class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.projects}</a>
+          <a href={`${navPrefix}#activity`} class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.activity}</a>
+          <a href="/blog/" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.blog}</a>
+          <a href={`${navPrefix}#contact`} class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">{dict.nav.contact}</a>
+          <a
+            href={targetPath}
+            data-lang-toggle
+            class="flex h-7 items-center gap-1 rounded-md border border-transparent px-1.5 font-mono-code text-[11px] font-medium text-text-muted transition-colors hover:border-border-subtle hover:bg-bg-raised hover:text-text-primary"
+            aria-label={dict.nav.toggleLanguageLabel}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
+            </svg>
+            <span class="uppercase">{targetLocale}</span>
+          </a>
           <button
             id="theme-toggle"
             type="button"
             class="flex size-7 items-center justify-center rounded-md border border-transparent text-text-muted transition-colors hover:border-border-subtle hover:bg-bg-raised hover:text-text-primary"
-            aria-label="Toggle color theme"
+            aria-label={dict.nav.toggleThemeLabel}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block" aria-hidden="true">
               <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
@@ -76,11 +110,20 @@ const { title, description = 'Full-Stack Engineer at Wazuh building the Wazuh AI
 
         <!-- Mobile Controls -->
         <div class="flex items-center gap-2 md:hidden">
+          <a
+            href={targetPath}
+            data-lang-toggle
+            class="flex size-8 items-center justify-center rounded-md border border-border-subtle/80 bg-bg/80 font-mono-code text-xs font-medium text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary"
+            aria-label={dict.nav.toggleLanguageLabel}
+          >
+            <span class="uppercase">{targetLocale}</span>
+          </a>
+
           <button
             id="theme-toggle-mobile"
             type="button"
             class="flex size-8 items-center justify-center rounded-md border border-border-subtle/80 bg-bg/80 text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary"
-            aria-label="Toggle color theme"
+            aria-label={dict.nav.toggleThemeLabel}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block" aria-hidden="true">
               <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
@@ -115,18 +158,18 @@ const { title, description = 'Full-Stack Engineer at Wazuh building the Wazuh AI
         aria-hidden="true"
       >
         <nav class="mx-auto flex max-w-3xl flex-col divide-y divide-border-subtle/50 rounded-xl border border-border-subtle/80 bg-bg/95 p-2 shadow-xl backdrop-blur-2xl">
-          <a href="/#about" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">About</a>
-          <a href="/#experience" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">Experience</a>
-          <a href="/#skills" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">Skills</a>
-          <a href="/#projects" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">Projects</a>
-          <a href="/#activity" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">Activity</a>
-          <a href="/blog/" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">Blog</a>
-          <a href="/#contact" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs font-medium text-accent-readable transition-colors hover:bg-bg-raised hover:underline">Contact →</a>
+          <a href={`${navPrefix}#about`} class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">{dict.nav.about}</a>
+          <a href={`${navPrefix}#experience`} class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">{dict.nav.experience}</a>
+          <a href={`${navPrefix}#skills`} class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">{dict.nav.skills}</a>
+          <a href={`${navPrefix}#projects`} class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">{dict.nav.projects}</a>
+          <a href={`${navPrefix}#activity`} class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">{dict.nav.activity}</a>
+          <a href="/blog/" class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs text-text-muted transition-colors hover:bg-bg-raised hover:text-text-primary">{dict.nav.blog}</a>
+          <a href={`${navPrefix}#contact`} class="mobile-nav-link rounded-lg px-3 py-2.5 font-mono-code text-xs font-medium text-accent-readable transition-colors hover:bg-bg-raised hover:underline">{dict.nav.contactCta}</a>
         </nav>
       </div>
     </header>
     <script is:inline>
-      // Sticky header scroll detection, mobile menu, & theme toggle persistence
+      // Sticky header scroll detection, mobile menu, theme toggle persistence, & language toggle hash preservation
       (() => {
         const header = document.getElementById('site-header');
         if (header) {
@@ -196,6 +239,19 @@ const { title, description = 'Full-Stack Engineer at Wazuh building the Wazuh AI
         const btnMobile = document.getElementById('theme-toggle-mobile');
         if (btnDesktop) btnDesktop.addEventListener('click', toggleTheme);
         if (btnMobile) btnMobile.addEventListener('click', toggleTheme);
+
+        // Language Toggle handlers (Desktop & Mobile)
+        document.querySelectorAll('[data-lang-toggle]').forEach((el) => {
+          el.addEventListener('click', (e) => {
+            const targetBase = el.getAttribute('href') || '/';
+            const hash = window.location.hash;
+            if (hash) {
+              e.preventDefault();
+              const cleanBase = targetBase === '/' ? '' : targetBase.replace(/\/$/, '');
+              window.location.href = `${cleanBase}${hash.startsWith('#') ? hash : '#' + hash}`;
+            }
+          });
+        });
       })();
     </script>
     <slot />

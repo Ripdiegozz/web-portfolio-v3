@@ -1,14 +1,23 @@
 import { useState } from 'react';
 import { Calendar, MapPin, Sparkles, TechIcon } from '@portfolio/ui';
-import type { ExperienceItem } from '../../data/site';
+import type { ExperienceItem, ExperienceDashboardLabels } from '../../i18n/types';
 
-interface ExperienceDashboardProps {
+export type { ExperienceDashboardLabels };
+
+export interface ExperienceDashboardProps {
   items: ExperienceItem[];
+  labels?: ExperienceDashboardLabels;
 }
 
-export default function ExperienceDashboard({ items }: ExperienceDashboardProps) {
+export default function ExperienceDashboard({ items, labels }: ExperienceDashboardProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const activeJob = items[selectedIndex] ?? items[0];
+
+  const tablistAriaLabel = labels?.tablistAriaLabel ?? 'Work Experience by Company';
+  const activeLabel = labels?.active ?? 'Active';
+  const atLabel = labels?.at ?? 'at';
+  const contributionsHeading = labels?.keyContributions ?? 'Key Contributions & Impact';
+  const technologiesHeading = labels?.technologies ?? 'Technologies & Tooling';
 
   if (!activeJob) return null;
 
@@ -17,7 +26,7 @@ export default function ExperienceDashboard({ items }: ExperienceDashboardProps)
       {/* Top Segmented Tab Navigation Bar */}
       <div
         role="tablist"
-        aria-label="Work Experience by Company"
+        aria-label={tablistAriaLabel}
         className="grid grid-cols-1 sm:grid-cols-3 gap-2 rounded-xl border border-border-subtle/80 bg-bg-raised/40 p-1.5 backdrop-blur-xs"
       >
         {items.map((job, idx) => {
@@ -43,7 +52,7 @@ export default function ExperienceDashboard({ items }: ExperienceDashboardProps)
                 {job.current && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent-readable">
                     <span className="size-1 animate-pulse rounded-full bg-accent" aria-hidden="true" />
-                    Active
+                    {activeLabel}
                   </span>
                 )}
               </div>
@@ -69,7 +78,7 @@ export default function ExperienceDashboard({ items }: ExperienceDashboardProps)
               {activeJob.role}
             </h3>
             <p className="mt-1 flex flex-wrap items-center gap-2 font-mono-code text-xs text-text-muted">
-              <span>at</span>
+              <span>{atLabel}</span>
               <span className="font-medium text-text-primary text-sm">{activeJob.company}</span>
               {activeJob.location && (
                 <>
@@ -113,7 +122,7 @@ export default function ExperienceDashboard({ items }: ExperienceDashboardProps)
         {activeJob.highlights.length > 0 && (
           <div className="mt-6">
             <h4 className="font-mono-code text-[11px] uppercase tracking-wider text-text-muted">
-              Key Contributions & Impact
+              {contributionsHeading}
             </h4>
             <ul className="mt-3.5 space-y-2.5">
               {activeJob.highlights.map((highlight) => (
@@ -133,7 +142,7 @@ export default function ExperienceDashboard({ items }: ExperienceDashboardProps)
         {activeJob.skills && activeJob.skills.length > 0 && (
           <div className="mt-8 border-t border-border-subtle/50 pt-5">
             <h4 className="font-mono-code text-[11px] uppercase tracking-wider text-text-muted">
-              Technologies & Tooling
+              {technologiesHeading}
             </h4>
             <div className="mt-3 flex flex-wrap items-center gap-1.5">
               {activeJob.skills.map((skill) => (

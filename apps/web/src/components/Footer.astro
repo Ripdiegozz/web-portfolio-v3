@@ -1,8 +1,21 @@
 ---
 import { SiGithub, SiLinkedin, FileText, ArrowUpRight } from '@portfolio/ui';
-import { socials } from '../data/site';
+import type { FooterTranslations, SocialLink } from '../i18n';
+import { en } from '../i18n/locales/en';
+import { socials as defaultSocials } from '../data/site';
+
+interface Props {
+  dict?: FooterTranslations;
+  socials?: SocialLink[];
+}
+
+const {
+  dict = en.footer,
+  socials = dict.socials ?? defaultSocials,
+} = Astro.props;
 
 const year = new Date().getFullYear();
+const copyrightText = dict.copyright.replace('{year}', String(year));
 ---
 <footer class="border-t border-border-subtle">
   <div class="mx-auto flex w-full max-w-3xl flex-col gap-4 px-6 py-10 md:flex-row md:items-center md:justify-between">
@@ -29,7 +42,6 @@ const year = new Date().getFullYear();
         );
       })}
     </ul>
-    <p class="font-mono-code text-xs text-text-muted">© {year} Diego</p>
+    <p class="font-mono-code text-xs text-text-muted">{copyrightText}</p>
   </div>
 </footer>
-

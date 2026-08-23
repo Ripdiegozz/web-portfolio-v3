@@ -1,5 +1,8 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Sparkles, Calendar, ExternalLink } from '@portfolio/ui';
+import type { ContributionGridLabels } from '../../i18n/types';
+
+export type { ContributionGridLabels };
 
 export interface ActivityDay {
   date: string;
@@ -12,7 +15,12 @@ export interface ContributionGridData {
   weeks: Array<{ days: ActivityDay[] }>;
 }
 
-const MONTHS = [
+export interface ContributionGridProps {
+  labels?: ContributionGridLabels;
+  months?: readonly string[];
+}
+
+const DEFAULT_MONTHS = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ] as const;
@@ -40,27 +48,43 @@ export function isEmptyGrid(grid: ContributionGridData | null): boolean {
 }
 
 /** "Aug 2025" label from an ISO date's parts; null when either part is missing. */
-function monthYear(month: number | undefined, year: number | undefined): string | null {
+function monthYear(
+  month: number | undefined,
+  year: number | undefined,
+  months: readonly string[] = DEFAULT_MONTHS,
+): string | null {
   if (month === undefined || year === undefined) return null;
-  const label = MONTHS[month - 1];
+  const label = months[month - 1];
   return label ? `${label} ${year}` : null;
 }
 
 /** "Aug 2025 - Aug 2026" for the caption; null when either date is malformed. */
-export function formatRange(firstIso: string, lastIso: string): string | null {
+export function formatRange(
+  firstIso: string,
+  lastIso: string,
+  months: readonly string[] = DEFAULT_MONTHS,
+): string | null {
   if (!ISO_DATE.test(firstIso) || !ISO_DATE.test(lastIso)) return null;
   const [firstYear, firstMonth] = firstIso.split('-').map(Number);
   const [lastYear, lastMonth] = lastIso.split('-').map(Number);
-  const firstLabel = monthYear(firstMonth, firstYear);
-  const lastLabel = monthYear(lastMonth, lastYear);
+  const firstLabel = monthYear(firstMonth, firstYear, months);
+  const lastLabel = monthYear(lastMonth, lastYear, months);
   if (!firstLabel || !lastLabel) return null;
   return firstLabel === lastLabel ? firstLabel : `${firstLabel} - ${lastLabel}`;
 }
 
 /** Caption beneath the grid, e.g. "98 contributions in the last year · Aug 2025 - Aug 2026". */
-export function captionFor(total: number, range: string | null): string {
-  const count = `${total.toLocaleString()} ${total === 1 ? 'contribution' : 'contributions'}`;
-  return range ? `${count} in the last year · ${range}` : count;
+export function captionFor(
+  total: number,
+  range: string | null,
+  labels?: Partial<ContributionGridLabels>,
+): string {
+  const singular = labels?.singularContribution ?? 'contribution';
+  const plural = labels?.pluralContributions ?? 'contributions';
+  const inTheLastYear = labels?.inTheLastYear ?? 'in the last year';
+
+  const count = `${total.toLocaleString()} ${total === 1 ? singular : plural}`;
+  return range ? `${count} ${inTheLastYear} · ${range}` : count;
 }
 
 /**
@@ -114,9 +138,21 @@ function calculateMetrics(grid: ContributionGridData) {
   };
 }
 
-export default function ContributionGrid() {
+export default function ContributionGrid({ labels, months }: ContributionGridProps = {}) {
   const [grid, setGrid] = useState<ContributionGridData | null>(null);
   const [failed, setFailed] = useState(false);
+
+  const totalContributionsLabel = labels?.totalContributions ?? 'Total Contributions';
+  const longestStreakLabel = labels?.longestStreak ?? 'Longest Streak';
+  const currentStreakLabel = labels?.currentStreak ?? 'Current Streak';
+  const activeDaysInYearLabel = labels?.activeDaysInYear ?? 'Active Days in Year';
+  const daysUnitLabel = labels?.daysUnit ?? 'days';
+  const lessLabel = labels?.less ?? 'Less';
+  const moreLabel = labels?.more ?? 'More';
+  const syncingTitle = labels?.syncingTitle ?? 'GitHub activity is syncing';
+  const syncingDescription =
+    labels?.syncingDescription ?? 'Configure your GITHUB_TOKEN to display real-time contribution analytics.';
+  const viewOnGithub = labels?.viewOnGithub ?? 'View on GitHub';
 
   useEffect(() => {
     let active = true;
@@ -142,17 +178,15 @@ export default function ContributionGrid() {
       <div className="rounded-2xl border border-border-subtle/80 bg-bg-raised/30 p-5 sm:p-7 backdrop-blur-xs">
         <div className="flex flex-col items-center justify-center py-8 text-center">
           <Calendar className="size-8 text-text-muted/60 mb-2" />
-          <p className="text-sm font-medium text-text-primary">GitHub activity is syncing</p>
-          <p className="mt-1 font-mono-code text-xs text-text-muted">
-            Configure your GITHUB_TOKEN to display real-time contribution analytics.
-          </p>
+          <p className="text-sm font-medium text-text-primary">{syncingTitle}</p>
+          <p className="mt-1 font-mono-code text-xs text-text-muted">{syncingDescription}</p>
           <a
             href="https://github.com/Ripdiegozz"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-flex items-center gap-1.5 rounded-md border border-border-subtle bg-bg px-3 py-1.5 font-mono-code text-xs text-text-muted transition-colors hover:border-text-muted hover:text-text-primary"
           >
-            <span>View on GitHub</span>
+            <span>{viewOnGithub}</span>
             <ExternalLink className="size-3" />
           </a>
         </div>
@@ -198,8 +232,8 @@ export default function ContributionGrid() {
   const firstDay = grid.weeks[0]?.days[0]?.date;
   const lastWeek = grid.weeks[grid.weeks.length - 1];
   const lastDay = lastWeek?.days[lastWeek.days.length - 1]?.date;
-  const range = firstDay && lastDay ? formatRange(firstDay, lastDay) : null;
-  const label = captionFor(grid.totalContributions, range);
+  const range = firstDay && lastDay ? formatRange(firstDay, lastDay, months) : null;
+  const label = captionFor(grid.totalContributions, range, labels);
 
   return (
     <div className="rounded-2xl border border-border-subtle/80 bg-bg-raised/30 p-5 sm:p-7 backdrop-blur-xs">
@@ -210,28 +244,28 @@ export default function ContributionGrid() {
             <Sparkles className="size-3.5 text-accent shrink-0" />
             <span>{metrics.total.toLocaleString()}</span>
           </span>
-          <span className="mt-1 font-mono-code text-[11px] text-text-muted">Total Contributions</span>
+          <span className="mt-1 font-mono-code text-[11px] text-text-muted">{totalContributionsLabel}</span>
         </div>
 
         <div className="flex flex-col rounded-xl border border-border-subtle/70 bg-bg/80 p-3 shadow-2xs">
           <span className="font-mono-code text-base font-bold text-text-primary">
-            {metrics.longestStreak} <span className="text-xs font-normal text-text-muted">days</span>
+            {metrics.longestStreak} <span className="text-xs font-normal text-text-muted">{daysUnitLabel}</span>
           </span>
-          <span className="mt-1 font-mono-code text-[11px] text-text-muted">Longest Streak</span>
+          <span className="mt-1 font-mono-code text-[11px] text-text-muted">{longestStreakLabel}</span>
         </div>
 
         <div className="flex flex-col rounded-xl border border-border-subtle/70 bg-bg/80 p-3 shadow-2xs">
           <span className="font-mono-code text-base font-bold text-text-primary">
-            {metrics.currentStreak} <span className="text-xs font-normal text-text-muted">days</span>
+            {metrics.currentStreak} <span className="text-xs font-normal text-text-muted">{daysUnitLabel}</span>
           </span>
-          <span className="mt-1 font-mono-code text-[11px] text-text-muted">Current Streak</span>
+          <span className="mt-1 font-mono-code text-[11px] text-text-muted">{currentStreakLabel}</span>
         </div>
 
         <div className="flex flex-col rounded-xl border border-border-subtle/70 bg-bg/80 p-3 shadow-2xs">
           <span className="font-mono-code text-base font-bold text-text-primary">
-            {metrics.activeDays} <span className="text-xs font-normal text-text-muted">days</span>
+            {metrics.activeDays} <span className="text-xs font-normal text-text-muted">{daysUnitLabel}</span>
           </span>
-          <span className="mt-1 font-mono-code text-[11px] text-text-muted">Active Days in Year</span>
+          <span className="mt-1 font-mono-code text-[11px] text-text-muted">{activeDaysInYearLabel}</span>
         </div>
       </div>
 
@@ -275,13 +309,13 @@ export default function ContributionGrid() {
         </a>
 
         <div className="flex items-center gap-1.5 text-[11px]">
-          <span>Less</span>
+          <span>{lessLabel}</span>
           <span className="size-2.5 rounded-[2px] bg-bg-raised/70 border border-border-subtle/50" />
           <span className="size-2.5 rounded-[2px] bg-emerald-500/25 dark:bg-emerald-500/30 border border-emerald-500/30" />
           <span className="size-2.5 rounded-[2px] bg-emerald-500/50 dark:bg-emerald-500/55 border border-emerald-500/40" />
           <span className="size-2.5 rounded-[2px] bg-emerald-500/75 dark:bg-emerald-500/80 border border-emerald-500/60" />
           <span className="size-2.5 rounded-[2px] bg-emerald-500 dark:bg-emerald-400 border border-emerald-400" />
-          <span>More</span>
+          <span>{moreLabel}</span>
         </div>
       </div>
     </div>

@@ -1,11 +1,26 @@
 ---
 import { Reveal, Mail, ArrowRight, ArrowUpRight, Terminal, FileText, SiGithub, SiLinkedin } from '@portfolio/ui';
 import HeroBackground from '../islands/HeroBackground';
-import { socials } from '../../data/site';
+import type { HeroTranslations, Locale, SocialLink } from '../../i18n';
+import { en } from '../../i18n/locales/en';
+import { socials as defaultSocials } from '../../data/site';
+
+interface Props {
+  dict?: HeroTranslations;
+  locale?: Locale;
+  socials?: SocialLink[];
+}
+
+const {
+  dict = en.hero,
+  locale = 'en',
+  socials = defaultSocials,
+} = Astro.props;
 
 const github = socials.find((s) => s.label.toLowerCase() === 'github');
 const linkedin = socials.find((s) => s.label.toLowerCase() === 'linkedin');
 const cv = socials.find((s) => s.label.toLowerCase() === 'cv');
+const contactHref = locale === 'es' ? '/es#contact' : '#contact';
 ---
 <section class="relative overflow-hidden">
   <!-- Atmospheric background: subtle technical grid + ambient radial glow + 3D dot wave -->
@@ -19,28 +34,27 @@ const cv = socials.find((s) => s.label.toLowerCase() === 'cv');
       <div class="inline-flex items-center gap-2 rounded-full border border-border-subtle/80 bg-bg-raised/80 px-3 py-1 font-mono-code text-xs text-text-muted shadow-2xs backdrop-blur-md">
         <span class="size-1.5 animate-pulse rounded-full bg-accent" aria-hidden="true" />
         <Terminal className="size-3 text-accent" />
-        <span class="font-medium text-text-primary">Full-Stack Engineer</span>
+        <span class="font-medium text-text-primary">{dict.kicker}</span>
       </div>
       <div class="h-px w-16 bg-gradient-to-r from-border-subtle/80 to-transparent sm:w-28" aria-hidden="true" />
     </div>
     <Reveal client:visible className="mt-6">
       <h1 class="text-balance font-sans-display text-5xl font-medium tracking-tight text-text-primary md:text-7xl">
-        I build <span class="font-serif-accent italic text-[1.05em]">software</span> that ships.
+        {dict.headlineStart}<span class="font-serif-accent italic text-[1.05em]">{dict.headlineEmphasis}</span>{dict.headlineEnd}
       </h1>
     </Reveal>
     <Reveal client:visible delay={0.08}>
       <p class="mt-8 max-w-xl text-lg leading-relaxed text-text-muted">
-        Full-stack engineer at Wazuh building the Wazuh AI Assistant. Working across
-        LLM tooling, backend services, and web dashboards for 90,000+ users.
+        {dict.lead}
       </p>
     </Reveal>
     <Reveal client:visible delay={0.16} className="mt-10 flex flex-wrap items-center gap-3">
       <a
-        href="#contact"
+        href={contactHref}
         class="group inline-flex items-center justify-center gap-2 rounded-md border border-border-subtle bg-bg/90 px-4 py-2 text-sm font-medium text-text-primary shadow-xs backdrop-blur-md transition-all hover:border-text-muted hover:bg-bg-raised"
       >
         <Mail className="size-4 text-text-muted transition-colors group-hover:text-text-primary" />
-        <span>Get in touch</span>
+        <span>{dict.contactButton}</span>
         <ArrowRight className="size-3.5 text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-text-primary" />
       </a>
       <div class="flex items-center gap-2">
@@ -50,7 +64,7 @@ const cv = socials.find((s) => s.label.toLowerCase() === 'cv');
             target="_blank"
             rel="noopener noreferrer"
             class="flex size-9 items-center justify-center rounded-md border border-border-subtle bg-bg/90 text-text-muted shadow-xs backdrop-blur-md transition-all hover:border-text-muted hover:bg-bg-raised hover:text-text-primary"
-            aria-label="GitHub profile"
+            aria-label={dict.githubAriaLabel}
           >
             <SiGithub size={15} />
           </a>
@@ -61,7 +75,7 @@ const cv = socials.find((s) => s.label.toLowerCase() === 'cv');
             target="_blank"
             rel="noopener noreferrer"
             class="flex size-9 items-center justify-center rounded-md border border-border-subtle bg-bg/90 text-text-muted shadow-xs backdrop-blur-md transition-all hover:border-text-muted hover:bg-bg-raised hover:text-text-primary"
-            aria-label="LinkedIn profile"
+            aria-label={dict.linkedinAriaLabel}
           >
             <SiLinkedin size={15} />
           </a>
@@ -72,10 +86,10 @@ const cv = socials.find((s) => s.label.toLowerCase() === 'cv');
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex h-9 items-center gap-1.5 rounded-md border border-border-subtle bg-bg/90 px-3 font-mono-code text-xs text-text-muted shadow-xs backdrop-blur-md transition-all hover:border-text-muted hover:bg-bg-raised hover:text-text-primary"
-            aria-label="Download CV"
+            aria-label={dict.cvAriaLabel}
           >
             <FileText className="size-3.5" />
-            <span>CV</span>
+            <span>{dict.cvLabel}</span>
             <ArrowUpRight className="size-3" />
           </a>
         )}

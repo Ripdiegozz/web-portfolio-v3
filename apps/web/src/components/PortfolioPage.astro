@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/global.css';
+import Hero from './sections/Hero.astro';
+import About from './sections/About.astro';
+import Experience from './sections/Experience.astro';
+import Skills from './sections/Skills.astro';
+import Projects from './sections/Projects.astro';
+import Activity from './sections/Activity.astro';
+import ContactSection from './sections/ContactSection.astro';
+import Footer from './Footer.astro';
+import { getTranslations } from '../i18n';
+import type { Locale } from '../i18n/types';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = getTranslations(locale);
+---
+<BaseLayout
+  title={dict.meta.title}
+  description={dict.meta.description}
+  locale={locale}
+  dict={dict}
+>
+  <main id="main">
+    <Hero dict={dict.hero} locale={locale} socials={dict.footer.socials} />
+    <About dict={dict.about} />
+    <Experience dict={dict.experience} />
+    <Skills dict={dict.skills} />
+    <Projects dict={dict.projects} />
+    <Activity dict={dict.activity} />
+    <ContactSection dict={dict.contact} />
+  </main>
+  <Footer dict={dict.footer} socials={dict.footer.socials} />
+</BaseLayout>

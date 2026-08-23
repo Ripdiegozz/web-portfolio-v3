@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState, type SubmitEvent } from 'react';
 import { Send, Loader2, CheckCircle2, AlertCircle } from '@portfolio/ui';
+import type { ContactFormLabels } from '../../i18n/types';
+
+export type { ContactFormLabels };
+
+export interface ContactFormProps {
+  labels?: ContactFormLabels;
+}
 
 type Status = 'idle' | 'sending' | 'sent' | 'error';
 
@@ -34,10 +41,22 @@ function getTurnstileToken(form: HTMLFormElement, widgetId: string | null): stri
   return '';
 }
 
-export default function ContactForm() {
+export default function ContactForm({ labels }: ContactFormProps = {}) {
   const [status, setStatus] = useState<Status>('idle');
   const turnstileContainerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
+
+  const nameLabel = labels?.nameLabel ?? 'Name';
+  const namePlaceholder = labels?.namePlaceholder ?? 'Your name';
+  const emailLabel = labels?.emailLabel ?? 'Email';
+  const emailPlaceholder = labels?.emailPlaceholder ?? 'you@example.com';
+  const messageLabel = labels?.messageLabel ?? 'Message';
+  const messagePlaceholder = labels?.messagePlaceholder ?? 'What can I help you with?';
+  const sendButton = labels?.sendButton ?? 'Send message';
+  const sendingButton = labels?.sendingButton ?? 'Sending…';
+  const successMessage = labels?.successMessage ?? 'Message sent. I will reply soon.';
+  const errorMessage =
+    labels?.errorMessage ?? 'Something went wrong. Try again or reach me on LinkedIn.';
 
   useEffect(() => {
     if (import.meta.env.PUBLIC_E2E_MOCKS === '1') return;
@@ -143,11 +162,11 @@ export default function ContactForm() {
         className="absolute -left-[9999px] h-0 w-0 opacity-0"
       />
       <label htmlFor="contact-name" className="sr-only">
-        Name
+        {nameLabel}
       </label>
-      <input id="contact-name" name="name" required maxLength={100} placeholder="Your name" className={inputClass} />
+      <input id="contact-name" name="name" required maxLength={100} placeholder={namePlaceholder} className={inputClass} />
       <label htmlFor="contact-email" className="sr-only">
-        Email
+        {emailLabel}
       </label>
       <input
         id="contact-email"
@@ -155,11 +174,11 @@ export default function ContactForm() {
         type="email"
         required
         maxLength={200}
-        placeholder="you@example.com"
+        placeholder={emailPlaceholder}
         className={inputClass}
       />
       <label htmlFor="contact-message" className="sr-only">
-        Message
+        {messageLabel}
       </label>
       <textarea
         id="contact-message"
@@ -167,7 +186,7 @@ export default function ContactForm() {
         required
         minLength={10}
         maxLength={5000}
-        placeholder="What can I help you with?"
+        placeholder={messagePlaceholder}
         className={`${inputClass} min-h-36 resize-y`}
       />
       {import.meta.env.PUBLIC_E2E_MOCKS !== '1' && (
@@ -181,11 +200,11 @@ export default function ContactForm() {
         {status === 'sending' ? (
           <>
             <Loader2 className="size-4 animate-spin" />
-            <span>Sending…</span>
+            <span>{sendingButton}</span>
           </>
         ) : (
           <>
-            <span>Send message</span>
+            <span>{sendButton}</span>
             <Send className="size-3.5" />
           </>
         )}
@@ -193,16 +212,15 @@ export default function ContactForm() {
       {status === 'sent' && (
         <p role="status" className="flex items-center gap-1.5 text-sm text-emerald-600 dark:text-emerald-400">
           <CheckCircle2 className="size-4 shrink-0" />
-          <span>Message sent. I will reply soon.</span>
+          <span>{successMessage}</span>
         </p>
       )}
       {status === 'error' && (
         <p role="alert" className="flex items-center gap-1.5 text-sm text-rose-600 dark:text-rose-400">
           <AlertCircle className="size-4 shrink-0" />
-          <span>Something went wrong. Try again or reach me on LinkedIn.</span>
+          <span>{errorMessage}</span>
         </p>
       )}
     </form>
   );
 }
-

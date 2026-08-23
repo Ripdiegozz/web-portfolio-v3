@@ -1,12 +1,18 @@
 ---
 import { Reveal } from '@portfolio/ui';
 import Section from './Section.astro';
-import { aboutTextLead, aboutTextSupport } from '../../data/site';
+import type { AboutTranslations } from '../../i18n';
+import { en } from '../../i18n/locales/en';
+
+interface Props {
+  dict?: AboutTranslations;
+}
+
+const { dict = en.about } = Astro.props;
 ---
-<Section label="about" number="01" title="A bit about me.">
+<Section label="about" number="01" title={dict.sectionTitle}>
   <Reveal client:visible>
-    <p class="text-xl leading-relaxed text-text-primary md:text-2xl">{aboutTextLead}</p>
-    <p class="mt-6 max-w-xl leading-relaxed text-text-muted">{aboutTextSupport}</p>
+    <p class="text-xl leading-relaxed text-text-primary md:text-2xl">{dict.lead}</p>
+    <p class="mt-6 max-w-xl leading-relaxed text-text-muted">{dict.support}</p>
   </Reveal>
 </Section>
-

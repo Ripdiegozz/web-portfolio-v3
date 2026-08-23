@@ -1,16 +1,22 @@
 ---
 import { Reveal, TechIcon, Sparkles, Layers, Cpu, Shield } from '@portfolio/ui';
 import Section from './Section.astro';
-import { coreSkills, skillCategories } from '../../data/site';
+import type { SkillsTranslations } from '../../i18n';
+import { en } from '../../i18n/locales/en';
 
-const [frontendCat, backendCat, devopsCat] = skillCategories;
+interface Props {
+  dict?: SkillsTranslations;
+}
+
+const { dict = en.skills } = Astro.props;
+const [frontendCat, backendCat, devopsCat] = dict.categories;
 ---
 
 <Section
   label="skills"
   number="03"
-  title="Technical arsenal & stack."
-  description="Technologies and tools I use to build production software."
+  title={dict.sectionTitle}
+  description={dict.sectionDescription}
 >
   <Reveal client:visible>
     <div class="space-y-6">
@@ -25,10 +31,10 @@ const [frontendCat, backendCat, devopsCat] = skillCategories;
             </span>
             <div>
               <h3 class="font-sans-display text-base font-medium text-text-primary">
-                Core Stack & Daily Drivers
+                {dict.coreStackTitle}
               </h3>
               <p class="font-mono-code text-[11px] text-text-muted">
-                Primary tools for production systems and agent tooling
+                {dict.coreStackSubtitle}
               </p>
             </div>
           </div>
@@ -36,7 +42,7 @@ const [frontendCat, backendCat, devopsCat] = skillCategories;
 
         {/* Featured Core Tech Grid */}
         <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-          {coreSkills.map((skill) => (
+          {dict.coreSkills.map((skill) => (
             <div
               class="group relative flex flex-col justify-between rounded-xl border border-border-subtle/70 bg-bg/70 p-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/50 hover:bg-bg-raised hover:shadow-xs"
             >
@@ -151,6 +157,3 @@ const [frontendCat, backendCat, devopsCat] = skillCategories;
     </div>
   </Reveal>
 </Section>
-
-
-

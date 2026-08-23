@@ -2,22 +2,29 @@
 import { Mail } from '@portfolio/ui';
 import Section from './Section.astro';
 import ContactForm from '../islands/ContactForm';
+import type { ContactTranslations } from '../../i18n';
+import { en } from '../../i18n/locales/en';
+
+interface Props {
+  dict?: ContactTranslations;
+}
+
+const { dict = en.contact } = Astro.props;
 ---
-<Section label="contact" number="06" title="Let's build together." description="Have a project in mind, a question about my work, or want to discuss an opportunity? Drop a message below.">
-  <ContactForm client:visible />
+<Section label="contact" number="06" title={dict.sectionTitle} description={dict.sectionDescription}>
+  <ContactForm client:visible labels={dict} />
 
   <p class="mt-12 flex items-center gap-2 font-mono-code text-xs text-text-muted">
-    <span>prefer email?</span>
+    <span>{dict.preferEmail}</span>
     <a
-      href="mailto:hello@dagadev.net"
+      href={`mailto:${dict.emailAddress}`}
       class="inline-flex items-center gap-1.5 underline decoration-border-subtle underline-offset-4 transition-colors hover:text-text-primary"
     >
       <Mail className="size-3.5" />
-      <span>hello@dagadev.net</span>
+      <span>{dict.emailAddress}</span>
     </a>
   </p>
 </Section>
 {import.meta.env.PUBLIC_E2E_MOCKS !== '1' && (
   <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
 )}
-

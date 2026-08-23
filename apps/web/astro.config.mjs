@@ -11,6 +11,13 @@ export default defineConfig({
   output: 'static',
   adapter: cloudflare(),
   integrations: [react(), sitemap()],
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'es'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
     resolve: {

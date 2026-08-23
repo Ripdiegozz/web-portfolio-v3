@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+/* dark: tracks the html.dark toggle (see FOUC script), not prefers-color-scheme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@plugin '@tailwindcss/typography';
+
 @theme {
   --font-sans-display: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
   --font-serif-accent: 'Instrument Serif', 'Times New Roman', Times, serif;

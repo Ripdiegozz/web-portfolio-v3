@@ -1,0 +1,25 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { isPublished } from '../../lib/blog';
+import '../../styles/global.css';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('posts')).filter(isPublished);
+  return posts.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<BaseLayout title={`${entry.data.title} — Diego`} description={entry.data.description}>
+  <main id="main">
+    <article class="prose prose-neutral dark:prose-invert mx-auto max-w-2xl px-6 py-16 md:py-24">
+      {entry.data.heroImage && (
+        <img src={entry.data.heroImage} alt="" width="1200" height="630" loading="eager" />
+      )}
+      <h1>{entry.data.title}</h1>
+      <Content />
+    </article>
+  </main>
+</BaseLayout>

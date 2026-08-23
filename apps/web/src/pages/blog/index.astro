@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { isPublished, sortPostsByDateDesc } from '../../lib/blog';
+import '../../styles/global.css';
+
+const entries = sortPostsByDateDesc((await getCollection('posts')).filter(isPublished));
+---
+<BaseLayout title="Blog — Diego">
+  <main id="main">
+    <ul class="mx-auto max-w-2xl divide-y divide-border-subtle px-6 py-16 md:py-24">
+      {entries.map((entry) => (
+        <li class="py-6">
+          <a href={`/blog/${entry.id}/`} class="group block">
+            <h2 class="font-sans-display text-xl group-hover:text-accent-readable">{entry.data.title}</h2>
+            <p class="text-text-muted">{entry.data.description}</p>
+            <time datetime={entry.data.pubDate.toISOString()} class="font-mono-code text-xs text-text-muted">
+              {entry.data.pubDate.toDateString()}
+            </time>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </main>
+</BaseLayout>

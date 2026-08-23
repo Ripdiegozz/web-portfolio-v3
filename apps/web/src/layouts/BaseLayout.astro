@@ -33,6 +33,13 @@ const { title, description = "Diego — Full-Stack Engineer" } = Astro.props;
     >
       Skip to content
     </a>
+    <header class="mx-auto flex max-w-3xl items-center justify-between px-6 py-6">
+      <a href="/" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">diego.dev</a>
+      <nav aria-label="Main" class="flex items-center gap-4">
+        <a href="/" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Home</a>
+        <a href="/blog/" class="font-mono-code text-xs text-text-muted transition-colors hover:text-text-primary">Blog</a>
+      </nav>
+    </header>
     <slot />
   </body>
 </html>

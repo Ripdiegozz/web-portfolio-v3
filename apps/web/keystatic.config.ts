@@ -21,6 +21,7 @@ export default config({
       format: { contentField: 'content' },
       schema: {
         title: fields.text({ label: 'Title', validation: { isRequired: true } }),
+        // @keystatic/core 0.6.x: fields.slug rejects a top-level `label`; only name.* props allowed.
         slug: fields.slug({ name: { label: 'Slug' } }),
         description: fields.text({ label: 'Description', multiline: true }),
         pubDate: fields.date({ label: 'Published date', validation: { isRequired: true } }),

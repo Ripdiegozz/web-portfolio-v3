@@ -3,7 +3,10 @@ export interface ExperienceItem {
   role: string;
   period: string;
   current?: boolean;
+  location?: string;
   highlights: string[];
+  skills?: string[];
+  kpis?: { value: string; label: string }[];
 }
 export interface ProjectItem {
   name: string;
@@ -27,12 +30,23 @@ export const experience: ExperienceItem[] = [
     role: 'Full-Stack Engineer',
     period: 'Current',
     current: true,
-    highlights: ['Building the Wazuh AI Assistant'],
+    location: 'Remote',
+    highlights: [
+      'Building the Wazuh AI Assistant, agent tooling, and scalable backend microservices.',
+      'Architecting intuitive UI workflows and real-time interfaces relied upon daily by security analysts worldwide.',
+    ],
+    skills: ['TypeScript', 'Python', 'React', 'Docker', 'Linux', 'OpenAI'],
+    kpis: [
+      { value: 'AI Assistant', label: 'GenAI Agent Tooling' },
+      { value: 'Full-Stack', label: 'Analyst UX & Services' },
+      { value: 'Global', label: 'Enterprise Security' },
+    ],
   },
   {
     company: 'Tres Pi Medios / Stanley Black & Decker',
     role: 'Full-stack Developer',
     period: 'Jul 2024 – Jan 2025',
+    location: 'Remote',
     highlights: [
       'Built a tool loan and repair management application for Stanley Black & Decker in Italy, cutting task time by 50%.',
       'Developed an Azure Cloud Function automating generative AI integration, enabling automated response generation for Stanley Black & Decker customers on Zendesk in the U.S.',
@@ -40,11 +54,18 @@ export const experience: ExperienceItem[] = [
       'Implemented real-time data delivery for a Power BI dashboard, improving visibility into operational metrics and reporting workflows.',
       'Integrated internationalization across frontend and backend for web applications in Italy and the Middle East, enabling support for both Italian and English.',
     ],
+    skills: ['TypeScript', 'Node.js', 'OpenAI', 'Python', 'Docker', 'Git'],
+    kpis: [
+      { value: '-50%', label: 'Task time in Italy' },
+      { value: 'GenAI', label: 'Zendesk US/CA bot' },
+      { value: 'Real-time', label: 'Power BI analytics' },
+    ],
   },
   {
     company: 'SuperGIROS',
     role: 'Full-stack Developer Intern',
     period: 'Aug 2023 – Jul 2024',
+    location: 'On-site / Hybrid',
     highlights: [
       'Developed a Node.js chatbot to assist sales personnel, reducing helpdesk calls by 60%.',
       'Improved the performance of the main web application by 40% through refactoring, optimization, and an Angular upgrade.',
@@ -52,6 +73,12 @@ export const experience: ExperienceItem[] = [
       'Created RESTful APIs to integrate new functionalities into the company Intranet and web applications using Java, Spring, and Hibernate with remote OracleSQL databases.',
       'Implemented RESTful APIs in the microservices environment using Docker and Linux servers, supporting scalable service delivery.',
       'Developed a Java desktop service to manage matrix printers, improving the printing workflow with real-time WebSocket updates.',
+    ],
+    skills: ['Node.js', 'TypeScript', 'Docker', 'Linux', 'PostgreSQL', 'Git'],
+    kpis: [
+      { value: '-60%', label: 'Helpdesk calls' },
+      { value: '+40%', label: 'App performance' },
+      { value: '-50%', label: 'Inventory task time' },
     ],
   },
 ];

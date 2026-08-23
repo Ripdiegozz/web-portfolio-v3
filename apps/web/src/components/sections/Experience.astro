@@ -1,35 +1,15 @@
 ---
-import { Reveal, Calendar } from '@portfolio/ui';
+import { Reveal } from '@portfolio/ui';
 import Section from './Section.astro';
+import ExperienceDashboard from '../islands/ExperienceDashboard';
 import { experience } from '../../data/site';
 ---
 <Section label="experience">
   <Reveal client:visible>
-    <ul class="mt-12 divide-y divide-border-subtle">
-      {experience.map((job) => (
-        <li class="grid gap-3 py-10 first:pt-0 last:pb-0 md:grid-cols-[10rem_1fr] md:gap-8">
-          <p class="flex items-center gap-1.5 font-mono-code text-xs text-text-muted">
-            {job.current ? (
-              <span class="size-1.5 animate-pulse rounded-full bg-accent" aria-hidden="true"></span>
-            ) : (
-              <Calendar className="size-3 text-text-muted/70" />
-            )}
-            <span>{job.period}</span>
-          </p>
-          <div>
-            <h3 class="font-sans-display text-xl font-medium text-text-primary">{job.role}</h3>
-            <p class="mt-1 font-mono-code text-xs text-text-muted">{job.company}</p>
-            {job.highlights.length > 0 && (
-              <ul class="mt-4 space-y-1.5">
-                {job.highlights.map((highlight) => (
-                  <li class="text-sm leading-relaxed text-text-muted">{highlight}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </li>
-      ))}
-    </ul>
+    <ExperienceDashboard client:visible items={experience} />
   </Reveal>
 </Section>
+
+
+
 

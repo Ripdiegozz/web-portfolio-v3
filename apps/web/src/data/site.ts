@@ -2,6 +2,7 @@ export interface ExperienceItem {
   company: string;
   role: string;
   period: string;
+  current?: boolean;
   highlights: string[];
 }
 export interface ProjectItem {
@@ -25,12 +26,13 @@ export const experience: ExperienceItem[] = [
     company: 'Wazuh',
     role: 'Full-Stack Engineer',
     period: 'Current',
+    current: true,
     highlights: ['Building the Wazuh AI Assistant'],
   },
 ];
 export const projects: ProjectItem[] = [
-  { name: 'NatGPT', description: 'Placeholder — migrated from v2.', stack: [] },
-  { name: 'Notewave', description: 'Placeholder — migrated from v2.', stack: [] },
+  { name: 'NatGPT', description: 'Placeholder copy; real text migrates from v2.', stack: [] },
+  { name: 'Notewave', description: 'Placeholder copy; real text migrates from v2.', stack: [] },
 ];
 export const skills: SkillGroup[] = [];
 export const socials: SocialLink[] = [

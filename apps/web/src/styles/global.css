@@ -6,6 +6,8 @@
   --font-mono-code: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace;
   --color-accent: #2563eb; /* electric blue accent; also drives the grim-style grid */
   --color-accent-strong: #1d4ed8;
+  /* Accent tuned for small text: meets WCAG AA on both theme backgrounds. */
+  --color-accent-readable: var(--tk-accent-readable);
 
   /* semantic tokens mapped to per-theme variables (see :root/.dark below) */
   --color-bg: var(--tk-bg);
@@ -21,6 +23,7 @@
   --tk-text-primary: #101014;
   --tk-text-muted: #52525b;
   --tk-border-subtle: #e4e4e7;
+  --tk-accent-readable: #2563eb;
   color-scheme: light;
 }
 
@@ -30,6 +33,7 @@ html.dark {
   --tk-text-primary: #f4f4f5;
   --tk-text-muted: #a1a1aa;
   --tk-border-subtle: #26262e;
+  --tk-accent-readable: #60a5fa;
   color-scheme: dark;
 }
 

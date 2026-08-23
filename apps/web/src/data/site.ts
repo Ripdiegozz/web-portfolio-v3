@@ -100,13 +100,64 @@ export const projects: ProjectItem[] = [
     liveUrl: 'https://notewave-lake.vercel.app/',
   },
 ];
-export const skills: SkillGroup[] = [
-  { category: 'Languages', items: ['TypeScript', 'JavaScript', 'HTML', 'CSS', 'Bash'] },
-  { category: 'Frameworks & Libraries', items: ['React.js', 'Next.js', 'Node.js', 'Express.js', 'Redux'] },
-  { category: 'Styling', items: ['Tailwind CSS', 'Sass'] },
-  { category: 'Tooling', items: ['Git', 'GitHub', 'NPM', 'Yarn', 'Vite'] },
-  { category: 'Infra, CI & Testing', items: ['GitHub Actions', 'Jest', 'Docker', 'Linux', 'Elasticsearch'] },
+export interface CoreSkill {
+  name: string;
+  role: string;
+}
+
+export interface SkillCategoryGroup {
+  id: string;
+  title: string;
+  iconName: 'Layers' | 'Cpu' | 'Shield' | 'Terminal';
+  description: string;
+  skills: string[];
+}
+
+export const coreSkills: CoreSkill[] = [
+  { name: 'TypeScript', role: 'Primary Language' },
+  { name: 'React', role: 'Frontend Architecture' },
+  { name: 'Next.js', role: 'Production Framework' },
+  { name: 'Node.js', role: 'Backend Runtime' },
+  { name: 'PostgreSQL', role: 'Relational Database' },
+  { name: 'Elasticsearch', role: 'Distributed Search & SIEM' },
+  { name: 'OpenAI', role: 'AI Agent Tooling' },
+  { name: 'Tailwind CSS', role: 'Design Systems' },
+  { name: 'Docker', role: 'Containerization' },
+  { name: 'Git', role: 'Version Control' },
 ];
+
+export const skillCategories: SkillCategoryGroup[] = [
+  {
+    id: 'frontend',
+    title: 'Frontend & UI Systems',
+    iconName: 'Layers',
+    description: 'Performant, accessible user interfaces, atomic design systems, and reactive state management.',
+    skills: ['React', 'Next.js', 'TypeScript', 'Angular', 'Tailwind CSS', 'Astro', 'Redux', 'Vite', 'HTML5', 'CSS3', 'Sass'],
+  },
+  {
+    id: 'backend',
+    title: 'Backend & Data Architecture',
+    iconName: 'Cpu',
+    description: 'AI agent tool orchestration, scalable microservices, distributed search pipelines, relational SQL and NoSQL storage.',
+    skills: ['Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'Elasticsearch', 'OpenSearch', 'MySQL', 'Oracle SQL', 'OpenAI', 'Java', 'Spring Boot', 'Bash'],
+  },
+  {
+    id: 'devops',
+    title: 'Cloud, CI/CD & Testing',
+    iconName: 'Shield',
+    description: 'Automated CI/CD pipelines, container orchestration, cloud platforms (AWS, Azure), and end-to-end quality assurance.',
+    skills: ['Docker', 'Linux', 'GitHub Actions', 'AWS', 'Azure', 'Vitest', 'Jest', 'Playwright', 'Turborepo', 'NPM', 'Yarn'],
+  },
+];
+
+export const skills: SkillGroup[] = [
+  { category: 'Languages', items: ['TypeScript', 'JavaScript', 'Java', 'HTML', 'CSS', 'Bash'] },
+  { category: 'Frameworks & Libraries', items: ['React.js', 'Next.js', 'Angular', 'Node.js', 'Express.js', 'Spring Boot', 'Redux'] },
+  { category: 'Bases de Datos', items: ['PostgreSQL', 'MongoDB', 'MySQL', 'Elasticsearch', 'Oracle SQL'] },
+  { category: 'Cloud & DevOps', items: ['Docker', 'Linux', 'GitHub Actions', 'AWS', 'Azure', 'Git', 'Vite', 'Turborepo'] },
+  { category: 'Testing', items: ['Jest', 'Vitest', 'Playwright'] },
+];
+
 export const socials: SocialLink[] = [
   { label: 'GitHub', href: 'https://github.com/Ripdiegozz' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/dagadev' },

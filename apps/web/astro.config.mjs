@@ -13,5 +13,10 @@ export default defineConfig({
   integrations: [react(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      // Single React instance across workspace packages and SSR islands:
+      // duplicate Reacts break hooks (Invalid hook call in SSR).
+      dedupe: ['react', 'react-dom'],
+    },
   },
 });

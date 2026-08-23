@@ -48,22 +48,31 @@ export default function ContactForm() {
         aria-hidden="true"
         className="absolute -left-[9999px] h-0 w-0 opacity-0"
       />
-      <input name="name" required maxLength={100} aria-label="Your name" placeholder="Your name" className={inputClass} />
+      <label htmlFor="contact-name" className="sr-only">
+        Name
+      </label>
+      <input id="contact-name" name="name" required maxLength={100} placeholder="Your name" className={inputClass} />
+      <label htmlFor="contact-email" className="sr-only">
+        Email
+      </label>
       <input
+        id="contact-email"
         name="email"
         type="email"
         required
         maxLength={200}
-        aria-label="Your email"
         placeholder="you@example.com"
         className={inputClass}
       />
+      <label htmlFor="contact-message" className="sr-only">
+        Message
+      </label>
       <textarea
+        id="contact-message"
         name="message"
         required
         minLength={10}
         maxLength={5000}
-        aria-label="What can I help you with?"
         placeholder="What can I help you with?"
         className={`${inputClass} min-h-36 resize-y`}
       />

@@ -3,9 +3,9 @@ import { Reveal, ExternalLink, SiGithub, TechIcon } from '@portfolio/ui';
 import Section from './Section.astro';
 import { projects } from '../../data/site';
 ---
-<Section label="projects">
+<Section label="projects" number="03" title="Selected projects & open source.">
   <Reveal client:visible>
-    <ul class="mt-12 divide-y divide-border-subtle">
+    <ul class="divide-y divide-border-subtle">
       {projects.map((project) => (
         <li class="py-10 first:pt-0 last:pb-0">
           <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">

@@ -7,9 +7,9 @@ import { skills } from '../../data/site';
 ---
 {
   skills.length > 0 && (
-    <Section label="skills">
+    <Section label="skills" number="04" title="Technical arsenal & stack.">
       <Reveal client:visible>
-        <dl class="mt-12 space-y-8">
+        <dl class="space-y-8">
           {skills.map((group) => (
             <div class="grid gap-3 md:grid-cols-[9rem_1fr] md:gap-8 md:items-start">
               <dt class="pt-1 font-sans-display text-sm font-medium text-text-primary">

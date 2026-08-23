@@ -5,6 +5,6 @@ import ContributionGrid from '../islands/ContributionGrid';
 {/* The island is a sibling of the slot content, never wrapped in a Reveal:
     Reveal swaps its child element post-hydration, which would remount the
     grid and re-fetch the activity endpoint. */}
-<Section label="activity">
+<Section label="activity" number="05" title="Live engineering log & contributions.">
   <ContributionGrid client:visible />
 </Section>

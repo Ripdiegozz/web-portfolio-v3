@@ -4,7 +4,7 @@ import Section from './Section.astro';
 import ExperienceDashboard from '../islands/ExperienceDashboard';
 import { experience } from '../../data/site';
 ---
-<Section label="experience">
+<Section label="experience" number="02" title="Where I've built & shipped.">
   <Reveal client:visible>
     <ExperienceDashboard client:visible items={experience} />
   </Reveal>

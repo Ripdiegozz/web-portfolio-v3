@@ -3,9 +3,10 @@ import { Reveal } from '@portfolio/ui';
 import Section from './Section.astro';
 import { aboutTextLead, aboutTextSupport } from '../../data/site';
 ---
-<Section label="about">
+<Section label="about" number="01" title="A bit about me.">
   <Reveal client:visible>
-    <p class="mt-10 text-xl leading-relaxed text-text-primary md:text-2xl">{aboutTextLead}</p>
+    <p class="text-xl leading-relaxed text-text-primary md:text-2xl">{aboutTextLead}</p>
     <p class="mt-6 max-w-xl leading-relaxed text-text-muted">{aboutTextSupport}</p>
   </Reveal>
 </Section>
+

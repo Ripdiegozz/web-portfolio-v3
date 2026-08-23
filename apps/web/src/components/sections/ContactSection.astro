@@ -3,13 +3,7 @@ import { Mail } from '@portfolio/ui';
 import Section from './Section.astro';
 import ContactForm from '../islands/ContactForm';
 ---
-<Section label="contact">
-  <!-- No Reveal here: the form must stay stable (no remount on hydration), and
-       the section heading follows the shell's static kicker like Activity. -->
-  <p class="mt-10 font-sans-display text-4xl font-medium tracking-tight text-text-primary md:text-5xl">
-    Let's build something.
-  </p>
-
+<Section label="contact" number="06" title="Let's build something together." description="Have a project in mind, an opportunity, or just want to chat? Send a message below.">
   <ContactForm client:visible />
 
   <p class="mt-12 flex items-center gap-2 font-mono-code text-xs text-text-muted">

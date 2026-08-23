@@ -1,54 +1,37 @@
 ---
 title: Hello, world
-description: First post on the new portfolio engine — and a test of reading time, tags, and the table of contents.
+description: First post on the new portfolio engine.
 pubDate: 2026-08-22
 tags: [meta, astro, engineering]
 draft: false
 ---
 
-This site now publishes through [Keystatic](https://keystatic.com) — a local-first CMS that lives in the repo alongside the code. No external database, no extra service, just markdown files with a nice editor UI.
+This site runs on Astro 5 and deploys to Cloudflare Pages. Content lives in plain markdown under `src/content/posts/` and gets edited through [Keystatic](https://keystatic.com), a local CMS that runs at `/keystatic` during dev. No database, no third-party service.
 
 ## Why Keystatic?
 
-I wanted content authoring that felt native to the development workflow. Keystatic delivers exactly that: you write in the repo, commit with git, and the CMS UI is just a local dev server route (`/keystatic`).
+I wanted a CMS that committed to git and stayed out of the way. Keystatic does that. You write markdown, you commit, done.
 
-Some things I appreciate:
+The alternative was a headless CMS with a separate account, a webhook, and something that could go down. Not worth it for a personal site.
 
-- **Zero vendor lock-in** — content is plain markdown in `src/content/posts/`
-- **Type-safe schema** via `astro:content` + Zod
-- **Draft support** — `draft: true` keeps a post hidden in production, visible in dev
+## Stack
 
-## The New Stack
+- **Astro 5** with the Cloudflare adapter
+- **Tailwind v4** with CSS custom properties for theming
+- **Keystatic** for content editing
+- **Vitest** for unit tests
+- **Resend** for the contact form
 
-The portfolio runs on **Astro 5** deployed to **Cloudflare Pages**. The setup gives you:
+### Theme toggle
 
-- Static rendering by default with islands for interactive components
-- View Transitions API for the theme toggle (800ms diagonal polygon wipe)
-- Edge functions via `@astrojs/cloudflare` for the contact form and activity API
+The dark/light switch uses the View Transitions API with a diagonal polygon wipe at 800ms. No JavaScript framework, no library. About 30 lines of vanilla JS in the layout.
 
-### Content Pipeline
+### Reading time
 
-```
-src/content/posts/*.md
-        ↓  astro:content (glob loader)
-  getCollection('posts')
-        ↓  isPublished + sortPostsByDateDesc
-    Writing section + /blog
-```
+Every post shows an estimated reading time. It strips code blocks and markdown syntax before counting words, then divides by 200 wpm. Minimum is 1 minute.
 
-### Reading Time
+## What's next
 
-Each post shows an estimated reading time calculated from the word count — stripping code blocks, markdown markers, and HTML before counting. Average reading speed: **200 wpm**.
-
-## What's Next
-
-A few things still on the list:
-
-1. More posts (obviously)
-2. RSS feed
-3. OG image generation per post
-4. Search
-
----
-
-That's all for the first post. If you want to discuss any of the engineering decisions, reach out on [LinkedIn](https://www.linkedin.com/in/dagadev) or via the contact form inside the main page.
+- More posts
+- RSS feed
+- OG images per post

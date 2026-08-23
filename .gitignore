@@ -8,3 +8,5 @@ dist/
 .env.*
 .dev.vars
 !.env.example
+test-results/
+playwright-report/

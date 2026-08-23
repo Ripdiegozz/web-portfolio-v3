@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { motion } from 'motion/react';
 
 export interface RevealProps {
@@ -24,13 +24,20 @@ export function revealPropsFor(reducedMotion: boolean) {
 }
 
 export function Reveal({ children, delay = 0, className }: RevealProps) {
-  const reduced = typeof window !== 'undefined'
-    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    : true;
-  const props = revealPropsFor(reduced);
-  if (!('initial' in props)) {
+  // Gate animation behind mount so SSR output (static div) matches the first
+  // client render — reading matchMedia during render would cause a hydration
+  // mismatch. After mount, respect prefers-reduced-motion.
+  const [canAnimate, setCanAnimate] = useState(false);
+  useEffect(() => {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setCanAnimate(true);
+    }
+  }, []);
+
+  if (!canAnimate) {
     return <div className={className}>{children}</div>;
   }
+  const props = revealPropsFor(false);
   return (
     <motion.div className={className} {...props} transition={{ ...(props.transition as object), delay }}>
       {children}

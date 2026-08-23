@@ -14,16 +14,33 @@ const CACHE_MAX_AGE_SECONDS = 3600;
 /** Mock mode for Playwright E2E only - hard-disabled in production builds. */
 const e2eMocks = import.meta.env.PUBLIC_E2E_MOCKS === '1' && !import.meta.env.PROD;
 
-/** Sole request body reader: classifies the payload and extracts the Turnstile token. */
+/**
+ * Sole request body reader: classifies the payload and extracts the Turnstile
+ * token. Honeypot detection runs before the JSON gate so naive form bots get
+ * the fake-success path instead of a 400 that tells them the endpoint
+ * validates. Only payloads that clear the honeypot must be strict JSON.
+ */
 async function parseJsonContactBody(
   request: Request
 ): Promise<{ classified: ClassifiedContact; turnstileToken: string }> {
+  const text = await request.text().catch(() => '');
+  let raw: unknown = null;
+  if (text) {
+    try {
+      raw = JSON.parse(text);
+    } catch {
+      raw = Object.fromEntries(new URLSearchParams(text));
+    }
+  }
+  const { classified: honeypot } = classifyContactPayload(raw);
+  if (honeypot.kind === 'silent_bot') {
+    return { classified: honeypot, turnstileToken: '' };
+  }
   // Require JSON: a JSON content-type forces a CORS preflight, removing the
   // simple-request path used by cross-origin form posts.
   if (!request.headers.get('content-type')?.includes('application/json')) {
     return { classified: { kind: 'rejected' }, turnstileToken: '' };
   }
-  const raw = await request.json().catch(() => null);
   return classifyContactPayload(raw);
 }
 

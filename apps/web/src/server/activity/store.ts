@@ -7,18 +7,28 @@ export interface ActivityStoreHooks {
   writeCache(grid: ActivityGrid): Promise<void>;
 }
 
-export type ActivitySource = 'fresh' | 'stale' | 'fallback';
+export type ActivitySource = 'cached' | 'fresh' | 'fallback';
 
+/**
+ * Cache-first: a fresh edge-cache hit is served without touching GitHub
+ * (expiry is managed by the Cache API via our max-age=3600 header); on a miss
+ * we fetch fresh and re-cache; on upstream failure (and no usable cache)
+ * we fall back to an empty grid and never throw.
+ */
 export async function getActivityWithFallback(
   hooks: ActivityStoreHooks
 ): Promise<{ grid: ActivityGrid; source: ActivitySource }> {
+  const cached = await hooks.readCache().catch(() => undefined);
+  if (cached) {
+    return { grid: cached, source: 'cached' };
+  }
   try {
     const grid = mapContributionsResponse(await hooks.fetchFresh());
     await hooks.writeCache(grid).catch(() => {}); // cache write is best-effort
     return { grid, source: 'fresh' };
   } catch {
     const stale = await hooks.readCache().catch(() => undefined);
-    if (stale) return { grid: stale, source: 'stale' };
+    if (stale) return { grid: stale, source: 'fallback' };
     return { grid: emptyGrid(), source: 'fallback' };
   }
 }

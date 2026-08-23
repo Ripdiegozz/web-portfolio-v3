@@ -17,25 +17,27 @@ describe('getActivityWithFallback', () => {
   const fresh = { totalContributions: 5, weeks: [] };
   const stale = { totalContributions: 99, weeks: [] };
 
-  it('prefers fresh upstream and refreshes cache', async () => {
+  it('serves a cache hit without touching upstream', async () => {
+    const fetchFresh = vi.fn();
+    const result = await getActivityWithFallback({
+      fetchFresh,
+      readCache: async () => stale,
+      writeCache: async () => {},
+    });
+    expect(result.grid).toEqual(stale);
+    expect(result.source).toBe('cached');
+    expect(fetchFresh).not.toHaveBeenCalled();
+  });
+  it('on cache miss fetches fresh and refreshes the cache', async () => {
     let cached: object | undefined;
     const result = await getActivityWithFallback({
       fetchFresh: async () => freshPayload,
-      readCache: async () => stale,
+      readCache: async () => undefined,
       writeCache: async (g) => { cached = g; },
     });
     expect(result.grid).toEqual(fresh);
     expect(result.source).toBe('fresh');
     expect(cached).toEqual(fresh);
-  });
-  it('on upstream failure serves stale cache', async () => {
-    const result = await getActivityWithFallback({
-      fetchFresh: async () => { throw new Error('github down'); },
-      readCache: async () => stale,
-      writeCache: async () => {},
-    });
-    expect(result.grid).toEqual(stale);
-    expect(result.source).toBe('stale');
   });
   it('when both fail serves empty grid, never throws', async () => {
     const result = await getActivityWithFallback({
@@ -45,6 +47,17 @@ describe('getActivityWithFallback', () => {
     });
     expect(result.grid).toEqual({ totalContributions: 0, weeks: [] });
     expect(result.source).toBe('fallback');
+  });
+  it('rejects empty calendars from error-shaped responses instead of caching them', async () => {
+    const writeCache = vi.fn();
+    const result = await getActivityWithFallback({
+      fetchFresh: async () => ({ data: null, errors: [{ message: 'boom' }] }),
+      readCache: async () => undefined,
+      writeCache,
+    });
+    expect(result.grid).toEqual({ totalContributions: 0, weeks: [] });
+    expect(result.source).toBe('fallback');
+    expect(writeCache).not.toHaveBeenCalled();
   });
 });
 

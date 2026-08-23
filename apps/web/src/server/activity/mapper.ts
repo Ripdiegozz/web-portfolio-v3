@@ -26,6 +26,11 @@ interface GraphQLResponse {
 export function mapContributionsResponse(payload: unknown): ActivityGrid {
   const p = payload as GraphQLResponse;
   const cal = p.data?.viewer?.contributionsCollection?.contributionCalendar;
+  // GraphQL returns 200 with { data: null, errors } on errors. Throw so the
+  // fallback chain serves a stale grid instead of caching an empty one.
+  if (!cal?.weeks) {
+    throw new Error('github_activity_invalid_response');
+  }
   return {
     totalContributions: p.data?.viewer?.contributionsCollection?.totalContributions ?? 0,
     weeks: (cal?.weeks ?? []).map((week) => ({

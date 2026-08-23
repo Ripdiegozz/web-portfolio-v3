@@ -27,6 +27,10 @@ jobs:
         env:
           PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
           PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: ${{ vars.PUBLIC_KEYSTATIC_GITHUB_APP_SLUG }}
+      # Loud gate: never deploy with the rate-limiter binding missing, else the
+      # 5/day per-IP cap silently degrades to a per-isolate limit.
+      - name: Require RATE_LIMIT_KV binding
+        run: grep -q '"kv_namespaces"' apps/web/wrangler.jsonc && test ! -z "$(grep -o '"id": *"[^"]*"' apps/web/wrangler.jsonc | head -1)" || (echo "::error::RATE_LIMIT_KV namespace not provisioned in apps/web/wrangler.jsonc - run 'bunx wrangler kv namespace create RATE_LIMIT_KV' and paste the id." && exit 1)
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

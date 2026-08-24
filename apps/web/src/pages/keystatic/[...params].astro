@@ -1,8 +1,6 @@
 ---
 export const prerender = false;
-import { Keystatic } from '@keystatic/core/ui';
-import type { Config } from '@keystatic/core';
-import config from '../../../keystatic.config';
+import KeystaticAdmin from '../../components/KeystaticAdmin';
 ---
 <!doctype html>
 <html lang="en">
@@ -12,6 +10,6 @@ import config from '../../../keystatic.config';
     <title>Keystatic Admin</title>
   </head>
   <body>
-    <Keystatic config={config as unknown as Config} client:only="react" />
+    <KeystaticAdmin client:only="react" />
   </body>
 </html>

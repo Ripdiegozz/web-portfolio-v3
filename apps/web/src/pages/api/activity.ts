@@ -10,9 +10,10 @@ export const GET: APIRoute = async (ctx) => {
     const env = await getWorkerEnv(ctx.locals);
     return await createApp(buildDeps(env)).fetch(ctx.request);
   } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
     console.error('[activity-route-error]', err);
     return new Response(
-      JSON.stringify({ ok: true, cached: false, data: emptyGrid() }),
+      JSON.stringify({ ok: true, cached: false, error: message, data: emptyGrid() }),
       {
         status: 200,
         headers: { 'content-type': 'application/json' },

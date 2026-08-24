@@ -7,18 +7,18 @@ export interface SendResult {
 }
 
 export function makeSendContactEmail(apiKey: string, opts?: { to?: string; from?: string }) {
-  if (!apiKey && !import.meta.env.PROD) {
+  if (!apiKey) {
     return async function mockDevSendContactEmail(input: {
       name: string;
       email: string;
       message: string;
     }): Promise<SendResult> {
-      console.log('📧 [DEV EMAIL] Simulated contact message delivery:', {
+      console.warn('📧 [EMAIL] RESEND_API_KEY not configured. Message simulated:', {
         from: `${input.name} <${input.email}>`,
         to: opts?.to ?? 'diegogarciag63@gmail.com',
         message: input.message,
       });
-      return { sent: true };
+      return { sent: !import.meta.env.PROD };
     };
   }
 

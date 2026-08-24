@@ -19,16 +19,20 @@ export async function getActivityWithFallback(
   hooks: ActivityStoreHooks
 ): Promise<{ grid: ActivityGrid; source: ActivitySource }> {
   const cached = await hooks.readCache().catch(() => undefined);
-  if (cached) {
+  if (cached && (cached.totalContributions > 0 || cached.weeks.length > 0)) {
     return { grid: cached, source: 'cached' };
   }
   try {
     const grid = mapContributionsResponse(await hooks.fetchFresh());
-    await hooks.writeCache(grid).catch(() => {}); // cache write is best-effort
+    if (grid.totalContributions > 0 || grid.weeks.length > 0) {
+      await hooks.writeCache(grid).catch(() => {}); // cache write is best-effort
+    }
     return { grid, source: 'fresh' };
   } catch {
     const stale = await hooks.readCache().catch(() => undefined);
-    if (stale) return { grid: stale, source: 'fallback' };
+    if (stale && (stale.totalContributions > 0 || stale.weeks.length > 0)) {
+      return { grid: stale, source: 'fallback' };
+    }
     return { grid: emptyGrid(), source: 'fallback' };
   }
 }

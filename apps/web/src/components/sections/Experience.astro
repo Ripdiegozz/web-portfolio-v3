@@ -1,5 +1,4 @@
 ---
-import { Reveal } from '@portfolio/ui';
 import Section from './Section.astro';
 import ExperienceDashboard from '../islands/ExperienceDashboard';
 import type { ExperienceTranslations } from '../../i18n';
@@ -12,18 +11,16 @@ interface Props {
 const { dict = en.experience } = Astro.props;
 ---
 <Section label="experience" number="02" title={dict.sectionTitle}>
-  <Reveal client:visible>
-    <ExperienceDashboard
-      client:visible
-      items={dict.items}
-      labels={{
-        active: dict.activeLabel,
-        at: dict.atLabel,
-        clientLabel: dict.clientLabel,
-        keyContributions: dict.contributionsHeading,
-        technologies: dict.technologiesHeading,
-        tablistAriaLabel: dict.tablistAriaLabel,
-      }}
-    />
-  </Reveal>
+  <ExperienceDashboard
+    client:visible
+    items={dict.items}
+    labels={{
+      active: dict.activeLabel,
+      at: dict.atLabel,
+      clientLabel: dict.clientLabel,
+      keyContributions: dict.contributionsHeading,
+      technologies: dict.technologiesHeading,
+      tablistAriaLabel: dict.tablistAriaLabel,
+    }}
+  />
 </Section>

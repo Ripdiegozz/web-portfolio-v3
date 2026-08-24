@@ -321,11 +321,12 @@ export function AmbientBackground() {
   const isDark = useThemeMode();
 
   useEffect(() => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setAllowed(!mediaQuery.matches);
+    setAllowed(!mediaQuery.matches && !isMobile);
 
     const onChange = (e: MediaQueryListEvent) => {
-      setAllowed(!e.matches);
+      setAllowed(!e.matches && window.innerWidth >= 768);
     };
     mediaQuery.addEventListener('change', onChange);
     return () => mediaQuery.removeEventListener('change', onChange);

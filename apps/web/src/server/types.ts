@@ -15,12 +15,12 @@ export interface FetcherLike {
 }
 
 export interface WorkerBindings extends Record<string, unknown> {
-  ASSETS?: FetcherLike;
-  RATE_LIMIT_KV?: KVLike;
-  RESEND_API_KEY?: string;
-  TURNSTILE_SECRET_KEY?: string;
-  GITHUB_TOKEN?: string;
-  KEYSTATIC_GITHUB_CLIENT_ID?: string;
-  KEYSTATIC_GITHUB_CLIENT_SECRET?: string;
-  KEYSTATIC_SECRET?: string;
+  ASSETS?: FetcherLike | undefined;
+  RATE_LIMIT_KV?: KVLike | undefined;
+  RESEND_API_KEY?: string | undefined;
+  TURNSTILE_SECRET_KEY?: string | undefined;
+  GITHUB_TOKEN?: string | undefined;
+  KEYSTATIC_GITHUB_CLIENT_ID?: string | undefined;
+  KEYSTATIC_GITHUB_CLIENT_SECRET?: string | undefined;
+  KEYSTATIC_SECRET?: string | undefined;
 }

@@ -97,7 +97,7 @@ export async function getWorkerEnv(locals: unknown): Promise<WorkerBindings> {
 
   const kv = (runtimeEnv?.RATE_LIMIT_KV ?? modEnv?.RATE_LIMIT_KV) as WorkerBindings['RATE_LIMIT_KV'];
 
-  return {
+  const bindings: WorkerBindings = {
     ...(runtimeEnv || {}),
     ...(modEnv || {}),
     RATE_LIMIT_KV: kv,
@@ -108,5 +108,7 @@ export async function getWorkerEnv(locals: unknown): Promise<WorkerBindings> {
     KEYSTATIC_GITHUB_CLIENT_SECRET: getVal('KEYSTATIC_GITHUB_CLIENT_SECRET'),
     KEYSTATIC_SECRET: getVal('KEYSTATIC_SECRET'),
   };
+
+  return bindings;
 }
 

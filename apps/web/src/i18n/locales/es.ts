@@ -241,7 +241,7 @@ export const es: TranslationDictionary = {
     socials: [
       { label: 'GitHub', href: 'https://github.com/Ripdiegozz' },
       { label: 'LinkedIn', href: 'https://www.linkedin.com/in/dagadev' },
-      { label: 'CV', href: '/cv.pdf' },
+      { label: 'CV', href: '/cv-es.pdf' },
     ],
   },
 };

@@ -1,0 +1,17 @@
+---
+export const prerender = false;
+import { Keystatic } from '@keystatic/core/ui';
+import type { Config } from '@keystatic/core';
+import config from '../../../keystatic.config';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Keystatic Admin</title>
+  </head>
+  <body>
+    <Keystatic config={config as unknown as Config} client:only="react" />
+  </body>
+</html>

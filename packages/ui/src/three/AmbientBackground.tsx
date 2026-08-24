@@ -41,16 +41,16 @@ function useThemeMode(): boolean {
  * Distinct, separated, crisp dots arranged in a flowing 3D wave terrain
  * with subtle elevation lighting, clean point separation, and gentle mouse interaction.
  */
-function DotWaveMesh({ isDark }: { isDark: boolean }) {
+function DotWaveMesh({ isDark, isMobile }: { isDark: boolean; isMobile: boolean }) {
   const meshRef = useRef<THREE.Points>(null!);
   const starsRef = useRef<THREE.Points>(null!);
   const mouse = useRef(new THREE.Vector2(0, 0));
   const targetMouse = useRef(new THREE.Vector2(0, 0));
 
-  // Structured 2D grid for distinct, separated dot lines
+  // Structured 2D grid: lightweight on mobile (~3.5k points) for 60fps, rich on desktop (~15k points)
   const { positions, gridIndices } = useMemo(() => {
-    const cols = 210; // across X (width)
-    const rows = 72;  // across Z (depth)
+    const cols = isMobile ? 100 : 210; // across X (width)
+    const rows = isMobile ? 38 : 72;   // across Z (depth)
     const total = cols * rows;
 
     const pos = new Float32Array(total * 3);
@@ -82,11 +82,11 @@ function DotWaveMesh({ isDark }: { isDark: boolean }) {
     }
 
     return { positions: pos, gridIndices: indices };
-  }, []);
+  }, [isMobile]);
 
   // Soft ambient floating background dust
   const starPositions = useMemo(() => {
-    const count = 900;
+    const count = isMobile ? 300 : 900;
     const arr = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       arr[i * 3] = (Math.random() - 0.5) * 44;
@@ -94,7 +94,7 @@ function DotWaveMesh({ isDark }: { isDark: boolean }) {
       arr[i * 3 + 2] = (Math.random() - 0.5) * 12 - 2.0;
     }
     return arr;
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
@@ -318,18 +318,30 @@ const STARS_FRAG = /* glsl */ `
 /** Ambient-only WebGL layer. Disabled entirely under prefers-reduced-motion. */
 export function AmbientBackground() {
   const [allowed, setAllowed] = useState<boolean | null>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth < 768;
+  });
   const isDark = useThemeMode();
 
   useEffect(() => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile, { passive: true });
+
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setAllowed(!mediaQuery.matches && !isMobile);
+    setAllowed(!mediaQuery.matches);
 
     const onChange = (e: MediaQueryListEvent) => {
-      setAllowed(!e.matches && window.innerWidth >= 768);
+      setAllowed(!e.matches);
     };
     mediaQuery.addEventListener('change', onChange);
-    return () => mediaQuery.removeEventListener('change', onChange);
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      mediaQuery.removeEventListener('change', onChange);
+    };
   }, []);
 
   if (allowed === null || !allowed) return null;
@@ -338,10 +350,10 @@ export function AmbientBackground() {
     <Canvas
       className="pointer-events-none h-full w-full"
       camera={{ position: [0, 2.6, 9.4], fov: 48, rotation: [-0.20, 0, 0] }}
-      dpr={[1, 2]}
+      dpr={isMobile ? [1, 1.25] : [1, 2]}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
     >
-      <DotWaveMesh isDark={isDark} />
+      <DotWaveMesh isDark={isDark} isMobile={isMobile} />
     </Canvas>
   );
 }

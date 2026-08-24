@@ -38,7 +38,17 @@ export default config({
           label: 'Tags',
           itemLabel: (props) => props.value || 'New tag',
         }),
-        content: fields.document({ label: 'Content' }),
+        content: fields.document({
+          label: 'Content',
+          formatting: true,
+          dividers: true,
+          links: true,
+          tables: true,
+          images: {
+            directory: 'public/images/posts',
+            publicPath: '/images/posts/',
+          },
+        }),
       },
     }),
   },

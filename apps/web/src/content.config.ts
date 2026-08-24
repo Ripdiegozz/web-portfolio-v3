@@ -5,7 +5,7 @@ import { z } from 'astro/zod';
 // Mirrors the `posts` collection in keystatic.config.ts (frontmatter fields only;
 // Keystatic's `slug` field becomes the entry filename and `content` is the body).
 const posts = defineCollection({
-  loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx}' }),
+  loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx,mdoc}' }),
   schema: z.object({
     title: z.string(),
     description: z.string().default(''),

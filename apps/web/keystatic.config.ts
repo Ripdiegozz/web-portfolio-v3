@@ -19,7 +19,7 @@ export default config({
     posts: collection({
       label: 'Posts',
       slugField: 'slug',
-      path: 'src/content/posts/*',
+      path: 'apps/web/src/content/posts/*',
       format: { contentField: 'content' },
       schema: {
         title: fields.text({ label: 'Title', validation: { isRequired: true } }),
@@ -31,22 +31,33 @@ export default config({
         draft: fields.checkbox({ label: 'Draft', defaultValue: false }),
         heroImage: fields.image({
           label: 'Hero image',
-          directory: 'public/images/posts',
+          directory: 'apps/web/public/images/posts',
           publicPath: '/images/posts/',
         }),
         tags: fields.array(fields.text({ label: 'Tag' }), {
           label: 'Tags',
           itemLabel: (props) => props.value || 'New tag',
         }),
-        content: fields.document({
+        content: fields.mdx({
           label: 'Content',
-          formatting: true,
-          dividers: true,
-          links: true,
-          tables: true,
-          images: {
-            directory: 'public/images/posts',
-            publicPath: '/images/posts/',
+          extension: 'md',
+          options: {
+            bold: true,
+            italic: true,
+            strikethrough: true,
+            code: true,
+            heading: [1, 2, 3, 4, 5, 6],
+            blockquote: true,
+            orderedList: true,
+            unorderedList: true,
+            table: true,
+            link: true,
+            divider: true,
+            codeBlock: true,
+            image: {
+              directory: 'apps/web/public/images/posts',
+              publicPath: '/images/posts/',
+            },
           },
         }),
       },

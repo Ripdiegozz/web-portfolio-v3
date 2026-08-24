@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /keystatic/
 
 Sitemap: https://dagadev.net/sitemap-index.xml
+Host: https://dagadev.net

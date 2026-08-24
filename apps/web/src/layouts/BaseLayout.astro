@@ -7,10 +7,13 @@ import { getAlternateLocale, getTranslations } from '../i18n';
 
 interface Props {
   title: string;
-  description?: string;
-  locale?: Locale;
-  alternatePath?: string;
-  dict?: TranslationDictionary;
+  description?: string | undefined;
+  locale?: Locale | undefined;
+  alternatePath?: string | undefined;
+  dict?: TranslationDictionary | undefined;
+  image?: string | undefined;
+  article?: boolean | undefined;
+  publishDate?: Date | undefined;
 }
 
 const SITE = 'https://dagadev.net';
@@ -18,6 +21,9 @@ const {
   title,
   locale = 'en',
   alternatePath,
+  image,
+  article = false,
+  publishDate,
 } = Astro.props;
 
 const dict = Astro.props.dict ?? getTranslations(locale);
@@ -26,6 +32,61 @@ const description = Astro.props.description ?? dict.meta.description;
 const targetLocale = getAlternateLocale(locale);
 const targetPath = alternatePath ?? (targetLocale === 'es' ? '/es' : '/');
 const navPrefix = locale === 'es' ? '/es' : '';
+
+const canonicalUrl = new URL(Astro.url.pathname, SITE).toString();
+const defaultOgImage = locale === 'es' ? `${SITE}/og-default-es.png` : `${SITE}/og-default.png`;
+const ogImage = image
+  ? (image.startsWith('http') ? image : `${SITE}${image.startsWith('/') ? '' : '/'}${image}`)
+  : defaultOgImage;
+
+const enUrl = alternatePath && locale === 'es' ? `${SITE}${alternatePath}` : (locale === 'en' ? canonicalUrl : `${SITE}/`);
+const esUrl = alternatePath && locale === 'en' ? `${SITE}${alternatePath}` : (locale === 'es' ? canonicalUrl : `${SITE}/es`);
+
+const jsonLd = article
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: title,
+      description: description,
+      image: [ogImage],
+      datePublished: publishDate ? publishDate.toISOString() : undefined,
+      author: {
+        '@type': 'Person',
+        name: 'Diego García',
+        url: SITE,
+      },
+      publisher: {
+        '@type': 'Person',
+        name: 'Diego García',
+        url: SITE,
+      },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': canonicalUrl,
+      },
+    }
+  : {
+      '@context': 'https://schema.org',
+      '@type': 'ProfilePage',
+      mainEntity: {
+        '@type': 'Person',
+        name: 'Diego García',
+        alternateName: 'dagadev',
+        url: SITE,
+        jobTitle: 'Full-Stack Engineer',
+        description: description,
+        image: defaultOgImage,
+        worksFor: {
+          '@type': 'Organization',
+          name: 'Wazuh',
+          url: 'https://wazuh.com',
+        },
+        sameAs: [
+          'https://github.com/Ripdiegozz',
+          'https://www.linkedin.com/in/diego-garcia-gonzalez',
+        ],
+      },
+    };
 ---
 <!doctype html>
 <html lang={locale}>
@@ -36,19 +97,38 @@ const navPrefix = locale === 'es' ? '/es' : '';
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="/favicon-192x192.png" />
     <meta name="description" content={description} />
+    <title>{title}</title>
+
+    <!-- Canonical & Alternates -->
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="es" href={esUrl} />
+    <link rel="alternate" hreflang="x-default" href={`${SITE}/`} />
+
+    <!-- Open Graph (Facebook, LinkedIn, Discord, WhatsApp, Telegram) -->
+    <meta property="og:site_name" content="Diego García · dagadev.net" />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={locale === 'es' ? `${SITE}/es` : `${SITE}/`} />
-    <link rel="alternate" hreflang="en" href={`${SITE}/`} />
-    <link rel="alternate" hreflang="es" href={`${SITE}/es`} />
-    <link rel="alternate" hreflang="x-default" href={`${SITE}/`} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:secure_url" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content={title} />
     <meta property="og:locale" content={dict.meta.ogLocale} />
     <meta property="og:locale:alternate" content={locale === 'es' ? 'en_US' : 'es_ES'} />
-    <!-- Pending manual asset: public/og-default.png (1200x630). Not generated yet. -->
-    <meta property="og:image" content={`${SITE}/og-default.png`} />
+
+    <!-- Twitter / X Cards -->
     <meta name="twitter:card" content="summary_large_image" />
-    <title>{title}</title>
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={title} />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <script is:inline>
       // Keep in sync with resolveInitialTheme in src/lib/theme.ts.
       (() => {

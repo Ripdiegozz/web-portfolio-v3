@@ -10,7 +10,19 @@ export default defineConfig({
   // 'static' = prerender everything by default; /api and /admin opt out per-route
   output: 'static',
   adapter: cloudflare(),
-  integrations: [react(), sitemap()],
+  integrations: [
+    react(),
+    sitemap({
+      filter: (page) => !page.includes('/keystatic') && !page.includes('/api'),
+      i18n: {
+        defaultLocale: 'en',
+        locales: {
+          en: 'en-US',
+          es: 'es-ES',
+        },
+      },
+    }),
+  ],
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'es'],

@@ -31,6 +31,9 @@ const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length > 1
   locale={locale}
   dict={dict}
   alternatePath={`/blog/${entry.id}/`}
+  article={true}
+  publishDate={entry.data.pubDate}
+  image={entry.data.heroImage}
 >
   <div id="main" class="mx-auto w-full max-w-6xl px-6 pt-28 pb-16 md:pt-32 md:pb-24">
 

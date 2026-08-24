@@ -33,11 +33,21 @@ export const GET: APIRoute = async ({ request, locals }) => {
         }
       },
     });
+    const headers = new Headers(keystatic.headers);
+    const location = headers.get('Location');
+    if (location && location.startsWith('https://github.com/login/oauth/authorize')) {
+      const authUrl = new URL(location);
+      if (!authUrl.searchParams.has('scope')) {
+        authUrl.searchParams.set('scope', 'public_repo,repo');
+        headers.set('Location', authUrl.toString());
+      }
+    }
+
     // Uint8Array bodies are valid BodyInit at runtime; the double width
     // (ArrayBufferLike) of newer lib typings forces this single boundary cast.
     return new Response(keystatic.body as BodyInit | null, {
       ...(keystatic.status !== undefined ? { status: keystatic.status } : {}),
-      ...(keystatic.headers ? { headers: keystatic.headers } : {}),
+      headers,
     });
   } catch (err) {
     console.error('[keystatic/api] handler error:', err);

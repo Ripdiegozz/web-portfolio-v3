@@ -62,17 +62,21 @@ function getLocalFileEnv(): Record<string, string> {
  * empty bindings object so routes degrade instead of crashing on resolution.
  */
 export async function getWorkerEnv(locals: unknown): Promise<WorkerBindings> {
-  let bindings: WorkerBindings;
+  let runtimeEnv: Record<string, unknown> | null = null;
+  let modEnv: Record<string, unknown> | null = null;
+
+  try {
+    const r = (locals as { runtime?: { env?: Record<string, unknown> } })?.runtime;
+    if (r?.env) runtimeEnv = r.env;
+  } catch {
+    // ignore
+  }
+
   try {
     const mod = await import('cloudflare:workers');
-    bindings = (mod.env as unknown as WorkerBindings) ?? {};
+    if (mod?.env) modEnv = mod.env as Record<string, unknown>;
   } catch {
-    try {
-      const runtimeEnv = (locals as { runtime?: { env?: WorkerBindings } })?.runtime?.env;
-      bindings = runtimeEnv ?? {};
-    } catch {
-      bindings = {};
-    }
+    // ignore
   }
 
   // In dev mode (astro dev / Node), merge with process.env, import.meta.env, and local .env files
@@ -80,26 +84,29 @@ export async function getWorkerEnv(locals: unknown): Promise<WorkerBindings> {
   const proc = typeof process !== 'undefined' ? process.env : {};
   const meta = typeof import.meta !== 'undefined' && import.meta.env ? (import.meta.env as unknown as Record<string, string>) : {};
 
+  const getVal = (key: string): string => {
+    return (
+      (runtimeEnv?.[key] as string) ||
+      (modEnv?.[key] as string) ||
+      (proc?.[key] as string) ||
+      (meta?.[key] as string) ||
+      (fileEnv?.[key] as string) ||
+      ''
+    );
+  };
+
+  const kv = (runtimeEnv?.RATE_LIMIT_KV ?? modEnv?.RATE_LIMIT_KV) as WorkerBindings['RATE_LIMIT_KV'];
+
   return {
-    ...bindings,
-    GITHUB_TOKEN:
-      bindings.GITHUB_TOKEN ||
-      proc.GITHUB_TOKEN ||
-      meta.GITHUB_TOKEN ||
-      fileEnv.GITHUB_TOKEN ||
-      '',
-    TURNSTILE_SECRET_KEY:
-      bindings.TURNSTILE_SECRET_KEY ||
-      proc.TURNSTILE_SECRET_KEY ||
-      meta.TURNSTILE_SECRET_KEY ||
-      fileEnv.TURNSTILE_SECRET_KEY ||
-      '1x0000000000000000000000000000000AA',
-    RESEND_API_KEY:
-      bindings.RESEND_API_KEY ||
-      proc.RESEND_API_KEY ||
-      meta.RESEND_API_KEY ||
-      fileEnv.RESEND_API_KEY ||
-      '',
+    ...(runtimeEnv || {}),
+    ...(modEnv || {}),
+    RATE_LIMIT_KV: kv,
+    GITHUB_TOKEN: getVal('GITHUB_TOKEN'),
+    TURNSTILE_SECRET_KEY: getVal('TURNSTILE_SECRET_KEY') || '1x0000000000000000000000000000000AA',
+    RESEND_API_KEY: getVal('RESEND_API_KEY'),
+    KEYSTATIC_GITHUB_CLIENT_ID: getVal('KEYSTATIC_GITHUB_CLIENT_ID'),
+    KEYSTATIC_GITHUB_CLIENT_SECRET: getVal('KEYSTATIC_GITHUB_CLIENT_SECRET'),
+    KEYSTATIC_SECRET: getVal('KEYSTATIC_SECRET'),
   };
 }
 

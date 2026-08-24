@@ -63,8 +63,7 @@ export function buildActivityDeps(bindings: WorkerBindings): AppDeps['activity']
     },
     async readCache() {
       try {
-        const { caches } = await import('cloudflare:workers');
-        const cache = caches?.default;
+        const cache = typeof caches !== 'undefined' ? (caches as unknown as { default?: Cache }).default : undefined;
         if (!cache) return undefined;
         const cacheReq = new Request('https://dagadev.net/__cache/activity-grid.json');
         const hit = await cache.match(cacheReq);
@@ -76,8 +75,7 @@ export function buildActivityDeps(bindings: WorkerBindings): AppDeps['activity']
     },
     async writeCache(grid) {
       try {
-        const { caches } = await import('cloudflare:workers');
-        const cache = caches?.default;
+        const cache = typeof caches !== 'undefined' ? (caches as unknown as { default?: Cache }).default : undefined;
         if (!cache) return;
         const cacheReq = new Request('https://dagadev.net/__cache/activity-grid.json');
         await cache.put(
@@ -100,16 +98,16 @@ export function buildActivityDeps(bindings: WorkerBindings): AppDeps['activity']
 // request. Without this, a memoryRateLimiter built per request starts with an
 // empty counter map and the rate limit becomes a no-op. Bindings are static
 // for the life of the isolate; first sighting wins.
-let cachedDeps: AppDeps | null = null;
+let memoryLimiterInstance: ReturnType<typeof memoryRateLimiter> | null = null;
 
-function createDeps(bindings: WorkerBindings): AppDeps {
+export function buildDeps(bindings: WorkerBindings): AppDeps {
   if (e2eMocks) {
-    const limiter = memoryRateLimiter(MAX_PER_DAY);
+    if (!memoryLimiterInstance) memoryLimiterInstance = memoryRateLimiter(MAX_PER_DAY);
     return {
       contact: {
         parseBody: parseJsonContactBody,
         verifyTurnstile: async () => true,
-        rateLimit: async (ip) => limiter.allow(ip ?? 'anon'),
+        rateLimit: async (ip) => memoryLimiterInstance!.allow(ip ?? 'anon'),
         sendEmail: async () => {},
       },
       activity: mockActivityDeps(),
@@ -117,11 +115,10 @@ function createDeps(bindings: WorkerBindings): AppDeps {
   }
 
   const kv = bindings.RATE_LIMIT_KV;
-  // NOTE: without the KV namespace wired in wrangler.jsonc, the fallback limiter
-  // is per-isolate only; provision RATE_LIMIT_KV before production deploy.
+  if (!memoryLimiterInstance) memoryLimiterInstance = memoryRateLimiter(MAX_PER_DAY);
   const limiter = kv
     ? kvRateLimiter(kv, DAY_SECONDS, MAX_PER_DAY)
-    : memoryRateLimiter(MAX_PER_DAY);
+    : memoryLimiterInstance;
   const secret = bindings.TURNSTILE_SECRET_KEY ?? '';
   const sendEmail = makeSendContactEmail(bindings.RESEND_API_KEY ?? '');
 
@@ -138,9 +135,4 @@ function createDeps(bindings: WorkerBindings): AppDeps {
     // GitHub activity with edge cache: fresh upstream, stale cache, empty grid.
     activity: buildActivityDeps(bindings),
   };
-}
-
-export function buildDeps(bindings: WorkerBindings): AppDeps {
-  if (!cachedDeps) cachedDeps = createDeps(bindings);
-  return cachedDeps;
 }

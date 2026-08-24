@@ -48,19 +48,6 @@ const QUERY = /* GraphQL */ `
         }
       }
     }
-    viewer {
-      contributionsCollection {
-        contributionCalendar {
-          totalContributions
-          weeks {
-            contributionDays {
-              date
-              contributionCount
-            }
-          }
-        }
-      }
-    }
   }
 `;
 

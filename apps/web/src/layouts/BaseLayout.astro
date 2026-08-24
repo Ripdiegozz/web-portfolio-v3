@@ -396,8 +396,9 @@ const jsonLd = article
             const hash = window.location.hash;
             if (hash) {
               e.preventDefault();
-              const cleanBase = targetBase === '/' ? '' : targetBase.replace(/\/$/, '');
-              window.location.href = `${cleanBase}${hash.startsWith('#') ? hash : '#' + hash}`;
+              const url = new URL(targetBase, window.location.origin);
+              url.hash = hash;
+              window.location.href = url.pathname + url.search + url.hash;
             }
           });
         });

@@ -4,6 +4,7 @@ export interface MetaTranslations {
   title: string;
   description: string;
   ogLocale: string;
+  keywords: string;
 }
 
 export interface NavTranslations {

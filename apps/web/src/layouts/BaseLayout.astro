@@ -42,50 +42,103 @@ const ogImage = image
 const enUrl = alternatePath && locale === 'es' ? `${SITE}${alternatePath}` : (locale === 'en' ? canonicalUrl : `${SITE}/`);
 const esUrl = alternatePath && locale === 'en' ? `${SITE}${alternatePath}` : (locale === 'es' ? canonicalUrl : `${SITE}/es`);
 
+const personSchema = {
+  '@type': 'Person',
+  '@id': `${SITE}/#person`,
+  name: 'Diego García',
+  givenName: 'Diego',
+  familyName: 'García',
+  additionalName: 'Garcia',
+  alternateName: ['dagadev', 'Diego Garcia', 'Diego García González', 'Diego Garcia Gonzalez'],
+  url: SITE,
+  image: defaultOgImage,
+  jobTitle: 'Full Stack Developer & Software Engineer',
+  description: description,
+  nationality: {
+    '@type': 'Country',
+    name: 'Colombia',
+  },
+  knowsAbout: [
+    'Full Stack Development',
+    'Software Engineering',
+    'TypeScript',
+    'JavaScript',
+    'React',
+    'Node.js',
+    'Astro',
+    'Cloudflare Workers',
+    'Distributed Systems',
+    'Artificial Intelligence',
+    'LLM Tooling',
+    'Web Development',
+  ],
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Wazuh',
+    url: 'https://wazuh.com',
+  },
+  sameAs: [
+    'https://github.com/Ripdiegozz',
+    'https://www.linkedin.com/in/diego-garcia-gonzalez',
+  ],
+};
+
+const webSiteSchema = {
+  '@type': 'WebSite',
+  '@id': `${SITE}/#website`,
+  url: SITE,
+  name: 'Diego García · Full Stack Developer',
+  alternateName: ['dagadev', 'dagadev.net'],
+  publisher: {
+    '@id': `${SITE}/#person`,
+  },
+  inLanguage: ['en', 'es'],
+};
+
 const jsonLd = article
   ? {
       '@context': 'https://schema.org',
-      '@type': 'BlogPosting',
-      headline: title,
-      description: description,
-      image: [ogImage],
-      datePublished: publishDate ? publishDate.toISOString() : undefined,
-      author: {
-        '@type': 'Person',
-        name: 'Diego García',
-        url: SITE,
-      },
-      publisher: {
-        '@type': 'Person',
-        name: 'Diego García',
-        url: SITE,
-      },
-      mainEntityOfPage: {
-        '@type': 'WebPage',
-        '@id': canonicalUrl,
-      },
+      '@graph': [
+        personSchema,
+        webSiteSchema,
+        {
+          '@type': 'BlogPosting',
+          '@id': canonicalUrl,
+          headline: title,
+          description: description,
+          image: [ogImage],
+          datePublished: publishDate ? publishDate.toISOString() : undefined,
+          inLanguage: locale,
+          author: {
+            '@id': `${SITE}/#person`,
+          },
+          publisher: {
+            '@id': `${SITE}/#person`,
+          },
+          mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': canonicalUrl,
+          },
+        },
+      ],
     }
   : {
       '@context': 'https://schema.org',
-      '@type': 'ProfilePage',
-      mainEntity: {
-        '@type': 'Person',
-        name: 'Diego García',
-        alternateName: 'dagadev',
-        url: SITE,
-        jobTitle: 'Full-Stack Engineer',
-        description: description,
-        image: defaultOgImage,
-        worksFor: {
-          '@type': 'Organization',
-          name: 'Wazuh',
-          url: 'https://wazuh.com',
+      '@graph': [
+        personSchema,
+        webSiteSchema,
+        {
+          '@type': 'ProfilePage',
+          '@id': canonicalUrl,
+          url: canonicalUrl,
+          name: title,
+          description: description,
+          inLanguage: locale,
+          mainEntity: {
+            '@id': `${SITE}/#person`,
+          },
         },
-        sameAs: [
-          'https://github.com/Ripdiegozz',
-          'https://www.linkedin.com/in/diego-garcia-gonzalez',
-        ],
-      },
+      ],
     };
 ---
 <!doctype html>
@@ -96,8 +149,11 @@ const jsonLd = article
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="/favicon-192x192.png" />
-    <meta name="description" content={description} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Diego García" />
+    {dict.meta.keywords && <meta name="keywords" content={dict.meta.keywords} />}
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
     <!-- Canonical & Alternates -->
     <link rel="canonical" href={canonicalUrl} />

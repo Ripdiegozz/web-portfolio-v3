@@ -2,9 +2,12 @@ import type { TranslationDictionary } from '../types';
 
 export const en: TranslationDictionary = {
   meta: {
-    title: 'Diego | Full-Stack Engineer',
-    description: 'Full-Stack Engineer at Wazuh building the Wazuh AI Assistant',
+    title: 'Diego García — Full Stack Developer & Software Engineer',
+    description:
+      'Diego García is a Full Stack Developer & Software Engineer based in Colombia. Full-Stack Engineer at Wazuh building AI tooling, scalable web applications, and distributed systems.',
     ogLocale: 'en_US',
+    keywords:
+      'Diego García, Diego Garcia, dagadev, Full Stack Developer, Full Stack Engineer, Software Engineer, Web Developer, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
   },
   nav: {
     about: 'About',
@@ -24,7 +27,7 @@ export const en: TranslationDictionary = {
     headlineStart: 'I build ',
     headlineEmphasis: 'software',
     headlineEnd: ' that ships.',
-    lead: 'Full-stack engineer at Wazuh building the Wazuh AI Assistant. Working across LLM tooling, backend services, and web dashboards for 90,000+ users.',
+    lead: "I'm Diego García, a full-stack developer and engineer at Wazuh building the Wazuh AI Assistant. Working across LLM tooling, backend services, and web dashboards for 90,000+ users.",
     contactButton: 'Get in touch',
     githubAriaLabel: 'GitHub profile',
     linkedinAriaLabel: 'LinkedIn profile',

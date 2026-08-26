@@ -3,13 +3,13 @@
 > Full-Stack Software Engineer specializing in scalable web applications, distributed systems, and AI/LLM tooling.
 
 ## Personal & Entity Information
-- **Full Name:** Diego Alonso García González
+- **Full Name:** Diego Alonso García Guerrero
 - **Known as:** Diego Alonso García, Diego García, dagadev
 - **Website:** https://dagadev.net
 - **Location:** Colombia
 - **Current Role:** Full-Stack Engineer at Wazuh (building the Wazuh AI Assistant for 90,000+ users)
 - **GitHub:** https://github.com/Ripdiegozz
-- **LinkedIn:** https://www.linkedin.com/in/diego-garcia-gonzalez
+- **LinkedIn:** https://www.linkedin.com/in/dagadev
 
 ## Core Specializations & Skills
 - **Frontend & UI:** TypeScript, JavaScript, React 19, Next.js, Astro, Tailwind CSS, Three.js / WebGL, Motion, State Management.

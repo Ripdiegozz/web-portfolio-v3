@@ -7,7 +7,7 @@ export const es: TranslationDictionary = {
       'Diego Alonso García (dagadev) es un Desarrollador Full Stack e Ingeniero de Software en Colombia. Ingeniero Full-Stack en Wazuh desarrollando herramientas de IA y sistemas distribuidos.',
     ogLocale: 'es_ES',
     keywords:
-      'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García González, Diego García, Diego Garcia, dagadev, Desarrollador Full Stack, Ingeniero Full-Stack, Ingeniero de Software, Desarrollador Web, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
+      'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García Guerrero, Diego Alonso Garcia Guerrero, Diego García, Diego Garcia, dagadev, Desarrollador Full Stack, Ingeniero Full-Stack, Ingeniero de Software, Desarrollador Web, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
   },
   nav: {
     about: 'Sobre mí',

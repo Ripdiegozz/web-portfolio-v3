@@ -4,7 +4,7 @@ export const en: TranslationDictionary = {
   meta: {
     title: 'Diego García — Full Stack Developer & Software Engineer',
     description:
-      'Diego Alonso García (dagadev) is a Full Stack Developer & Software Engineer based in Colombia. Full-Stack Engineer at Wazuh building AI tooling, scalable web applications, and distributed systems.',
+      'Diego Alonso García (dagadev) is a Full Stack Engineer at Wazuh, Colombia. Building scalable web apps, AI tooling, and high-performance backends.',
     ogLocale: 'en_US',
     keywords:
       'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García Guerrero, Diego Alonso Garcia Guerrero, Diego García, Diego Garcia, dagadev, Full Stack Developer, Full Stack Engineer, Software Engineer, Web Developer, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
@@ -27,7 +27,7 @@ export const en: TranslationDictionary = {
     headlineStart: 'I build ',
     headlineEmphasis: 'software',
     headlineEnd: ' that ships.',
-    lead: "I'm Diego García, a full-stack developer and engineer at Wazuh building the Wazuh AI Assistant. Working across LLM tooling, backend services, and web dashboards for 90,000+ users.",
+    lead: "I'm Diego Alonso García (dagadev), a full-stack engineer at Wazuh building production software that ships. Developing AI tooling, scalable backend services, and web apps for 90,000+ users.",
     contactButton: 'Get in touch',
     githubAriaLabel: 'GitHub profile',
     linkedinAriaLabel: 'LinkedIn profile',

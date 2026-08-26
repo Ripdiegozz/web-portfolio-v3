@@ -24,7 +24,7 @@ const ICONS = {
 
 const IconComponent = ICONS[label as keyof typeof ICONS] ?? Sparkles;
 ---
-<section id={label} aria-labelledby={`${label}-heading`} class="border-t border-border-subtle/80">
+<section id={label} aria-labelledby={`${label}-heading`} class="scroll-mt-16 sm:scroll-mt-20 border-t border-border-subtle/80">
   <div class="mx-auto w-full max-w-3xl px-6 py-20 md:py-28">
     <!-- Header: Badge Kicker + Display Title + Gradient Accent Line -->
     <header class="mb-10">

@@ -1,0 +1,28 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://dagadev.net/api/activity",
+      "rel": "service-desc",
+      "href": "https://dagadev.net/api/activity",
+      "type": "application/json"
+    },
+    {
+      "anchor": "https://dagadev.net/api/contact",
+      "rel": "service-desc",
+      "href": "https://dagadev.net/api/contact",
+      "type": "application/json"
+    },
+    {
+      "anchor": "https://dagadev.net/llms.txt",
+      "rel": "describedby",
+      "href": "https://dagadev.net/llms.txt",
+      "type": "text/markdown"
+    },
+    {
+      "anchor": "https://dagadev.net/sitemap-index.xml",
+      "rel": "service-doc",
+      "href": "https://dagadev.net/sitemap-index.xml",
+      "type": "application/xml"
+    }
+  ]
+}

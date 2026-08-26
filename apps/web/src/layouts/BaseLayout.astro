@@ -170,6 +170,11 @@ const jsonLd = article
     <link rel="alternate" hreflang="es" href={esUrl} />
     <link rel="alternate" hreflang="x-default" href={`${SITE}/`} />
 
+    <!-- Agent Discovery Links (RFC 9727 & RFC 8288) -->
+    <link rel="api-catalog" href="/.well-known/api-catalog" />
+    <link rel="describedby" href="/llms.txt" type="text/markdown" />
+    <link rel="service-doc" href="/sitemap-index.xml" type="application/xml" />
+
     <!-- Open Graph (Facebook, LinkedIn, Discord, WhatsApp, Telegram) -->
     <meta property="og:site_name" content="Diego García · dagadev.net" />
     <meta property="og:type" content={article ? 'article' : 'website'} />

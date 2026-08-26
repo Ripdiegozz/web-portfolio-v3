@@ -13,7 +13,10 @@ interface Message {
   content: string;
 }
 
-function renderFormattedText(text: string) {
+function renderFormattedText(
+  text: string,
+  onLinkClick?: (href: string | undefined, e: React.MouseEvent<HTMLAnchorElement>) => void
+) {
   // Enhanced inline parser for markdown links, raw URLs, bold text, and line breaks
   const parts = text.split('\n');
 
@@ -67,17 +70,24 @@ function renderFormattedText(text: string) {
             );
           }
           if (token.type === 'link') {
-            const isExternal = token.href?.startsWith('http');
+            const isInternalAnchor = Boolean(token.href && (token.href.startsWith('#') || token.href.includes('#')));
+            const isExternal = Boolean(token.href?.startsWith('http') && !isInternalAnchor);
+
             return (
               <a
                 key={tIdx}
                 href={token.href}
+                onClick={(e) => onLinkClick?.(token.href, e)}
                 target={isExternal ? '_blank' : undefined}
                 rel={isExternal ? 'noopener noreferrer' : undefined}
-                className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-mono font-medium text-accent bg-accent/10 border border-accent/20 hover:bg-accent/20 hover:border-accent/40 transition-colors"
+                className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-mono font-medium text-accent bg-accent/10 border border-accent/20 hover:bg-accent/20 hover:border-accent/40 transition-colors cursor-pointer"
               >
                 <span>{token.text}</span>
-                <ExternalLink className="h-3 w-3 shrink-0" />
+                {isExternal ? (
+                  <ExternalLink className="h-3 w-3 shrink-0" />
+                ) : (
+                  <span className="text-[10px] select-none text-accent font-bold">↓</span>
+                )}
               </a>
             );
           }
@@ -150,6 +160,18 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
     }
   }, [isOpen]);
 
+  // Lock body scroll on mobile when chat is open
+  useEffect(() => {
+    if (!isOpen || typeof window === 'undefined') return;
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    if (window.innerWidth < 640) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, [isOpen]);
+
   // Handle escape key to close
   useEffect(() => {
     const handleKeyDown = (e: globalThis.KeyboardEvent) => {
@@ -170,6 +192,24 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
       },
     ]);
     setErrorStatus(null);
+  };
+
+  const handleAnchorClick = (href: string | undefined, e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!href) return;
+    const hashMatch = href.match(/#([a-zA-Z0-9_-]+)$/);
+    if (hashMatch && hashMatch[1]) {
+      e.preventDefault();
+      const targetId = hashMatch[1];
+      setIsOpen(false);
+      setTimeout(() => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.location.hash = targetId;
+        }
+      }, 150);
+    }
   };
 
   const handleSendMessage = async (text: string) => {
@@ -281,10 +321,10 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
           role="dialog"
           aria-modal="true"
           aria-label={title}
-          className="fixed bottom-20 right-4 sm:right-6 z-50 flex h-[520px] max-h-[82vh] w-[calc(100vw-2rem)] sm:w-[400px] flex-col overflow-hidden rounded-2xl border border-border-subtle bg-bg shadow-2xl animate-in fade-in zoom-in-95"
+          className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-50 flex h-[100dvh] sm:h-[520px] sm:max-h-[82vh] w-full sm:w-[400px] flex-col overflow-hidden sm:rounded-2xl sm:border sm:border-border-subtle bg-bg shadow-2xl animate-in fade-in sm:zoom-in-95"
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-border-subtle bg-bg-raised px-4 py-3">
+          <div className="flex items-center justify-between border-b border-border-subtle bg-bg-raised px-4 py-3 sm:py-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
             <div className="flex items-center gap-2.5">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-accent/30 bg-accent/10 text-accent">
                 <Sparkles className="h-4 w-4" />
@@ -303,17 +343,17 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
                 type="button"
                 onClick={handleClear}
                 title={clearLabel}
-                className="cursor-pointer rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg hover:text-text-primary focus:outline-none"
+                className="cursor-pointer rounded-lg p-2 text-text-muted transition-colors hover:bg-bg hover:text-text-primary focus:outline-none"
               >
-                <RotateCcw className="h-3.5 w-3.5" />
+                <RotateCcw className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
               </button>
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
                 title={closeLabel}
-                className="cursor-pointer rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg hover:text-text-primary focus:outline-none"
+                className="cursor-pointer rounded-lg p-2 text-text-muted transition-colors hover:bg-bg hover:text-text-primary focus:outline-none"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5 sm:h-4 sm:w-4" />
               </button>
             </div>
           </div>
@@ -347,7 +387,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
                     {isUser ? (
                       <p className="whitespace-pre-wrap">{msg.content}</p>
                     ) : (
-                      renderFormattedText(msg.content)
+                      renderFormattedText(msg.content, handleAnchorClick)
                     )}
                   </div>
                 </div>
@@ -380,7 +420,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
 
           {/* Quick Suggestions (if only initial message) */}
           {messages.length <= 1 && (
-            <div className="border-t border-border-subtle bg-bg-raised px-3 py-2">
+            <div className="border-t border-border-subtle bg-bg-raised px-3.5 py-2.5">
               <p className="mb-1.5 text-[10px] font-mono text-text-muted uppercase tracking-wider">
                 {locale === 'es' ? 'Preguntas sugeridas' : 'Suggested questions'}
               </p>
@@ -390,7 +430,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
                     key={i}
                     type="button"
                     onClick={() => handleSendMessage(sug)}
-                    className="cursor-pointer rounded-lg border border-border-subtle bg-bg px-2.5 py-1 text-left text-[11px] text-text-primary transition-colors hover:border-accent hover:bg-accent/10 focus:outline-none"
+                    className="cursor-pointer rounded-lg border border-border-subtle bg-bg px-2.5 py-1.5 sm:py-1 text-left text-[11px] text-text-primary transition-colors hover:border-accent hover:bg-accent/10 focus:outline-none"
                   >
                     {sug}
                   </button>
@@ -400,7 +440,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
           )}
 
           {/* Input Area */}
-          <form onSubmit={onSubmit} className="border-t border-border-subtle bg-bg-raised p-3">
+          <form onSubmit={onSubmit} className="border-t border-border-subtle bg-bg-raised p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <div className="relative flex items-center">
               <input
                 ref={inputRef}
@@ -417,7 +457,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
                 type="submit"
                 disabled={!input.trim() || loading}
                 title={sendLabel}
-                className="cursor-pointer absolute right-1.5 rounded-lg p-1.5 text-accent transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-30 focus:outline-none"
+                className="cursor-pointer absolute right-1.5 rounded-lg p-2 sm:p-1.5 text-accent transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-30 focus:outline-none"
               >
                 <Send className="h-4 w-4" />
               </button>

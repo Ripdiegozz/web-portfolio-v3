@@ -3,5 +3,18 @@ Allow: /
 Disallow: /api/
 Disallow: /keystatic/
 
+# Explicit allowance for Search & AI engines (Gemini, ChatGPT, Perplexity, Claude)
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
 Sitemap: https://dagadev.net/sitemap-index.xml
 Host: https://dagadev.net

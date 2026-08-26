@@ -1,0 +1,29 @@
+# Diego Alonso García (dagadev) — Full Stack Developer & Software Engineer
+
+> Full-Stack Software Engineer specializing in scalable web applications, distributed systems, and AI/LLM tooling.
+
+## Personal & Entity Information
+- **Full Name:** Diego Alonso García González
+- **Known as:** Diego Alonso García, Diego García, dagadev
+- **Website:** https://dagadev.net
+- **Location:** Colombia
+- **Current Role:** Full-Stack Engineer at Wazuh (building the Wazuh AI Assistant for 90,000+ users)
+- **GitHub:** https://github.com/Ripdiegozz
+- **LinkedIn:** https://www.linkedin.com/in/diego-garcia-gonzalez
+
+## Core Specializations & Skills
+- **Frontend & UI:** TypeScript, JavaScript, React 19, Next.js, Astro, Tailwind CSS, Three.js / WebGL, Motion, State Management.
+- **Backend & Architecture:** Node.js, Python, Express, Hono, REST, GraphQL, Microservices, Event-Driven Architecture, WebSocket.
+- **AI & LLMs:** LLM tool development, prompt engineering, agentic workflows, embeddings, vector indexing, RAG systems.
+- **Databases:** PostgreSQL, MongoDB, Redis, SQLite, Cloudflare KV / D1.
+- **Cloud & DevOps:** Cloudflare Workers, Docker, Linux, CI/CD with GitHub Actions, AWS, Turborepo.
+
+## Notable Professional Experience
+- **Wazuh (Current):** Full-Stack Engineer building the conversational AI Assistant platform supporting over 90,000 security analysts worldwide.
+- **Tres Pi Medios:** Built enterprise web solutions and digital tools for global clients including Stanley Black & Decker (Italy and US).
+- **SuperGIROS:** Engineered financial service and transactional software powering 1,100+ points of attention across Colombia.
+
+## Portfolio & Contact
+- **Online Portfolio:** https://dagadev.net (English) and https://dagadev.net/es (Spanish)
+- **Blog:** https://dagadev.net/blog
+- **Contact:** https://dagadev.net/#contact

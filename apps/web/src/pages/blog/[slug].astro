@@ -1,4 +1,5 @@
 ---
+export const prerender = false;
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
@@ -7,12 +8,14 @@ import { getTranslations } from '../../i18n';
 import type { Locale } from '../../i18n/types';
 import '../../styles/global.css';
 
-export async function getStaticPaths() {
-  const posts = (await getCollection('posts')).filter(isPublished);
-  return posts.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+const { slug } = Astro.params;
+const posts = await getCollection('posts');
+const entry = posts.find((p) => p.id === slug && isPublished(p));
+
+if (!entry) {
+  return Astro.redirect('/blog');
 }
 
-const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 
 const locale: Locale = 'en';

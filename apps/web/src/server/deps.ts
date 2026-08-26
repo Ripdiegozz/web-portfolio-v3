@@ -100,6 +100,10 @@ export function buildActivityDeps(bindings: WorkerBindings): AppDeps['activity']
 // for the life of the isolate; first sighting wins.
 let memoryLimiterInstance: ReturnType<typeof memoryRateLimiter> | null = null;
 
+import { processChatRequest } from './chat/engine';
+
+let chatMemoryLimiterInstance: ReturnType<typeof memoryRateLimiter> | null = null;
+
 export function buildDeps(bindings: WorkerBindings): AppDeps {
   if (e2eMocks) {
     if (!memoryLimiterInstance) memoryLimiterInstance = memoryRateLimiter(MAX_PER_DAY);
@@ -111,6 +115,10 @@ export function buildDeps(bindings: WorkerBindings): AppDeps {
         sendEmail: async () => {},
       },
       activity: mockActivityDeps(),
+      chat: {
+        processMessage: async (payload) => processChatRequest(payload, {}),
+        rateLimit: async () => true,
+      },
     };
   }
 
@@ -119,6 +127,12 @@ export function buildDeps(bindings: WorkerBindings): AppDeps {
   const limiter = kv
     ? kvRateLimiter(kv, DAY_SECONDS, MAX_PER_DAY)
     : memoryLimiterInstance;
+
+  if (!chatMemoryLimiterInstance) chatMemoryLimiterInstance = memoryRateLimiter(30);
+  const chatLimiter = kv
+    ? kvRateLimiter(kv, 600, 30)
+    : chatMemoryLimiterInstance;
+
   const secret = bindings.TURNSTILE_SECRET_KEY ?? '';
   const sendEmail = makeSendContactEmail(bindings.RESEND_API_KEY ?? '');
 
@@ -134,5 +148,14 @@ export function buildDeps(bindings: WorkerBindings): AppDeps {
     },
     // GitHub activity with edge cache: fresh upstream, stale cache, empty grid.
     activity: buildActivityDeps(bindings),
+    chat: {
+      processMessage: (payload) =>
+        processChatRequest(payload, {
+          workersAi: bindings.AI,
+          geminiApiKey: bindings.GEMINI_API_KEY,
+          openaiApiKey: bindings.OPENAI_API_KEY,
+        }),
+      rateLimit: (ip) => chatLimiter.allow(ip ?? 'anon'),
+    },
   };
 }

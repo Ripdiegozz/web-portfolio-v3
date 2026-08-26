@@ -193,3 +193,69 @@ describe('POST /api/contact', () => {
     expect(sendEmail).toHaveBeenCalledWith(accepted);
   });
 });
+
+describe('POST /api/chat', () => {
+  it('returns 400 on invalid json', async () => {
+    const app = createApp(makeDeps());
+    const res = await app.request('/api/chat', {
+      method: 'POST',
+      body: 'invalid-json',
+      headers: { 'content-type': 'application/json' },
+    });
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ ok: false, error: 'invalid_json' });
+  });
+
+  it('returns 400 when payload has empty messages', async () => {
+    const app = createApp(makeDeps());
+    const res = await app.request('/api/chat', {
+      method: 'POST',
+      body: JSON.stringify({ messages: [] }),
+      headers: { 'content-type': 'application/json' },
+    });
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ ok: false, error: 'invalid_payload' });
+  });
+
+  it('enforces chat rate limiting with 429 status', async () => {
+    const deps = makeDeps({
+      chat: {
+        processMessage: async () => 'Hello',
+        rateLimit: async () => false,
+      },
+    });
+    const app = createApp(deps);
+    const res = await app.request('/api/chat', {
+      method: 'POST',
+      body: JSON.stringify({ messages: [{ role: 'user', content: 'Hi' }] }),
+      headers: { 'content-type': 'application/json' },
+    });
+    expect(res.status).toBe(429);
+    expect(await res.json()).toEqual({ ok: false, error: 'rate_limited' });
+  });
+
+  it('processes chat message and returns reply', async () => {
+    const processMessage = vi.fn(async () => 'Diego is a Full-Stack Engineer at Wazuh.');
+    const deps = makeDeps({
+      chat: {
+        processMessage,
+        rateLimit: async () => true,
+      },
+    });
+    const app = createApp(deps);
+    const res = await app.request('/api/chat', {
+      method: 'POST',
+      body: JSON.stringify({
+        locale: 'en',
+        messages: [{ role: 'user', content: 'What does Diego do at Wazuh?' }],
+      }),
+      headers: { 'content-type': 'application/json' },
+    });
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({
+      ok: true,
+      reply: 'Diego is a Full-Stack Engineer at Wazuh.',
+    });
+    expect(processMessage).toHaveBeenCalled();
+  });
+});

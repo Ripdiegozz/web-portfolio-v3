@@ -247,4 +247,23 @@ export const en: TranslationDictionary = {
       { label: 'CV', href: '/cv.pdf' },
     ],
   },
+  chatAssistant: {
+    floatingButtonLabel: 'Ask Diego AI',
+    badge: 'AI Assistant',
+    title: 'Diego AI Assistant',
+    subtitle: 'Ask anything about my experience, skills, or projects',
+    placeholder: 'Ask a question about Diego...',
+    sendAriaLabel: 'Send message',
+    clearAriaLabel: 'Clear chat history',
+    closeAriaLabel: 'Close assistant',
+    initialMessage: "Hi! I'm Diego's AI Assistant. Ask me about his work at Wazuh, full-stack tech stack, AI tooling experience, or how to get in touch.",
+    suggestedQuestions: [
+      'What is your work at Wazuh?',
+      'What AI and full-stack technologies do you use?',
+      'How can I get in touch with Diego?',
+    ],
+    disclaimer: 'AI responses are generated based on verified portfolio and engineering data.',
+    errorMessage: 'Sorry, I encountered an issue processing your question. Please try again.',
+    rateLimitMessage: 'You have reached the question limit. Please try again in a few minutes or use the contact form.',
+  },
 };

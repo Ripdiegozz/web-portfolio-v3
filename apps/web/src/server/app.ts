@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import type { ClassifiedContact } from './contact/schema';
 import { getActivityWithFallback } from './activity/store';
+import type { ChatRequestPayload } from './chat/engine';
 
 export interface ContactDeps {
   /** Sole Request reader: returns the classified payload and the Turnstile token. */
@@ -24,9 +25,15 @@ export interface ActivityDeps {
   writeCache(grid: ActivityGrid): Promise<void>;
 }
 
+export interface ChatDeps {
+  processMessage(payload: ChatRequestPayload): Promise<string>;
+  rateLimit(ip: string | null): Promise<boolean>;
+}
+
 export interface AppDeps {
   contact: ContactDeps;
   activity: ActivityDeps;
+  chat?: ChatDeps;
 }
 
 export type ApiApp = ReturnType<typeof createApp>;
@@ -76,6 +83,36 @@ export function createApp(deps: AppDeps) {
       writeCache: deps.activity.writeCache,
     });
     return c.json({ ok: true, cached: source !== 'fresh', data: grid });
+  });
+
+  app.post('/api/chat', async (c) => {
+    const ip = c.req.header('cf-connecting-ip') ?? null;
+    if (deps.chat) {
+      const allowed = await deps.chat.rateLimit(ip);
+      if (!allowed) {
+        return c.json({ ok: false, error: 'rate_limited' }, 429);
+      }
+    }
+
+    let payload: ChatRequestPayload;
+    try {
+      payload = await c.req.json();
+    } catch {
+      return c.json({ ok: false, error: 'invalid_json' }, 400);
+    }
+
+    if (!payload || !Array.isArray(payload.messages) || payload.messages.length === 0) {
+      return c.json({ ok: false, error: 'invalid_payload' }, 400);
+    }
+
+    try {
+      const reply = deps.chat
+        ? await deps.chat.processMessage(payload)
+        : 'Hello! I am Diego AI.';
+      return c.json({ ok: true, reply });
+    } catch {
+      return c.json({ ok: false, error: 'chat_failed' }, 500);
+    }
   });
 
   return app;

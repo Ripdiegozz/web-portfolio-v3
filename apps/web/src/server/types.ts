@@ -23,4 +23,8 @@ export interface WorkerBindings extends Record<string, unknown> {
   KEYSTATIC_GITHUB_CLIENT_ID?: string | undefined;
   KEYSTATIC_GITHUB_CLIENT_SECRET?: string | undefined;
   KEYSTATIC_SECRET?: string | undefined;
+  AI?: { run(model: string, input: unknown): Promise<unknown> } | undefined;
+  GEMINI_API_KEY?: string | undefined;
+  OPENAI_API_KEY?: string | undefined;
+  GROQ_API_KEY?: string | undefined;
 }

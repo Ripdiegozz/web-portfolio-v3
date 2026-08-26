@@ -8,7 +8,9 @@
     "binding": "ASSETS",
     "directory": "./dist"
   },
-  "observability": { "enabled": true },
+  "ai": {
+    "binding": "AI"
+  },
   "vars": {
     "PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAAEZirQtgOSbDAmlZ"
   },

@@ -213,6 +213,22 @@ export interface ContactFormLabels {
   errorMessage?: string;
 }
 
+export interface ChatAssistantTranslations {
+  floatingButtonLabel: string;
+  badge: string;
+  title: string;
+  subtitle: string;
+  placeholder: string;
+  sendAriaLabel: string;
+  clearAriaLabel: string;
+  closeAriaLabel: string;
+  initialMessage: string;
+  suggestedQuestions: string[];
+  disclaimer: string;
+  errorMessage: string;
+  rateLimitMessage: string;
+}
+
 export interface TranslationDictionary {
   meta: MetaTranslations;
   nav: NavTranslations;
@@ -227,4 +243,5 @@ export interface TranslationDictionary {
   blogPage: BlogPageTranslations;
   contact: ContactTranslations;
   footer: FooterTranslations;
+  chatAssistant?: ChatAssistantTranslations;
 }

@@ -40,8 +40,7 @@ export const en: TranslationDictionary = {
   about: {
     sectionTitle: 'A bit about me.',
     lead: 'Full-stack engineer building production web applications, LLM tooling, and distributed systems.',
-    philosophyQuote: '“Reliable backends, clean data architectures, and fast, accessible interfaces.”',
-    philosophyLabel: '— Core Engineering Focus',
+    philosophyQuote: '“Designing AI-powered tooling and distributed architectures built to scale without compromise.”',
     support:
       'Currently at Wazuh building the Wazuh AI Assistant for 90,000+ security users. Before that, built business tools at Tres Pi Medios for Stanley Black & Decker (Italy and US) and financial software serving 1,100+ SuperGIROS service points in Colombia. My focus is practical: reliable backends, clean databases, and fast, accessible interfaces.',
   },
@@ -249,14 +248,14 @@ export const en: TranslationDictionary = {
   },
   chatAssistant: {
     floatingButtonLabel: 'Ask Diego AI',
-    badge: 'AI Assistant',
-    title: 'Diego AI Assistant',
-    subtitle: 'Ask anything about my experience, skills, or projects',
-    placeholder: 'Ask a question about Diego...',
+    badge: 'AI',
+    title: 'Diego AI',
+    subtitle: 'Interactive engineering assistant',
+    placeholder: 'Ask a question...',
     sendAriaLabel: 'Send message',
     clearAriaLabel: 'Clear chat history',
     closeAriaLabel: 'Close assistant',
-    initialMessage: "Hi! I'm Diego's AI Assistant. Ask me about his work at Wazuh, full-stack tech stack, AI tooling experience, or how to get in touch.",
+    initialMessage: "Hi! Ask me anything about Diego's work at Wazuh, full-stack stack, AI projects, or getting in touch.",
     suggestedQuestions: [
       'What is your work at Wazuh?',
       'What AI and full-stack technologies do you use?',

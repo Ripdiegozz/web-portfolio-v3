@@ -40,7 +40,7 @@ export default function ExperienceDashboard({ items, labels }: ExperienceDashboa
               aria-selected={isSelected}
               aria-controls={`experience-panel-${idx}`}
               onClick={() => setSelectedIndex(idx)}
-              className={`relative flex flex-col items-start justify-center rounded-lg px-4 py-3 text-left transition-all duration-200 ${
+              className={`cursor-pointer relative flex flex-col items-start justify-center rounded-lg px-4 py-3 text-left transition-all duration-200 ${
                 isSelected
                   ? 'bg-bg text-text-primary shadow-xs border border-border-subtle'
                   : 'text-text-muted hover:text-text-primary hover:bg-bg-raised/60 border border-transparent'

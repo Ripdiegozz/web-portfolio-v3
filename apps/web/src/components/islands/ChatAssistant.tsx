@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, type KeyboardEvent, type FormEvent } from 'react';
-import { Bot, User, Sparkles, Send, X, RotateCcw, Loader2, AlertCircle } from '@portfolio/ui';
+import { useState, useRef, useEffect, type KeyboardEvent } from 'react';
+import { User, Sparkles, Send, X, RotateCcw, AlertCircle, ThinkingOrb, ExternalLink } from '@portfolio/ui';
 import type { ChatAssistantTranslations, Locale } from '../../i18n/types';
 
 export interface ChatAssistantProps {
@@ -14,7 +14,7 @@ interface Message {
 }
 
 function renderFormattedText(text: string) {
-  // Simple, safe inline parser for markdown links, bold text, and line breaks
+  // Enhanced inline parser for markdown links, raw URLs, bold text, and line breaks
   const parts = text.split('\n');
 
   return (
@@ -25,10 +25,10 @@ function renderFormattedText(text: string) {
         const isBullet = line.trim().startsWith('- ') || line.trim().startsWith('* ');
         const cleanLine = isBullet ? line.trim().substring(2) : line;
 
-        // Parse **bold** and [links](url)
+        // Parse **bold**, [links](url), and raw URLs
         const tokens: Array<{ type: 'text' | 'bold' | 'link'; text: string; href?: string }> = [];
         let cursor = 0;
-        const regex = /(\*\*([^*]+)\*\*|\[([^\]]+)\]\(([^)]+)\))/g;
+        const regex = /(\*\*([^*]+)\*\*|\[([^\]]+)\]\(([^)]+)\)|(https?:\/\/[^\s),]+))/g;
         let match: RegExpExecArray | null;
 
         while ((match = regex.exec(cleanLine)) !== null) {
@@ -39,6 +39,17 @@ function renderFormattedText(text: string) {
             tokens.push({ type: 'bold', text: match[2] });
           } else if (match[3] && match[4]) {
             tokens.push({ type: 'link', text: match[3], href: match[4] });
+          } else if (match[5]) {
+            const rawUrl = match[5];
+            let label = rawUrl;
+            if (rawUrl.includes('#contact')) {
+              label = 'Contact Form';
+            } else if (rawUrl.includes('linkedin.com')) {
+              label = 'LinkedIn Profile';
+            } else if (rawUrl.includes('github.com')) {
+              label = 'GitHub';
+            }
+            tokens.push({ type: 'link', text: label, href: rawUrl });
           }
           cursor = regex.lastIndex;
         }
@@ -56,15 +67,17 @@ function renderFormattedText(text: string) {
             );
           }
           if (token.type === 'link') {
+            const isExternal = token.href?.startsWith('http');
             return (
               <a
                 key={tIdx}
                 href={token.href}
-                target={token.href?.startsWith('http') ? '_blank' : undefined}
-                rel={token.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="text-accent underline underline-offset-2 hover:opacity-80"
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noopener noreferrer' : undefined}
+                className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-mono font-medium text-accent bg-accent/10 border border-accent/20 hover:bg-accent/20 hover:border-accent/40 transition-colors"
               >
-                {token.text}
+                <span>{token.text}</span>
+                <ExternalLink className="h-3 w-3 shrink-0" />
               </a>
             );
           }
@@ -109,11 +122,9 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
 
-  const title = labels?.title ?? 'Diego AI Assistant';
-  const subtitle = labels?.subtitle ?? 'Ask anything about Diego';
-  const placeholder = labels?.placeholder ?? (locale === 'es' ? 'Pregunta algo sobre Diego...' : 'Ask a question about Diego...');
+  const title = labels?.title ?? 'Diego AI';
+  const placeholder = labels?.placeholder ?? (locale === 'es' ? 'Escribe tu pregunta...' : 'Ask a question...');
   const sendLabel = labels?.sendAriaLabel ?? 'Send';
   const clearLabel = labels?.clearAriaLabel ?? 'Clear';
   const closeLabel = labels?.closeAriaLabel ?? 'Close';
@@ -129,16 +140,15 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
     locale === 'es' ? '¿Cómo puedo contactar a Diego?' : 'How can I get in touch?',
   ];
 
-  const scrollToBottom = () => {
+  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, [messages, loading]);
 
   useEffect(() => {
     if (isOpen) {
-      scrollToBottom();
-      setTimeout(() => inputRef.current?.focus(), 150);
+      inputRef.current?.focus();
     }
-  }, [isOpen, messages]);
+  }, [isOpen]);
 
   // Handle escape key to close
   useEffect(() => {
@@ -154,7 +164,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
   const handleClear = () => {
     setMessages([
       {
-        id: `init-${Date.now()}`,
+        id: 'initial',
         role: 'assistant',
         content: initialMsg,
       },
@@ -162,13 +172,17 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
     setErrorStatus(null);
   };
 
-  const handleSendMessage = async (textToSend: string) => {
-    const text = textToSend.trim();
-    if (!text || loading) return;
+  const handleSendMessage = async (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed || loading) return;
 
-    const userMessageId = `user-${Date.now()}`;
-    const newMessages: Message[] = [...messages, { id: userMessageId, role: 'user', content: text }];
+    const userMessage: Message = {
+      id: `user-${Date.now()}`,
+      role: 'user',
+      content: trimmed,
+    };
 
+    const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput('');
     setLoading(true);
@@ -225,7 +239,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
     }
   };
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     handleSendMessage(input);
   };
@@ -244,7 +258,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
-          className="group relative flex items-center gap-2.5 rounded-full border border-border-subtle bg-bg-raised/95 px-4 py-2.5 text-sm font-medium text-text-primary shadow-xl backdrop-blur-md transition-all duration-300 hover:border-accent hover:bg-bg-subtle hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-accent"
+          className="cursor-pointer group relative flex items-center gap-2.5 rounded-full border border-border-subtle bg-bg-raised px-3.5 py-2 text-sm font-medium text-text-primary shadow-2xl transition-all duration-200 hover:border-accent hover:bg-bg-subtle hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-accent"
           aria-label={labels?.floatingButtonLabel ?? 'Ask Diego AI'}
           aria-expanded={isOpen}
         >
@@ -264,26 +278,23 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
       {/* Chat Window Panel */}
       {isOpen && (
         <div
-          ref={panelRef}
           role="dialog"
           aria-modal="true"
           aria-label={title}
-          className="fixed bottom-20 right-4 sm:right-6 z-50 flex h-[520px] max-h-[82vh] w-[calc(100vw-2rem)] sm:w-[400px] flex-col overflow-hidden rounded-2xl border border-border-subtle bg-bg-surface/98 shadow-2xl backdrop-blur-xl transition-all duration-300 animate-in fade-in zoom-in-95"
+          className="fixed bottom-20 right-4 sm:right-6 z-50 flex h-[520px] max-h-[82vh] w-[calc(100vw-2rem)] sm:w-[400px] flex-col overflow-hidden rounded-2xl border border-border-subtle bg-bg shadow-2xl animate-in fade-in zoom-in-95"
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-border-subtle bg-bg-raised/80 px-4 py-3">
+          <div className="flex items-center justify-between border-b border-border-subtle bg-bg-raised px-4 py-3">
             <div className="flex items-center gap-2.5">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-accent/30 bg-accent/10 text-accent">
-                <Bot className="h-4 w-4" />
+                <Sparkles className="h-4 w-4" />
               </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <h3 className="font-mono text-xs sm:text-sm font-semibold text-text-primary">{title}</h3>
-                  <span className="rounded-full bg-accent/15 px-1.5 py-0.5 text-[10px] font-mono text-accent">
-                    {labels?.badge ?? 'AI'}
-                  </span>
-                </div>
-                <p className="text-[11px] text-text-muted">{subtitle}</p>
+              <div className="flex items-center gap-2">
+                <h3 className="font-mono text-xs sm:text-sm font-semibold text-text-primary">Diego AI</h3>
+                <span className="flex items-center gap-1 text-[10px] font-mono text-emerald-500">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  online
+                </span>
               </div>
             </div>
 
@@ -292,7 +303,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
                 type="button"
                 onClick={handleClear}
                 title={clearLabel}
-                className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg-subtle hover:text-text-primary focus:outline-none"
+                className="cursor-pointer rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg hover:text-text-primary focus:outline-none"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
               </button>
@@ -300,7 +311,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
                 type="button"
                 onClick={() => setIsOpen(false)}
                 title={closeLabel}
-                className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg-subtle hover:text-text-primary focus:outline-none"
+                className="cursor-pointer rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg hover:text-text-primary focus:outline-none"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -308,7 +319,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
           </div>
 
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3.5 scroll-smooth">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3.5 scroll-smooth bg-bg">
             {messages.map((msg) => {
               const isUser = msg.role === 'user';
               return (
@@ -317,24 +328,24 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
                   className={`flex items-start gap-2.5 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
                 >
                   <div
-                    className={`flex h-6 w-6 shrink-0 select-none items-center justify-center rounded-md text-[11px] ${
+                    className={`flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-lg text-xs ${
                       isUser
-                        ? 'bg-accent text-bg-base font-bold'
-                        : 'border border-border-subtle bg-bg-raised text-accent'
+                        ? 'border border-border-subtle bg-bg-raised text-text-muted'
+                        : 'border border-accent/30 bg-accent/10 text-accent'
                     }`}
                   >
-                    {isUser ? <User className="h-3.5 w-3.5" /> : <Bot className="h-3.5 w-3.5" />}
+                    {isUser ? <User className="h-3.5 w-3.5" /> : <Sparkles className="h-3.5 w-3.5" />}
                   </div>
 
                   <div
-                    className={`max-w-[85%] rounded-xl px-3.5 py-2.5 shadow-sm ${
+                    className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm leading-relaxed shadow-xs ${
                       isUser
-                        ? 'bg-accent text-bg-base font-medium selection:bg-bg-base selection:text-accent'
-                        : 'border border-border-subtle bg-bg-raised/70 text-text-primary'
+                        ? 'border border-border-subtle bg-bg-raised text-text-primary font-medium'
+                        : 'border border-border-subtle bg-bg-raised text-text-primary'
                     }`}
                   >
                     {isUser ? (
-                      <p className="text-xs sm:text-sm whitespace-pre-wrap">{msg.content}</p>
+                      <p className="whitespace-pre-wrap">{msg.content}</p>
                     ) : (
                       renderFormattedText(msg.content)
                     )}
@@ -345,11 +356,11 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
 
             {loading && (
               <div className="flex items-start gap-2.5">
-                <div className="flex h-6 w-6 shrink-0 select-none items-center justify-center rounded-md border border-border-subtle bg-bg-raised text-accent">
-                  <Bot className="h-3.5 w-3.5" />
+                <div className="flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-lg border border-accent/30 bg-accent/10 text-accent">
+                  <Sparkles className="h-3.5 w-3.5" />
                 </div>
-                <div className="flex items-center gap-1.5 rounded-xl border border-border-subtle bg-bg-raised/70 px-3.5 py-2 text-text-muted">
-                  <Loader2 className="h-3.5 w-3.5 animate-spin text-accent" />
+                <div className="flex items-center gap-2 rounded-2xl border border-border-subtle bg-bg-raised px-3.5 py-2 text-text-muted">
+                  <ThinkingOrb size={18} state="composing" />
                   <span className="text-xs font-mono">
                     {locale === 'es' ? 'Pensando...' : 'Thinking...'}
                   </span>
@@ -369,7 +380,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
 
           {/* Quick Suggestions (if only initial message) */}
           {messages.length <= 1 && (
-            <div className="border-t border-border-subtle/50 bg-bg-surface/50 px-3 py-2">
+            <div className="border-t border-border-subtle bg-bg-raised px-3 py-2">
               <p className="mb-1.5 text-[10px] font-mono text-text-muted uppercase tracking-wider">
                 {locale === 'es' ? 'Preguntas sugeridas' : 'Suggested questions'}
               </p>
@@ -379,7 +390,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
                     key={i}
                     type="button"
                     onClick={() => handleSendMessage(sug)}
-                    className="rounded-lg border border-border-subtle bg-bg-raised/60 px-2.5 py-1 text-left text-[11px] text-text-primary transition-colors hover:border-accent hover:bg-accent/10 focus:outline-none"
+                    className="cursor-pointer rounded-lg border border-border-subtle bg-bg px-2.5 py-1 text-left text-[11px] text-text-primary transition-colors hover:border-accent hover:bg-accent/10 focus:outline-none"
                   >
                     {sug}
                   </button>
@@ -389,7 +400,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
           )}
 
           {/* Input Area */}
-          <form onSubmit={onSubmit} className="border-t border-border-subtle bg-bg-raised/90 p-3">
+          <form onSubmit={onSubmit} className="border-t border-border-subtle bg-bg-raised p-3">
             <div className="relative flex items-center">
               <input
                 ref={inputRef}
@@ -400,13 +411,13 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
                 placeholder={placeholder}
                 maxLength={400}
                 disabled={loading}
-                className="w-full rounded-xl border border-border-subtle bg-bg-surface py-2.5 pl-3.5 pr-10 text-xs sm:text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-50"
+                className="w-full rounded-xl border border-border-subtle bg-bg py-2.5 pl-3.5 pr-10 text-xs sm:text-sm text-text-primary placeholder:text-text-muted transition-colors focus:border-accent focus:outline-none disabled:opacity-50"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || loading}
                 title={sendLabel}
-                className="absolute right-1.5 rounded-lg p-1.5 text-accent transition-opacity hover:opacity-80 disabled:opacity-30 focus:outline-none"
+                className="cursor-pointer absolute right-1.5 rounded-lg p-1.5 text-accent transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-30 focus:outline-none"
               >
                 <Send className="h-4 w-4" />
               </button>

@@ -1,5 +1,6 @@
 export { Reveal, revealPropsFor, type RevealProps } from './react/Reveal';
 export { Button, type ButtonProps } from './react/Button';
+export { ThinkingOrb, type ThinkingOrbProps, type OrbState } from './react/ThinkingOrb';
 export { AmbientBackground } from './three/AmbientBackground';
 export * from './react/BrandIcon';
 export {

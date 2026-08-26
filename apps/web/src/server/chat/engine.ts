@@ -114,9 +114,9 @@ export function checkInputGuardrails(userMessage: string, locale: 'en' | 'es'): 
 
   // 3. Simple Math / General Calculation queries
   const mathPatterns = [
-    /^(what\s+is\s+)?\d+\s*[\+\-\*\/\^]\s*\d+/i,
-    /^(calculate|solve|evaluate|compute)\s+[\d\(\)]+/i,
-    /^(cuanto\s+es|calcula|resuelve)\s+[\d\(\)]+/i,
+    /^(what\s+is\s+)?\d+\s*[+\-*/^]\s*\d+/i,
+    /^(calculate|solve|evaluate|compute)\s+[\d()]+/i,
+    /^(cuanto\s+es|calcula|resuelve)\s+[\d()]+/i,
   ];
 
   for (const pattern of mathPatterns) {

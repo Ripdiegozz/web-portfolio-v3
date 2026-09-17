@@ -9,6 +9,7 @@ export default defineConfig({
   site: 'https://dagadev.net',
   // 'static' = prerender everything by default; /api and /admin opt out per-route
   output: 'static',
+  trailingSlash: 'always',
   adapter: cloudflare({
     prerenderEnvironment: 'node',
     remoteBindings: false,

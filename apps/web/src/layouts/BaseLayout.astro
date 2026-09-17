@@ -31,7 +31,7 @@ const dict = Astro.props.dict ?? getTranslations(locale);
 const description = Astro.props.description ?? dict.meta.description;
 
 const targetLocale = getAlternateLocale(locale);
-const targetPath = alternatePath ?? (targetLocale === 'es' ? '/es' : '/');
+const targetPath = alternatePath ?? (targetLocale === 'es' ? '/es/' : '/');
 const navPrefix = locale === 'es' ? '/es' : '';
 
 const canonicalUrl = new URL(Astro.url.pathname, SITE).toString();
@@ -41,7 +41,7 @@ const ogImage = image
   : defaultOgImage;
 
 const enUrl = alternatePath && locale === 'es' ? `${SITE}${alternatePath}` : (locale === 'en' ? canonicalUrl : `${SITE}/`);
-const esUrl = alternatePath && locale === 'en' ? `${SITE}${alternatePath}` : (locale === 'es' ? canonicalUrl : `${SITE}/es`);
+const esUrl = alternatePath && locale === 'en' ? `${SITE}${alternatePath}` : (locale === 'es' ? canonicalUrl : `${SITE}/es/`);
 
 const personSchema = {
   '@type': 'Person',

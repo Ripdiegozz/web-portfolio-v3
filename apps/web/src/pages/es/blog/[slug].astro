@@ -13,7 +13,7 @@ const posts = await getCollection('posts');
 const entry = posts.find((p) => p.id === slug && isPublished(p));
 
 if (!entry) {
-  return Astro.redirect('/es/blog');
+  return Astro.redirect('/es/blog/');
 }
 
 const { Content, headings } = await render(entry);

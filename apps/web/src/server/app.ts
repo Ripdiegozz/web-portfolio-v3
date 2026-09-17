@@ -39,7 +39,7 @@ export interface AppDeps {
 export type ApiApp = ReturnType<typeof createApp>;
 
 export function createApp(deps: AppDeps) {
-  const app = new Hono();
+  const app = new Hono({ strictRouting: false });
 
   app.onError((err, c) => {
     // Non-HTTP OK to log the message here; responses stay generic to clients.

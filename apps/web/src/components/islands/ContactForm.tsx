@@ -117,7 +117,7 @@ export default function ContactForm({ labels }: ContactFormProps = {}) {
       const payload = Object.fromEntries(new FormData(form).entries());
       const turnstileToken = getTurnstileToken(form, widgetIdRef.current);
 
-      const res = await fetch('/api/contact', {
+      const res = await fetch('/api/contact/', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({

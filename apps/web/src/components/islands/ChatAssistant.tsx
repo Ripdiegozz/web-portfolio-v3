@@ -229,7 +229,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
     setErrorStatus(null);
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetch('/api/chat/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

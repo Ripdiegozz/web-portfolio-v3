@@ -156,7 +156,7 @@ export default function ContributionGrid({ labels, months }: ContributionGridPro
 
   useEffect(() => {
     let active = true;
-    fetch('/api/activity')
+    fetch('/api/activity/')
       .then((r) => r.json())
       .then((body: { ok?: boolean; data?: ContributionGridData }) => {
         if (!active) return;

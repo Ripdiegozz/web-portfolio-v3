@@ -60,6 +60,7 @@ export interface ExperienceTranslations {
 export interface CoreSkill {
   name: string;
   role: string;
+  context?: string;
 }
 
 export interface SkillCategoryGroup {

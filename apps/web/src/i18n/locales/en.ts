@@ -4,7 +4,7 @@ export const en: TranslationDictionary = {
   meta: {
     title: 'Diego García — Full Stack Developer & Software Engineer',
     description:
-      'Diego Alonso García (dagadev) is a Full Stack Engineer at Wazuh, Colombia. Building scalable web apps, AI tooling, and high-performance backends.',
+      'Diego Alonso García (dagadev) is a Full-Stack Engineer at Wazuh, Colombia, with 3+ years of experience building scalable web apps, AI tooling, and high-performance backends for 90,000+ users.',
     ogLocale: 'en_US',
     keywords:
       'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García Guerrero, Diego Alonso Garcia Guerrero, Diego García, Diego Garcia, dagadev, Full Stack Developer, Full Stack Engineer, Software Engineer, Web Developer, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
@@ -23,11 +23,11 @@ export const en: TranslationDictionary = {
     skipToContent: 'Skip to content',
   },
   hero: {
-    kicker: 'Full-Stack Engineer',
+    kicker: 'Full-Stack Engineer · 3+ years in production',
     headlineStart: 'I build ',
     headlineEmphasis: 'software',
     headlineEnd: ' that ships.',
-    lead: "I'm Diego Alonso García (dagadev), a full-stack engineer at Wazuh building production software that ships. Developing AI tooling, scalable backend services, and web apps for 90,000+ users.",
+    lead: "I'm Diego Alonso García (dagadev), a full-stack engineer at Wazuh since Jan 2026, with 3+ years building production software. I design and build AI tooling, scalable backends, and web apps for 90,000+ users, with 130+ merged PRs across Wazuh's open-source dashboard repositories.",
     contactButton: 'Get in touch',
     githubAriaLabel: 'GitHub profile',
     linkedinAriaLabel: 'LinkedIn profile',
@@ -39,10 +39,11 @@ export const en: TranslationDictionary = {
   },
   about: {
     sectionTitle: 'A bit about me.',
-    lead: 'Full-stack engineer building production web applications, LLM tooling, and distributed systems.',
-    philosophyQuote: '“Designing AI-powered tooling and distributed architectures built to scale without compromise.”',
+    lead: 'Full-stack engineer with 3+ years building production web applications, LLM tooling, and distributed systems, from financial back-office software in 2023 to AI tooling at Wazuh.',
+    philosophyQuote:
+      '“Designing AI-powered tooling and distributed architectures built to scale without compromise.”',
     support:
-      'Currently at Wazuh building the Wazuh AI Assistant for 90,000+ security users. Before that, built business tools at Tres Pi Medios for Stanley Black & Decker (Italy and US) and financial software serving 1,100+ SuperGIROS service points in Colombia. My focus is practical: reliable backends, clean databases, and fast, accessible interfaces.',
+      'I started in Aug 2023 at SuperGIROS, where I designed and built back-office tools for 1,100+ service points, a chatbot that cut helpdesk calls by 60%, and web improvements that raised load speed by 40%. From Jul 2024 to Jan 2026 at Tres Pi Medios, I designed and built tools for Stanley Black & Decker, cutting task time by 50% in Italy and automating Zendesk support with AI for the US and Canada. Since Jan 2026 at Wazuh, I design and build the Wazuh AI Assistant end to end for a platform used by 90,000+ users.',
   },
   experience: {
     sectionTitle: "Where I've built & shipped.",
@@ -57,19 +58,28 @@ export const en: TranslationDictionary = {
         company: 'Wazuh',
         companyUrl: 'https://wazuh.com',
         role: 'Full-Stack Engineer',
-        period: 'Current',
+        period: 'Jan 2026 – Present',
         current: true,
         location: 'Remote',
         highlights: [
-          'Building the Wazuh AI Assistant: backend tooling that lets security analysts query platform data using natural language.',
-          'Developing full-stack features, OpenSearch integrations, and releases for the Wazuh web dashboard.',
-          'Automating CI/CD pipelines with GitHub Actions to test and build Linux packages for 90,000+ deployments.',
+          'Designed and built the Wazuh AI Assistant end to end, from issue and design to merged PR: tools revamp, privacy never-send enforcement, RBAC sanitization, and session persistence, so analysts can query platform data in natural language.',
+          'Designed and shipped security hardening across the dashboard: provider API-key encryption at rest, an encryption key generated on install, and log/CSV injection fixes.',
+          'Built new surfaces and platform improvements, including Case management, Engine Health dashboards, and a unified Security Analytics search, alongside bundle minification and dependency reduction for a dashboard used by 90,000+ users.',
         ],
-        skills: ['TypeScript', 'React', 'Node.js', 'Elasticsearch', 'OpenSearch', 'OpenAI', 'Docker', 'Linux'],
+        skills: [
+          'TypeScript',
+          'React',
+          'Node.js',
+          'Elasticsearch',
+          'OpenSearch',
+          'OpenAI',
+          'Docker',
+          'Linux',
+        ],
         kpis: [
           { value: '90k+ users', label: 'Platform deployments' },
+          { value: '130+ merged PRs', label: 'Open-source contributions' },
           { value: 'AI Assistant', label: 'GenAI Tooling' },
-          { value: 'XDR / SIEM', label: 'Security Dashboard' },
         ],
       },
       {
@@ -81,11 +91,23 @@ export const en: TranslationDictionary = {
         period: 'Jul 2024 – Jan 2026',
         location: 'Remote',
         highlights: [
-          'Built an internal tool loan and repair app for client Stanley Black & Decker Italy, cutting task completion time by 50%.',
-          'Developed an Azure Function integrating generative AI to automate Zendesk customer support replies for Stanley Black & Decker in the US and Canada.',
-          'Built real-time data feeds for Power BI operational dashboards and set up i18n support for Italian and English.',
+          'Designed and built an internal tool loan and repair app for client Stanley Black & Decker Italy, cutting task completion time by 50%.',
+          'Designed and built an Azure Function integrating generative AI to automate Zendesk customer support replies for Stanley Black & Decker in the US and Canada.',
+          'Designed and built real-time data feeds for Power BI operational dashboards and shipped i18n support for Italian and English.',
         ],
-        skills: ['TypeScript', 'Node.js', 'Express.js', 'React', 'PostgreSQL', 'MongoDB', 'AWS', 'Azure', 'OpenAI', 'Docker', 'Power BI'],
+        skills: [
+          'TypeScript',
+          'Node.js',
+          'Express.js',
+          'React',
+          'PostgreSQL',
+          'MongoDB',
+          'AWS',
+          'Azure',
+          'OpenAI',
+          'Docker',
+          'Power BI',
+        ],
         kpis: [
           { value: '-50% time', label: 'Tool repair app (Italy)' },
           { value: 'Zendesk AI', label: 'Support bot (US/CA)' },
@@ -99,11 +121,20 @@ export const en: TranslationDictionary = {
         period: 'Aug 2023 – Jul 2024',
         location: 'On-site / Hybrid',
         highlights: [
-          'Built internal back-office tools serving 1,100+ financial service points in Norte de Santander.',
-          'Built a Node.js sales chatbot that reduced helpdesk support calls by 60%.',
+          'Designed and built internal back-office tools serving 1,100+ financial service points in Norte de Santander.',
+          'Designed and built a Node.js sales chatbot that reduced helpdesk support calls by 60%.',
           'Improved web app load speed by 40% through code refactoring, Angular upgrades, and Java/Spring Boot microservices connected to Oracle databases.',
         ],
-        skills: ['Node.js', 'TypeScript', 'Angular', 'Java', 'Spring Boot', 'PostgreSQL', 'Oracle SQL', 'Docker'],
+        skills: [
+          'Node.js',
+          'TypeScript',
+          'Angular',
+          'Java',
+          'Spring Boot',
+          'PostgreSQL',
+          'Oracle SQL',
+          'Docker',
+        ],
         kpis: [
           { value: '1,100+ points', label: 'Financial back-office' },
           { value: '-60% calls', label: 'Internal helpdesk' },
@@ -114,9 +145,11 @@ export const en: TranslationDictionary = {
   },
   skills: {
     sectionTitle: 'Technical arsenal & stack.',
-    sectionDescription: 'Technologies and tools I use to build production software.',
+    sectionDescription:
+      'Technologies and tools I use to build production software. TypeScript, React, Node.js, and OpenSearch are my production daily drivers at Wazuh.',
     coreStackTitle: 'Core Stack & Daily Drivers',
-    coreStackSubtitle: 'Primary tools for production systems and agent tooling',
+    coreStackSubtitle:
+      'Primary tools for production systems and agent tooling, in daily production use at Wazuh',
     coreSkills: [
       { name: 'TypeScript', role: 'Primary Language' },
       { name: 'React', role: 'Frontend Architecture' },
@@ -134,22 +167,62 @@ export const en: TranslationDictionary = {
         id: 'frontend',
         title: 'Frontend & UI Systems',
         iconName: 'Layers',
-        description: 'Component architecture, state management, and accessible design system implementations.',
-        skills: ['React', 'Next.js', 'TypeScript', 'Angular', 'Tailwind CSS', 'Astro', 'Redux', 'Vite', 'HTML5', 'CSS3', 'Sass'],
+        description:
+          'Component architecture, state management, and accessible design system implementations.',
+        skills: [
+          'React',
+          'Next.js',
+          'TypeScript',
+          'Angular',
+          'Tailwind CSS',
+          'Astro',
+          'Redux',
+          'Vite',
+          'HTML5',
+          'CSS3',
+          'Sass',
+        ],
       },
       {
         id: 'backend',
         title: 'Backend & Data Architecture',
         iconName: 'Cpu',
-        description: 'REST microservices, database design, distributed search, and LLM integrations.',
-        skills: ['Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'Elasticsearch', 'OpenSearch', 'MySQL', 'Oracle SQL', 'OpenAI', 'Java', 'Spring Boot', 'Bash'],
+        description:
+          'REST microservices, database design, distributed search, and LLM integrations.',
+        skills: [
+          'Node.js',
+          'Express',
+          'PostgreSQL',
+          'MongoDB',
+          'Elasticsearch',
+          'OpenSearch',
+          'MySQL',
+          'Oracle SQL',
+          'OpenAI',
+          'Java',
+          'Spring Boot',
+          'Bash',
+        ],
       },
       {
         id: 'devops',
         title: 'Cloud, CI/CD & Testing',
         iconName: 'Shield',
-        description: 'CI/CD pipelines, containerized environments, cloud hosting, and automated testing.',
-        skills: ['Docker', 'Linux', 'GitHub Actions', 'AWS', 'Azure', 'Vitest', 'Jest', 'Playwright', 'Turborepo', 'NPM', 'Yarn'],
+        description:
+          'CI/CD pipelines, containerized environments, cloud hosting, and automated testing.',
+        skills: [
+          'Docker',
+          'Linux',
+          'GitHub Actions',
+          'AWS',
+          'Azure',
+          'Vitest',
+          'Jest',
+          'Playwright',
+          'Turborepo',
+          'NPM',
+          'Yarn',
+        ],
       },
     ],
   },
@@ -176,8 +249,7 @@ export const en: TranslationDictionary = {
       },
       {
         name: 'Notewave',
-        description:
-          'Note-taking web app with rich-text markdown editing and task management.',
+        description: 'Note-taking web app with rich-text markdown editing and task management.',
         stack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'JavaScript', 'HTML', 'CSS'],
         repoUrl: 'https://github.com/Ripdiegozz/Notewave',
         liveUrl: 'https://notewave-lake.vercel.app/',
@@ -255,7 +327,8 @@ export const en: TranslationDictionary = {
     sendAriaLabel: 'Send message',
     clearAriaLabel: 'Clear chat history',
     closeAriaLabel: 'Close assistant',
-    initialMessage: "Hi! Ask me anything about Diego's work at Wazuh, full-stack stack, AI projects, or getting in touch.",
+    initialMessage:
+      "Hi! Ask me anything about Diego's work at Wazuh, full-stack stack, AI projects, or getting in touch.",
     suggestedQuestions: [
       'What is your work at Wazuh?',
       'What AI and full-stack technologies do you use?',
@@ -263,6 +336,7 @@ export const en: TranslationDictionary = {
     ],
     disclaimer: 'AI responses are generated based on verified portfolio and engineering data.',
     errorMessage: 'Sorry, I encountered an issue processing your question. Please try again.',
-    rateLimitMessage: 'You have reached the question limit. Please try again in a few minutes or use the contact form.',
+    rateLimitMessage:
+      'You have reached the question limit. Please try again in a few minutes or use the contact form.',
   },
 };

@@ -1,27 +1,27 @@
-# Diego Alonso García (dagadev) — Full Stack Developer & Software Engineer
+# Diego Alonso García (dagadev) — Full-Stack Engineer
 
-> Full-Stack Software Engineer specializing in scalable web applications, distributed systems, and AI/LLM tooling.
+> Full-Stack Engineer with 3+ years of experience building scalable web applications, distributed systems, and AI/LLM tooling.
 
 ## Personal & Entity Information
 - **Full Name:** Diego Alonso García Guerrero
 - **Known as:** Diego Alonso García, Diego García, dagadev
 - **Website:** https://dagadev.net
 - **Location:** Colombia
-- **Current Role:** Full-Stack Engineer at Wazuh (building the Wazuh AI Assistant for 90,000+ users)
+- **Experience:** 3+ years (since Aug 2023)
+- **Current Role:** Full-Stack Engineer at Wazuh since Jan 2026, designing and building the Wazuh AI Assistant end to end for a platform used by 90,000+ users, with 130+ merged PRs across Wazuh's open-source dashboard repositories
 - **GitHub:** https://github.com/Ripdiegozz
 - **LinkedIn:** https://www.linkedin.com/in/dagadev
 
 ## Core Specializations & Skills
-- **Frontend & UI:** TypeScript, JavaScript, React 19, Next.js, Astro, Tailwind CSS, Three.js / WebGL, Motion, State Management.
-- **Backend & Architecture:** Node.js, Python, Express, Hono, REST, GraphQL, Microservices, Event-Driven Architecture, WebSocket.
-- **AI & LLMs:** LLM tool development, prompt engineering, agentic workflows, embeddings, vector indexing, RAG systems.
-- **Databases:** PostgreSQL, MongoDB, Redis, SQLite, Cloudflare KV / D1.
-- **Cloud & DevOps:** Cloudflare Workers, Docker, Linux, CI/CD with GitHub Actions, AWS, Turborepo.
+- **Frontend & UI:** TypeScript, React, Next.js, Angular, Tailwind CSS, Astro, Redux, Vite, HTML5, CSS3, Sass. Production daily drivers at Wazuh: TypeScript, React, Node.js, and OpenSearch.
+- **Backend & Data:** Node.js, Express, PostgreSQL, MongoDB, Elasticsearch, OpenSearch, MySQL, Oracle SQL, OpenAI, Java, Spring Boot, Bash.
+- **AI & LLMs:** AI Assistant and LLM tooling with OpenAI, including tools revamp, privacy never-send enforcement, RBAC sanitization, and session persistence.
+- **Cloud, CI/CD & Testing:** Docker, Linux, GitHub Actions, AWS, Azure, Vitest, Jest, Playwright, Turborepo, NPM, Yarn.
 
 ## Notable Professional Experience
-- **Wazuh (Current):** Full-Stack Engineer building the conversational AI Assistant platform supporting over 90,000 security analysts worldwide.
-- **Tres Pi Medios:** Built enterprise web solutions and digital tools for global clients including Stanley Black & Decker (Italy and US).
-- **SuperGIROS:** Engineered financial service and transactional software powering 1,100+ points of attention across Colombia.
+- **Wazuh (Jan 2026 – Present):** Full-Stack Engineer. Designed and built the Wazuh AI Assistant end to end, from issue and design to merged PR, for a platform used by 90,000+ users. Designed and shipped security hardening (provider API-key encryption at rest, an encryption key generated on install, and log/CSV injection fixes), and built Case management, Engine Health dashboards, and a unified Security Analytics search, alongside bundle minification and dependency reduction. 130+ merged PRs across wazuh-dashboard, wazuh-dashboard-plugins, and wazuh-dashboard-security-analytics.
+- **Tres Pi Medios for Stanley Black & Decker (Jul 2024 – Jan 2026):** Designed and built an internal tool loan and repair app for Italy that cut task completion time by 50%, an Azure Function integrating generative AI to automate Zendesk support replies for the US and Canada, and real-time data feeds for Power BI dashboards with i18n support for Italian and English.
+- **SuperGIROS (Aug 2023 – Jul 2024):** Designed and built internal back-office tools serving 1,100+ financial service points in Norte de Santander, a Node.js sales chatbot that reduced helpdesk support calls by 60%, and web improvements that raised load speed by 40%.
 
 ## Portfolio & Contact
 - **Online Portfolio:** https://dagadev.net (English) and https://dagadev.net/es (Spanish)

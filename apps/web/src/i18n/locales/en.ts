@@ -1,10 +1,14 @@
+import { formatHeroKicker, formatYearsOfExperience } from '../../lib/experience';
 import type { TranslationDictionary } from '../types';
+
+const expYears = formatYearsOfExperience('en');
+const heroKicker = formatHeroKicker('en');
 
 export const en: TranslationDictionary = {
   meta: {
     title: 'Diego García — Full Stack Developer & Software Engineer',
     description:
-      'Diego Alonso García is a Full-Stack Engineer at Wazuh, Colombia, with 3+ years of experience building scalable web apps, AI tooling, and high-performance backends for 90,000+ users.',
+      `Diego Alonso García is a Full-Stack Engineer at Wazuh, Colombia, with ${expYears} of experience building scalable web apps, AI tooling, and high-performance backends for 90,000+ users.`,
     ogLocale: 'en_US',
     keywords:
       'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García Guerrero, Diego Alonso Garcia Guerrero, Diego García, Diego Garcia, dagadev, Full Stack Developer, Full Stack Engineer, Software Engineer, Web Developer, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
@@ -23,11 +27,11 @@ export const en: TranslationDictionary = {
     skipToContent: 'Skip to content',
   },
   hero: {
-    kicker: 'Full-Stack Engineer · 3+ years in production',
+    kicker: heroKicker,
     headlineStart: 'I build ',
     headlineEmphasis: 'software',
     headlineEnd: ' that ships.',
-    lead: "I'm Diego Alonso García, a full-stack engineer at Wazuh with 3+ years building production software. I design and build AI tooling, scalable backends, and web apps for 90,000+ users.",
+    lead: `I'm Diego Alonso García, a full-stack engineer at Wazuh with ${expYears} building production software. I design and build AI tooling, scalable backends, and web apps for 90,000+ users.`,
     contactButton: 'Get in touch',
     githubAriaLabel: 'GitHub profile',
     linkedinAriaLabel: 'LinkedIn profile',
@@ -39,7 +43,7 @@ export const en: TranslationDictionary = {
   },
   about: {
     sectionTitle: 'A bit about me.',
-    lead: 'Full-stack engineer with 3+ years building production web applications, LLM tooling, and distributed systems, from financial back-office software to AI tooling at Wazuh.',
+    lead: `Full-stack engineer with ${expYears} building production web applications, LLM tooling, and distributed systems, from financial back-office software to AI tooling at Wazuh.`,
     philosophyQuote:
       '“Designing AI-powered tooling and distributed architectures built to scale without compromise.”',
     support:

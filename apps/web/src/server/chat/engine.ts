@@ -16,26 +16,33 @@ export interface ChatEngineOptions {
 
 export const PORTFOLIO_KNOWLEDGE_BASE = `
 Identity & Background:
-- Full Name: Diego Alonso García Guerrero (dagadev)
-- Professional Title: Full-Stack Software Engineer & AI Tooling Developer
+- Full Name: Diego Alonso García Guerrero
+- Professional Title: Full-Stack Engineer
+- Experience: 3+ years building production software (since Aug 2023)
 - Location: Colombia (Remote)
 - Context: This chat assistant is embedded directly inside Diego's interactive portfolio website.
 - LinkedIn: https://www.linkedin.com/in/dagadev
 - GitHub: https://github.com/Ripdiegozz
 
 Current Role:
-- Company: Wazuh (Current)
-- Role: Full-Stack Engineer
-- Responsibilities & Achievements:
-  - Developing the Wazuh AI Assistant: backend tooling enabling security analysts to query complex SIEM/XDR security data using natural language.
-  - Full-stack features, OpenSearch / Elasticsearch integrations, and releases for the Wazuh web dashboard.
-  - Automating CI/CD pipelines with GitHub Actions to test and build Linux packages for 90,000+ deployments.
+- Company: Wazuh | Jan 2026 – Present
+- Role: Full-Stack Engineer (Remote)
+- Key Responsibilities & Achievements:
+  - Designed and built the Wazuh AI Assistant end to end (tools revamp, privacy never-send enforcement, RBAC sanitization, session persistence), enabling security analysts to query platform data using natural language.
+  - Designed and shipped security hardening across the dashboard: provider API-key encryption at rest, encryption key generated on install, and log/CSV injection fixes.
+  - Built new surfaces and platform improvements: Case management, Engine Health dashboards, unified Security Analytics search, bundle minification, and dependency reduction for 90,000+ deployments across open-source dashboard repositories (130+ merged PRs).
 
 Previous Roles & Impact:
 - Company: Tres Pi Medios (Client: Stanley Black & Decker) | Jul 2024 – Jan 2026
-  - Built an internal tool loan and repair app for Stanley Black & Decker Italy, cutting task completion time by 50%.
-  - Developed an Azure Function with Generative AI automating Zendesk customer support replies for Stanley Black & Decker US & Canada.
+  - Role: Full-stack Developer (Remote)
+  - Designed and built an internal tool loan and repair app for Stanley Black & Decker Italy, cutting task completion time by 50%.
+  - Designed and built an Azure Function integrating generative AI to automate Zendesk customer support replies for Stanley Black & Decker in the US and Canada.
   - Built real-time data feeds for Power BI operational dashboards with i18n support for Italian and English.
+- Company: SuperGIROS | Aug 2023 – Jul 2024
+  - Role: Full-stack Developer Intern (On-site / Hybrid)
+  - Designed and built internal back-office tools serving 1,100+ financial service points in Norte de Santander.
+  - Designed and built a Node.js sales chatbot that reduced helpdesk support calls by 60%.
+  - Improved web app load speed by 40% through code refactoring, Angular upgrades, and Java/Spring Boot microservices connected to Oracle databases.
 
 Technical Stack & Core Skills:
 - Languages: TypeScript, JavaScript, Python, SQL, HTML5, CSS3
@@ -53,8 +60,9 @@ Featured Projects:
 - Section Link: [Projects](#projects)
 
 Experience & Career:
-- Wazuh (Current): Full-Stack Engineer on Wazuh AI Assistant & Dashboard.
-- Tres Pi Medios: Stanley Black & Decker (Italy & US/Canada).
+- Wazuh (Jan 2026 – Present): Full-Stack Engineer on Wazuh AI Assistant, Security Hardening & Dashboard (90k+ users, 130+ merged PRs).
+- Tres Pi Medios (Jul 2024 – Jan 2026): Full-stack Developer for Stanley Black & Decker (Italy & US/Canada).
+- SuperGIROS (Aug 2023 – Jul 2024): Full-stack Developer Intern (1,100+ points, chatbot, 40% speedup).
 - Section Link: [Experience](#experience)
 
 Contact & Availability:
@@ -67,7 +75,7 @@ export function buildSystemPrompt(locale: 'en' | 'es' = 'en'): string {
       ? 'Responde SIEMPRE en español de forma profesional, clara, concisa y amigable.'
       : 'ALWAYS respond in English in a professional, clear, concise, and friendly tone.';
 
-  return `You are "Diego AI", the personal portfolio assistant for Diego Alonso García Guerrero (dagadev).
+  return `You are "Diego AI", the personal portfolio assistant for Diego Alonso García Guerrero.
 Your mission is to represent Diego, answer questions from recruiters, engineers, and clients about his real experience, technical stack, projects, and how to get in touch with him.
 
 ${languageDirective}
@@ -128,7 +136,7 @@ export function checkInputGuardrails(userMessage: string, locale: 'en' | 'es'): 
   const mathPatterns = [
     /^(what\s+is\s+)?\d+\s*[+\-*/^]\s*\d+/i,
     /^(calculate|solve|evaluate|compute)\s+[\d()]+/i,
-    /^(cuanto\s+es|calcula|resuelve)\s+[\d()]+/i,
+    /^(cuanto\s+es|calcula|resuelve)\s+[\\d()]+/i,
   ];
 
   for (const pattern of mathPatterns) {
@@ -150,8 +158,11 @@ export function generateLocalFallbackResponse(userMessage: string, locale: 'en' 
   const query = userMessage.toLowerCase();
 
   if (locale === 'es') {
-    if (query.includes('wazuh') || query.includes('trabajo') || query.includes('actual') || query.includes('experiencia')) {
-      return 'Actualmente Diego es Ingeniero Full-Stack en Wazuh, donde construye el **Wazuh AI Assistant** (herramientas de IA para consultar datos de seguridad con lenguaje natural), integraciones con OpenSearch y pipelines de CI/CD para más de 90.000 despliegues. Conoce más en la sección de [Experiencia](#experience).';
+    if (query.includes('wazuh') || query.includes('actual')) {
+      return 'Actualmente Diego es Ingeniero Full-Stack en Wazuh (desde enero de 2026), donde diseñó y construyó el **Wazuh AI Assistant** de principio a fin, implementó el endurecimiento de seguridad y mejoras en la plataforma para más de 90.000 despliegues (con 130+ PRs fusionados). Conoce más en la sección de [Experiencia](#experience).';
+    }
+    if (query.includes('experiencia') || query.includes('trayectoria') || query.includes('carrera') || query.includes('historia') || query.includes('supergiros') || query.includes('tres pi') || query.includes('stanley') || query.includes('años') || query.includes('trabajo')) {
+      return 'Diego cuenta con más de **3 años de experiencia** construyendo software en producción: inició en **SuperGIROS** (herramientas para 1.100+ puntos de atención y chatbot que redujo llamadas un 60%), continuó en **Tres Pi Medios** para Stanley Black & Decker (reducción del 50% en tiempo de app y bot de soporte con IA), y actualmente en **Wazuh** liderando features clave de AI Assistant y seguridad. Explora su trayectoria en [Experiencia](#experience).';
     }
     if (query.includes('stack') || query.includes('tecnolog') || query.includes('skills') || query.includes('react') || query.includes('node') || query.includes('ia') || query.includes('ai')) {
       return 'El stack principal de Diego incluye **TypeScript, React 19, Astro, Node.js, Python, OpenSearch, Tailwind CSS, Cloudflare Workers y Docker**, con especialización en tooling de IA y sistemas escalables. Puedes ver el bento grid completo en la sección de [Habilidades](#skills).';
@@ -166,8 +177,11 @@ export function generateLocalFallbackResponse(userMessage: string, locale: 'en' 
   }
 
   // English fallback
-  if (query.includes('wazuh') || query.includes('work') || query.includes('current') || query.includes('role') || query.includes('experience')) {
-    return "Diego is currently a Full-Stack Engineer at Wazuh, where he builds the **Wazuh AI Assistant** (enabling security analysts to query SIEM data using natural language), OpenSearch integrations, and CI/CD automation for 90,000+ deployments. Explore more in the [Experience](#experience) section.";
+  if (query.includes('wazuh') || query.includes('current')) {
+    return "Diego is currently a Full-Stack Engineer at Wazuh (since Jan 2026), where he designed and built the **Wazuh AI Assistant** end to end, shipped security hardening across the dashboard, and delivered platform improvements for 90,000+ deployments with 130+ merged PRs. Explore more in the [Experience](#experience) section.";
+  }
+  if (query.includes('experience') || query.includes('career') || query.includes('background') || query.includes('history') || query.includes('supergiros') || query.includes('tres pi') || query.includes('stanley') || query.includes('years') || query.includes('work') || query.includes('job')) {
+    return "Diego has **3+ years of experience** building production software: started at **SuperGIROS** (tools for 1,100+ branches and a chatbot cutting support calls by 60%), built enterprise tools for Stanley Black & Decker at **Tres Pi Medios** (-50% task time, AI support bot), and now designs AI tooling and scalable backends at **Wazuh**. Explore his career timeline in [Experience](#experience).";
   }
   if (query.includes('stack') || query.includes('tech') || query.includes('skills') || query.includes('react') || query.includes('node') || query.includes('ai') || query.includes('llm')) {
     return "Diego's primary stack includes **TypeScript, React 19, Astro, Node.js, Python, OpenSearch, Cloudflare Workers, Tailwind CSS, and Docker**, specializing in AI tooling and scalable web applications. Explore the full interactive bento grid in the [Skills](#skills) section.";

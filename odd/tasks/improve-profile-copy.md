@@ -64,4 +64,6 @@ The portfolio already proves impact (90k+ users, -50% time, -60% calls, +40% spe
 - Evidence: explorer map 2026-10-14, parent spot-check of `en.ts` (full read) and EN/ES diff; GitHub author/assignee counts in decision 3.
 - Verification (2026-10-14, after Prettier normalization): `bun run lint` pass (3 tasks), `bun run typecheck` pass (0 errors, 73 Astro files), `bun run test` pass (3 tasks, web 92 tests).
 - Acceptance criteria above are met except native RDD review, which is the remaining gate before the work-unit commit.
-- Next step: native RDD review of this candidate, then commit on `feat/improve-profile-copy`.
+- Native RDD review: approved 2026-10-14 (lineage `review-c57f459b4caccfac`, acknowledgement burned). Four advisory non-blocking findings recorded as follow-ups: hardcoded "3+ years" will go stale, EN/ES drift in one Wazuh highlight, unchecked acceptance boxes (this section), and chat-assistant knowledge source not covered by this candidate.
+- Work-unit commit: `a3acf23` on `feat/improve-profile-copy`. This doc-record commit follows it.
+- Next step: open the PR when Diego decides; address advisory findings as a separate change.

@@ -27,7 +27,7 @@ export const en: TranslationDictionary = {
     headlineStart: 'I build ',
     headlineEmphasis: 'software',
     headlineEnd: ' that ships.',
-    lead: "I'm Diego Alonso García, a full-stack engineer at Wazuh with 3+ years building production software. I design and build AI tooling, scalable backends, and web apps for 90,000+ users, with 130+ merged PRs across Wazuh's open-source dashboard repositories.",
+    lead: "I'm Diego Alonso García, a full-stack engineer at Wazuh with 3+ years building production software. I design and build AI tooling, scalable backends, and web apps for 90,000+ users.",
     contactButton: 'Get in touch',
     githubAriaLabel: 'GitHub profile',
     linkedinAriaLabel: 'LinkedIn profile',

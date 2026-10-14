@@ -1,4 +1,4 @@
-# Diego Alonso García (dagadev) — Full-Stack Engineer
+# Diego Alonso García — Full-Stack Engineer
 
 > Full-Stack Engineer with 3+ years of experience building scalable web applications, distributed systems, and AI/LLM tooling.
 

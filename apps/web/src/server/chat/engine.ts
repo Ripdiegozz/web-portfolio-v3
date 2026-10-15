@@ -14,12 +14,13 @@ export interface ChatEngineOptions {
   workersAi?: { run(model: string, input: unknown): Promise<unknown> } | undefined;
   geminiApiKey?: string | undefined;
   openaiApiKey?: string | undefined;
+  referenceDate?: Date | undefined;
 }
 
-const expYearsSnippetEn = formatYearsOfExperience('en');
-const expYearsCount = getYearsOfExperience();
+export function buildPortfolioKnowledgeBase(referenceDate: Date = new Date()): string {
+  const expYearsSnippetEn = formatYearsOfExperience('en', referenceDate);
 
-export const PORTFOLIO_KNOWLEDGE_BASE = `
+  return `
 Identity & Background:
 - Full Name: Diego Alonso García Guerrero
 - Professional Title: Full-Stack Engineer
@@ -73,8 +74,12 @@ Experience & Career:
 Contact & Availability:
 - How to get in touch: Through the [Contact Form](#contact) directly on this portfolio or via LinkedIn at https://www.linkedin.com/in/dagadev.
 `;
+}
 
-export function buildSystemPrompt(locale: 'en' | 'es' = 'en'): string {
+export function buildSystemPrompt(
+  locale: 'en' | 'es' = 'en',
+  referenceDate: Date = new Date(),
+): string {
   const languageDirective =
     locale === 'es'
       ? 'Responde SIEMPRE en español de forma profesional, clara, concisa y amigable.'
@@ -100,7 +105,7 @@ Strict Guardrails & Constraints:
 7. CONCISE TONE: Keep answers concise (2 to 4 sentences or a clean bulleted list).
 
 --- Knowledge Base ---
-${PORTFOLIO_KNOWLEDGE_BASE}
+${buildPortfolioKnowledgeBase(referenceDate)}
 `;
 }
 
@@ -141,7 +146,7 @@ export function checkInputGuardrails(userMessage: string, locale: 'en' | 'es'): 
   const mathPatterns = [
     /^(what\s+is\s+)?\d+\s*[+\-*/^]\s*\d+/i,
     /^(calculate|solve|evaluate|compute)\s+[\d()]+/i,
-    /^(cuanto\s+es|calcula|resuelve)\s+[\\d()]+/i,
+    /^(cuanto\s+es|calcula|resuelve)\s+[\d()]+/i,
   ];
 
   for (const pattern of mathPatterns) {
@@ -156,23 +161,54 @@ export function checkInputGuardrails(userMessage: string, locale: 'en' | 'es'): 
 }
 
 /** Fallback rule-based answering for offline / local dev when no LLM API key is present. */
-export function generateLocalFallbackResponse(userMessage: string, locale: 'en' | 'es' = 'en'): string {
+export function generateLocalFallbackResponse(
+  userMessage: string,
+  locale: 'en' | 'es' = 'en',
+  referenceDate: Date = new Date(),
+): string {
   const guardrail = checkInputGuardrails(userMessage, locale);
   if (guardrail) return guardrail;
 
+  const expYearsSnippetEn = formatYearsOfExperience('en', referenceDate);
+  const expYearsCount = getYearsOfExperience(referenceDate);
   const query = userMessage.toLowerCase();
 
   if (locale === 'es') {
     if (query.includes('wazuh') || query.includes('actual')) {
       return 'Actualmente Diego es Ingeniero Full-Stack en Wazuh (desde enero de 2026), donde diseñó y construyó el **Wazuh AI Assistant** de principio a fin, implementó el endurecimiento de seguridad y mejoras en la plataforma para más de 90.000 despliegues (con 130+ PRs fusionados). Conoce más en la sección de [Experiencia](#experience).';
     }
-    if (query.includes('experiencia') || query.includes('trayectoria') || query.includes('carrera') || query.includes('historia') || query.includes('supergiros') || query.includes('tres pi') || query.includes('stanley') || query.includes('años') || query.includes('trabajo')) {
+    if (
+      query.includes('experiencia') ||
+      query.includes('trayectoria') ||
+      query.includes('carrera') ||
+      query.includes('historia') ||
+      query.includes('supergiros') ||
+      query.includes('tres pi') ||
+      query.includes('stanley') ||
+      query.includes('años') ||
+      query.includes('trabajo')
+    ) {
       return `Diego cuenta con más de **${expYearsCount} años de experiencia** construyendo software en producción: inició en **SuperGIROS** (herramientas para 1.100+ puntos de atención y chatbot que redujo llamadas un 60%), continuó en **Tres Pi Medios** para Stanley Black & Decker (reducción del 50% en tiempo de app y bot de soporte con IA), y actualmente en **Wazuh** liderando features clave de AI Assistant y seguridad. Explora su trayectoria en [Experiencia](#experience).`;
     }
-    if (query.includes('stack') || query.includes('tecnolog') || query.includes('skills') || query.includes('react') || query.includes('node') || query.includes('ia') || query.includes('ai')) {
+    if (
+      query.includes('stack') ||
+      query.includes('tecnolog') ||
+      query.includes('skills') ||
+      query.includes('react') ||
+      query.includes('node') ||
+      query.includes('ia') ||
+      query.includes('ai')
+    ) {
       return 'El stack principal de Diego incluye **TypeScript, React 19, Astro, Node.js, Python, OpenSearch, Tailwind CSS, Cloudflare Workers y Docker**, con especialización en tooling de IA y sistemas escalables. Puedes ver el bento grid completo en la sección de [Habilidades](#skills).';
     }
-    if (query.includes('contact') || query.includes('email') || query.includes('contrat') || query.includes('linkedin') || query.includes('escribir') || query.includes('tocar')) {
+    if (
+      query.includes('contact') ||
+      query.includes('email') ||
+      query.includes('contrat') ||
+      query.includes('linkedin') ||
+      query.includes('escribir') ||
+      query.includes('tocar')
+    ) {
       return 'Puedes ponerte en contacto con Diego a través del [Formulario de Contacto](#contact) en este portafolio o conectar directamente en su [Perfil de LinkedIn](https://www.linkedin.com/in/dagadev).';
     }
     if (query.includes('proyect') || query.includes('natgpt') || query.includes('notewave')) {
@@ -183,36 +219,63 @@ export function generateLocalFallbackResponse(userMessage: string, locale: 'en' 
 
   // English fallback
   if (query.includes('wazuh') || query.includes('current')) {
-    return "Diego is currently a Full-Stack Engineer at Wazuh (since Jan 2026), where he designed and built the **Wazuh AI Assistant** end to end, shipped security hardening across the dashboard, and delivered platform improvements for 90,000+ deployments with 130+ merged PRs. Explore more in the [Experience](#experience) section.";
+    return 'Diego is currently a Full-Stack Engineer at Wazuh (since Jan 2026), where he designed and built the **Wazuh AI Assistant** end to end, shipped security hardening across the dashboard, and delivered platform improvements for 90,000+ deployments with 130+ merged PRs. Explore more in the [Experience](#experience) section.';
   }
-  if (query.includes('experience') || query.includes('career') || query.includes('background') || query.includes('history') || query.includes('supergiros') || query.includes('tres pi') || query.includes('stanley') || query.includes('years') || query.includes('work') || query.includes('job')) {
+  if (
+    query.includes('experience') ||
+    query.includes('career') ||
+    query.includes('background') ||
+    query.includes('history') ||
+    query.includes('supergiros') ||
+    query.includes('tres pi') ||
+    query.includes('stanley') ||
+    query.includes('years') ||
+    query.includes('work') ||
+    query.includes('job')
+  ) {
     return `Diego has **${expYearsSnippetEn} of experience** building production software: started at **SuperGIROS** (tools for 1,100+ branches and a chatbot cutting support calls by 60%), built enterprise tools for Stanley Black & Decker at **Tres Pi Medios** (-50% task time, AI support bot), and now designs AI tooling and scalable backends at **Wazuh**. Explore his career timeline in [Experience](#experience).`;
   }
-  if (query.includes('stack') || query.includes('tech') || query.includes('skills') || query.includes('react') || query.includes('node') || query.includes('ai') || query.includes('llm')) {
+  if (
+    query.includes('stack') ||
+    query.includes('tech') ||
+    query.includes('skills') ||
+    query.includes('react') ||
+    query.includes('node') ||
+    query.includes('ai') ||
+    query.includes('llm')
+  ) {
     return "Diego's primary stack includes **TypeScript, React 19, Astro, Node.js, Python, OpenSearch, Cloudflare Workers, Tailwind CSS, and Docker**, specializing in AI tooling and scalable web applications. Explore the full interactive bento grid in the [Skills](#skills) section.";
   }
-  if (query.includes('contact') || query.includes('hire') || query.includes('email') || query.includes('linkedin') || query.includes('reach') || query.includes('touch')) {
-    return "You can get in touch with Diego through the [Contact Form](#contact) directly on this portfolio or connect with him via [LinkedIn](https://www.linkedin.com/in/dagadev).";
+  if (
+    query.includes('contact') ||
+    query.includes('hire') ||
+    query.includes('email') ||
+    query.includes('linkedin') ||
+    query.includes('reach') ||
+    query.includes('touch')
+  ) {
+    return 'You can get in touch with Diego through the [Contact Form](#contact) directly on this portfolio or connect with him via [LinkedIn](https://www.linkedin.com/in/dagadev).';
   }
   if (query.includes('project') || query.includes('natgpt') || query.includes('notewave')) {
-    return "Key highlighted projects include **Wazuh Dashboard** (open-source SIEM/XDR web UI), **NatGPT** (AI voice & streaming platform), and **Notewave** (rich-text markdown app). Check them out in the [Projects](#projects) section.";
+    return 'Key highlighted projects include **Wazuh Dashboard** (open-source SIEM/XDR web UI), **NatGPT** (AI voice & streaming platform), and **Notewave** (rich-text markdown app). Check them out in the [Projects](#projects) section.';
   }
   return "Hello! I'm Diego's AI Assistant. Ask me anything about his work in [Experience](#experience), his core stack in [Skills](#skills), his [Projects](#projects), or how to get in touch via the [Contact Form](#contact).";
 }
 
 export async function processChatRequest(
   payload: ChatRequestPayload,
-  options: ChatEngineOptions
+  options: ChatEngineOptions,
 ): Promise<string> {
   const locale = payload.locale === 'es' ? 'es' : 'en';
-  const systemPrompt = buildSystemPrompt(locale);
+  const referenceDate = options.referenceDate ?? new Date();
+  const systemPrompt = buildSystemPrompt(locale, referenceDate);
 
   const cleanMessages = (payload.messages || [])
     .filter((m) => m && typeof m.content === 'string' && m.content.trim().length > 0)
     .slice(-6); // Keep last 6 turns for context efficiency
 
   if (cleanMessages.length === 0) {
-    return generateLocalFallbackResponse('', locale);
+    return generateLocalFallbackResponse('', locale, referenceDate);
   }
 
   const lastMessage = cleanMessages[cleanMessages.length - 1];
@@ -243,7 +306,11 @@ export async function processChatRequest(
           temperature: 0.3,
         })) as { response?: string };
 
-        if (response && typeof response.response === 'string' && response.response.trim().length > 0) {
+        if (
+          response &&
+          typeof response.response === 'string' &&
+          response.response.trim().length > 0
+        ) {
           return response.response.trim();
         }
       } catch (err) {
@@ -286,5 +353,5 @@ export async function processChatRequest(
   }
 
   // 3. Fallback to smart grounded local response
-  return generateLocalFallbackResponse(latestUserMessage, locale);
+  return generateLocalFallbackResponse(latestUserMessage, locale, referenceDate);
 }

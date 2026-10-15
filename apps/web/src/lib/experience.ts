@@ -7,6 +7,9 @@ export const CAREER_START_DATE = new Date('2023-08-01T00:00:00Z');
  * Calculates completed full years of professional experience from the career start date.
  */
 export function getYearsOfExperience(referenceDate: Date = new Date()): number {
+  if (referenceDate < CAREER_START_DATE) {
+    return 0;
+  }
   let years = referenceDate.getUTCFullYear() - CAREER_START_DATE.getUTCFullYear();
   const monthDiff = referenceDate.getUTCMonth() - CAREER_START_DATE.getUTCMonth();
   const dayDiff = referenceDate.getUTCDate() - CAREER_START_DATE.getUTCDate();

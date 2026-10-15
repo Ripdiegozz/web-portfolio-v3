@@ -1,14 +1,12 @@
 import { formatHeroKicker, formatYearsOfExperience } from '../../lib/experience';
 import type { TranslationDictionary } from '../types';
 
-const expYears = formatYearsOfExperience('en');
-const heroKicker = formatHeroKicker('en');
-
 export const en: TranslationDictionary = {
   meta: {
     title: 'Diego García — Full-Stack Developer & Software Engineer',
-    description:
-      `Diego Alonso García is a Full-Stack Engineer at Wazuh, Colombia, with ${expYears} of experience building scalable web apps, AI tooling, and high-performance backends for 90,000+ users.`,
+    get description() {
+      return `Diego Alonso García is a Full-Stack Engineer at Wazuh, Colombia, with ${formatYearsOfExperience('en')} of experience building scalable web apps, AI tooling, and high-performance backends for 90,000+ users.`;
+    },
     ogLocale: 'en_US',
     keywords:
       'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García Guerrero, Diego Alonso Garcia Guerrero, Diego García, Diego Garcia, dagadev, Full-Stack Developer, Full-Stack Engineer, Software Engineer, Web Developer, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
@@ -27,11 +25,15 @@ export const en: TranslationDictionary = {
     skipToContent: 'Skip to content',
   },
   hero: {
-    kicker: heroKicker,
+    get kicker() {
+      return formatHeroKicker('en');
+    },
     headlineStart: 'I build ',
     headlineEmphasis: 'software',
     headlineEnd: ' that ships.',
-    lead: `I'm Diego Alonso García, a full-stack engineer at Wazuh with ${expYears} building production software. I design and build AI tooling, scalable backends, and web apps for 90,000+ users.`,
+    get lead() {
+      return `I'm Diego Alonso García, a full-stack engineer at Wazuh with ${formatYearsOfExperience('en')} building production software. I design and build AI tooling, scalable backends, and web apps for 90,000+ users.`;
+    },
     contactButton: 'Get in touch',
     githubAriaLabel: 'GitHub profile',
     linkedinAriaLabel: 'LinkedIn profile',
@@ -43,7 +45,9 @@ export const en: TranslationDictionary = {
   },
   about: {
     sectionTitle: 'A bit about me.',
-    lead: `Full-Stack Engineer with ${expYears} building production web applications, LLM tooling, and distributed systems, from financial back-office software to AI tooling at Wazuh.`,
+    get lead() {
+      return `Full-Stack Engineer with ${formatYearsOfExperience('en')} building production web applications, LLM tooling, and distributed systems, from financial back-office software to AI tooling at Wazuh.`;
+    },
     support:
       'I started at SuperGIROS, where I designed and built back-office tools for 1,100+ service points, a chatbot that cut helpdesk calls by 60%, and web improvements that raised load speed by 40%. At Tres Pi Medios, I designed and built tools for Stanley Black & Decker, cutting task time by 50% in Italy and automating Zendesk support with AI for the US and Canada. Now at Wazuh, I design and build the Wazuh AI Assistant end to end for a platform used by 90,000+ users.',
   },

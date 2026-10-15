@@ -1,14 +1,12 @@
 import { formatHeroKicker, formatYearsOfExperience } from '../../lib/experience';
 import type { TranslationDictionary } from '../types';
 
-const expYears = formatYearsOfExperience('es');
-const heroKicker = formatHeroKicker('es');
-
 export const es: TranslationDictionary = {
   meta: {
     title: 'Diego García — Desarrollador Full-Stack & Software Engineer',
-    description:
-      `Diego Alonso García, Ingeniero Full-Stack en Wazuh, Colombia, con ${expYears} de experiencia construyendo aplicaciones web escalables, herramientas de IA y backends de alto rendimiento para más de 90.000 usuarios.`,
+    get description() {
+      return `Diego Alonso García, Ingeniero Full-Stack en Wazuh, Colombia, con ${formatYearsOfExperience('es')} de experiencia construyendo aplicaciones web escalables, herramientas de IA y backends de alto rendimiento para más de 90.000 usuarios.`;
+    },
     ogLocale: 'es_ES',
     keywords:
       'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García Guerrero, Diego Alonso Garcia Guerrero, Diego García, Diego Garcia, dagadev, Desarrollador Full-Stack, Ingeniero Full-Stack, Ingeniero de Software, Desarrollador Web, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
@@ -27,11 +25,15 @@ export const es: TranslationDictionary = {
     skipToContent: 'Saltar al contenido',
   },
   hero: {
-    kicker: heroKicker,
+    get kicker() {
+      return formatHeroKicker('es');
+    },
     headlineStart: 'Construyo ',
     headlineEmphasis: 'software',
     headlineEnd: ' que llega a producción.',
-    lead: `Soy Diego Alonso García, ingeniero full-stack en Wazuh, con ${expYears} construyendo software en producción. Diseño y construyo herramientas de IA, backends escalables y aplicaciones web para más de 90.000 usuarios.`,
+    get lead() {
+      return `Soy Diego Alonso García, ingeniero full-stack en Wazuh, con ${formatYearsOfExperience('es')} construyendo software en producción. Diseño y construyo herramientas de IA, backends escalables y aplicaciones web para más de 90.000 usuarios.`;
+    },
     contactButton: 'Escríbeme',
     githubAriaLabel: 'Perfil de GitHub',
     linkedinAriaLabel: 'Perfil de LinkedIn',
@@ -43,7 +45,9 @@ export const es: TranslationDictionary = {
   },
   about: {
     sectionTitle: 'Sobre mí.',
-    lead: `Ingeniero full-stack con ${expYears} construyendo aplicaciones web en producción, herramientas LLM y sistemas distribuidos, desde software financiero de back-office hasta herramientas de IA en Wazuh.`,
+    get lead() {
+      return `Ingeniero full-stack con ${formatYearsOfExperience('es')} construyendo aplicaciones web en producción, herramientas LLM y sistemas distribuidos, desde software financiero de back-office hasta herramientas de IA en Wazuh.`;
+    },
     support:
       'Comencé en SuperGIROS, donde diseñé y construí herramientas de back-office para más de 1.100 puntos de atención, un chatbot que redujo las llamadas a la mesa de ayuda en un 60% y mejoras web que aumentaron la velocidad de carga en un 40%. En Tres Pi Medios, diseñé y construí herramientas para Stanley Black & Decker, reduciendo el tiempo de las tareas en un 50% en Italia y automatizando el soporte de Zendesk con IA para EE. UU. y Canadá. Ahora, en Wazuh, diseño y construyo el Wazuh AI Assistant de principio a fin para una plataforma utilizada por más de 90.000 usuarios.',
   },

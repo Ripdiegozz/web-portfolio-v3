@@ -19,7 +19,7 @@ export const projects: ProjectItem[] = en.projects.items;
 export const coreSkills: CoreSkill[] = en.skills.coreSkills;
 export const skillCategories: SkillCategoryGroup[] = en.skills.categories;
 export const socials: SocialLink[] = en.footer.socials;
-export const aboutTextLead = en.about.lead;
+export const getAboutTextLead = (): string => en.about.lead;
 export const aboutTextSupport = en.about.support;
 
 export const skills: SkillGroup[] = [

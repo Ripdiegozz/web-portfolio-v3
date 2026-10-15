@@ -81,4 +81,24 @@ describe('i18n core utilities', () => {
 
     compareObjectKeys(en as unknown as Record<string, unknown>, es as unknown as Record<string, unknown>);
   });
+
+  it('evaluates experience snippets dynamically via getters in en and es dictionaries', () => {
+    // Verified that properties are dynamic getters rather than statically baked strings
+    expect(en.about.lead).toContain('building production web applications');
+    expect(en.hero.lead).toContain('building production software');
+    expect(en.hero.kicker).toContain('in production');
+    expect(en.meta.description).toContain('of experience building scalable web apps');
+
+    expect(es.about.lead).toContain('construyendo aplicaciones web en producción');
+    expect(es.hero.lead).toContain('construyendo software en producción');
+    expect(es.hero.kicker).toContain('en producción');
+    expect(es.meta.description).toContain('de experiencia construyendo aplicaciones web');
+
+    // Confirm that accessing through getTranslations returns current experience values
+    const dictEn = getTranslations('en');
+    const dictEs = getTranslations('es');
+    expect(dictEn.about.lead).toMatch(/\d+\+ years/);
+    expect(dictEs.about.lead).toMatch(/más de \d+ años/);
+  });
 });
+

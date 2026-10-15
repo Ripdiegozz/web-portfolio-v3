@@ -13,6 +13,10 @@ describe('Experience Calculation Utilities', () => {
   });
 
   it('calculates completed years of experience accurately across milestones', () => {
+    // Before career start date or epoch:
+    expect(getYearsOfExperience(new Date('1970-01-01T00:00:00Z'))).toBe(0);
+    expect(getYearsOfExperience(new Date('2023-07-31T00:00:00Z'))).toBe(0);
+
     // Before completing 1 full year:
     expect(getYearsOfExperience(new Date('2024-05-01T00:00:00Z'))).toBe(1);
 

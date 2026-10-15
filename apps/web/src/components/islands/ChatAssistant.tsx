@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, type KeyboardEvent } from 'react';
+import { Presence } from '@damped/react';
 import { User, Sparkles, Send, X, RotateCcw, AlertCircle, ThinkingOrb, ExternalLink } from '@portfolio/ui';
 import type { ChatAssistantTranslations, Locale } from '../../i18n/types';
 
@@ -111,6 +112,13 @@ function renderFormattedText(
 
 export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+  const handleClose = () => {
+    setIsOpen(false);
+    triggerRef.current?.focus();
+  };
+
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorStatus, setErrorStatus] = useState<string | null>(null);
@@ -176,7 +184,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
   useEffect(() => {
     const handleKeyDown = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
-        setIsOpen(false);
+        handleClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -296,6 +304,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
       {/* Floating Trigger Button */}
       <div className="fixed bottom-5 right-5 z-40">
         <button
+          ref={triggerRef}
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
           className="cursor-pointer group relative flex items-center gap-2.5 rounded-full border border-border-subtle bg-bg-raised px-3.5 py-2 text-sm font-medium text-text-primary shadow-2xl transition-all duration-200 hover:border-accent hover:bg-bg-subtle hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-accent"
@@ -316,13 +325,19 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
       </div>
 
       {/* Chat Window Panel */}
-      {isOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={title}
-          className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-50 flex h-[100dvh] sm:h-[520px] sm:max-h-[82vh] w-full sm:w-[400px] flex-col overflow-hidden sm:rounded-2xl sm:border sm:border-border-subtle bg-bg shadow-2xl animate-in fade-in sm:zoom-in-95"
-        >
+      <Presence
+        enter={{ opacity: 0, scale: 0.92, y: 12 }}
+        exit={{ opacity: 0, scale: 0.92, y: 12 }}
+        options={{ duration: 0.35, bounce: 0.15 }}
+      >
+        {isOpen && (
+          <div
+            key="chat-assistant-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
+            className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-50 flex h-[100dvh] sm:h-[520px] sm:max-h-[82vh] w-full sm:w-[400px] flex-col overflow-hidden sm:rounded-2xl sm:border sm:border-border-subtle bg-bg shadow-2xl origin-bottom sm:origin-bottom-right"
+          >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border-subtle bg-bg-raised px-4 py-3 sm:py-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
             <div className="flex items-center gap-2.5">
@@ -349,7 +364,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
               </button>
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={handleClose}
                 title={closeLabel}
                 className="cursor-pointer rounded-lg p-2 text-text-muted transition-colors hover:bg-bg hover:text-text-primary focus:outline-none"
               >
@@ -469,6 +484,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
           </form>
         </div>
       )}
-    </>
+    </Presence>
+  </>
   );
 }

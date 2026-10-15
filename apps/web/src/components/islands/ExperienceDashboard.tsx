@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Presence } from '@damped/react';
 import { Calendar, MapPin, Sparkles, TechIcon, ArrowUpRight } from '@portfolio/ui';
 import type { ExperienceItem, ExperienceDashboardLabels } from '../../i18n/types';
 
@@ -66,12 +67,14 @@ export default function ExperienceDashboard({ items, labels }: ExperienceDashboa
       </div>
 
       {/* Full Width Detail Panel */}
-      <div
-        role="tabpanel"
-        id={`experience-panel-${selectedIndex}`}
-        aria-labelledby={`experience-tab-${selectedIndex}`}
-        className="rounded-2xl border border-border-subtle/80 bg-bg-raised/30 p-6 sm:p-8 backdrop-blur-xs transition-all duration-300 animate-in fade-in"
-      >
+      <Presence enter={{ opacity: 0, y: 8 }} options={{ duration: 0.25, bounce: 0 }}>
+        <div
+          key={activeJob.company}
+          role="tabpanel"
+          id={`experience-panel-${selectedIndex}`}
+          aria-labelledby={`experience-tab-${selectedIndex}`}
+          className="rounded-2xl border border-border-subtle/80 bg-bg-raised/30 p-6 sm:p-8 backdrop-blur-xs"
+        >
         {/* Header: Role, Company & Period */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border-subtle/50 pb-6">
           <div>
@@ -190,6 +193,7 @@ export default function ExperienceDashboard({ items, labels }: ExperienceDashboa
           </div>
         )}
       </div>
-    </div>
+    </Presence>
+  </div>
   );
 }

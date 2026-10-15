@@ -42,8 +42,6 @@ export interface AboutTranslations {
   sectionTitle: string;
   lead: string;
   support: string;
-  philosophyQuote?: string;
-  philosophyLabel?: string;
 }
 
 export interface ExperienceTranslations {
@@ -60,6 +58,7 @@ export interface ExperienceTranslations {
 export interface CoreSkill {
   name: string;
   role: string;
+  context?: string;
 }
 
 export interface SkillCategoryGroup {

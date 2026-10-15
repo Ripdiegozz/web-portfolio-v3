@@ -1,0 +1,83 @@
+---
+interface Props {
+  locale?: 'en' | 'es';
+}
+
+const { locale = 'en' } = Astro.props;
+---
+
+<script is:inline define:vars={{ locale }}>
+  function initHeadingPermalinks() {
+    const article = document.querySelector('article.prose');
+    if (!article) return;
+
+    const headings = article.querySelectorAll('h2[id], h3[id]');
+    const copyLabel = locale === 'es' ? 'Copiar enlace a esta sección' : 'Copy link to section';
+    const copiedLabel = locale === 'es' ? '¡Enlace copiado!' : 'Link copied!';
+
+    headings.forEach((heading) => {
+      if (heading.querySelector('.heading-permalink')) return;
+
+      heading.classList.add('group');
+
+      const id = heading.id;
+      const a = document.createElement('a');
+      a.href = '#' + id;
+      a.className =
+        'heading-permalink ml-2 inline-flex items-center justify-center align-middle rounded-md p-1 text-text-muted opacity-0 transition-all duration-150 group-hover:opacity-100 hover:bg-bg-raised hover:text-accent-readable focus:opacity-100 focus:outline-none focus-visible:ring-1 focus-visible:ring-accent';
+      a.setAttribute('aria-label', copyLabel);
+      a.setAttribute('title', copyLabel);
+
+      a.innerHTML = `
+        <svg class="permalink-icon size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+        </svg>
+        <svg class="check-icon hidden size-4 text-accent-readable" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      `;
+
+      a.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const url = new URL(window.location.href);
+        url.hash = id;
+
+        try {
+          await navigator.clipboard.writeText(url.toString());
+        } catch {
+          // Fallback if clipboard API is denied in context
+        }
+
+        heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.pushState(null, '', '#' + id);
+
+        const permalinkIcon = a.querySelector('.permalink-icon');
+        const checkIcon = a.querySelector('.check-icon');
+
+        if (permalinkIcon && checkIcon) {
+          permalinkIcon.classList.add('hidden');
+          checkIcon.classList.remove('hidden');
+          a.setAttribute('title', copiedLabel);
+          a.setAttribute('aria-label', copiedLabel);
+
+          setTimeout(() => {
+            permalinkIcon.classList.remove('hidden');
+            checkIcon.classList.add('hidden');
+            a.setAttribute('title', copyLabel);
+            a.setAttribute('aria-label', copyLabel);
+          }, 1500);
+        }
+      });
+
+      heading.appendChild(a);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeadingPermalinks);
+  } else {
+    initHeadingPermalinks();
+  }
+  document.addEventListener('astro:page-load', initHeadingPermalinks);
+</script>

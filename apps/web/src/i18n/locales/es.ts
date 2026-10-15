@@ -1,13 +1,17 @@
+import { formatHeroKicker, formatYearsOfExperience } from '../../lib/experience';
 import type { TranslationDictionary } from '../types';
+
+const expYears = formatYearsOfExperience('es');
+const heroKicker = formatHeroKicker('es');
 
 export const es: TranslationDictionary = {
   meta: {
-    title: 'Diego García — Desarrollador Full Stack & Software Engineer',
+    title: 'Diego García — Desarrollador Full-Stack & Software Engineer',
     description:
-      'Diego Alonso García (dagadev), Desarrollador Full Stack en Colombia e Ingeniero en Wazuh. Especializado en aplicaciones web, IA y sistemas escalables.',
+      `Diego Alonso García, Ingeniero Full-Stack en Wazuh, Colombia, con ${expYears} de experiencia construyendo aplicaciones web escalables, herramientas de IA y backends de alto rendimiento para más de 90.000 usuarios.`,
     ogLocale: 'es_ES',
     keywords:
-      'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García Guerrero, Diego Alonso Garcia Guerrero, Diego García, Diego Garcia, dagadev, Desarrollador Full Stack, Ingeniero Full-Stack, Ingeniero de Software, Desarrollador Web, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
+      'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García Guerrero, Diego Alonso Garcia Guerrero, Diego García, Diego Garcia, dagadev, Desarrollador Full-Stack, Ingeniero Full-Stack, Ingeniero de Software, Desarrollador Web, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
   },
   nav: {
     about: 'Sobre mí',
@@ -23,11 +27,11 @@ export const es: TranslationDictionary = {
     skipToContent: 'Saltar al contenido',
   },
   hero: {
-    kicker: 'Ingeniero Full-Stack',
+    kicker: heroKicker,
     headlineStart: 'Construyo ',
     headlineEmphasis: 'software',
     headlineEnd: ' que llega a producción.',
-    lead: 'Soy Diego Alonso García (dagadev), ingeniero de software y desarrollador full-stack en Wazuh. Construyo software de alto impacto que llega a producción para más de 90.000 usuarios.',
+    lead: `Soy Diego Alonso García, ingeniero full-stack en Wazuh, con ${expYears} construyendo software en producción. Diseño y construyo herramientas de IA, backends escalables y aplicaciones web para más de 90.000 usuarios.`,
     contactButton: 'Escríbeme',
     githubAriaLabel: 'Perfil de GitHub',
     linkedinAriaLabel: 'Perfil de LinkedIn',
@@ -39,10 +43,9 @@ export const es: TranslationDictionary = {
   },
   about: {
     sectionTitle: 'Sobre mí.',
-    lead: 'Ingeniero full-stack especializado en aplicaciones web de alto rendimiento, herramientas LLM y sistemas distribuidos.',
-    philosophyQuote: '« Diseñando herramientas impulsadas por IA y arquitecturas distribuidas construidas para escalar sin compromisos. »',
+    lead: `Ingeniero full-stack con ${expYears} construyendo aplicaciones web en producción, herramientas LLM y sistemas distribuidos, desde software financiero de back-office hasta herramientas de IA en Wazuh.`,
     support:
-      'Actualmente en Wazuh desarrollando el Wazuh AI Assistant para más de 90.000 analistas de seguridad. Anteriormente construí herramientas empresariales en Tres Pi Medios para Stanley Black & Decker (Italia y EE. UU.) y software financiero para más de 1.100 puntos de atención de SuperGIROS en Colombia. Mi enfoque es práctico: backends confiables, bases de datos eficientes e interfaces rápidas y accesibles.',
+      'Comencé en SuperGIROS, donde diseñé y construí herramientas de back-office para más de 1.100 puntos de atención, un chatbot que redujo las llamadas a la mesa de ayuda en un 60% y mejoras web que aumentaron la velocidad de carga en un 40%. En Tres Pi Medios, diseñé y construí herramientas para Stanley Black & Decker, reduciendo el tiempo de las tareas en un 50% en Italia y automatizando el soporte de Zendesk con IA para EE. UU. y Canadá. Ahora, en Wazuh, diseño y construyo el Wazuh AI Assistant de principio a fin para una plataforma utilizada por más de 90.000 usuarios.',
   },
   experience: {
     sectionTitle: 'Trayectoria profesional.',
@@ -57,19 +60,28 @@ export const es: TranslationDictionary = {
         company: 'Wazuh',
         companyUrl: 'https://wazuh.com',
         role: 'Ingeniero Full-Stack',
-        period: 'Actual',
+        period: 'Ene 2026 – Actualidad',
         current: true,
         location: 'Remoto',
         highlights: [
-          'Desarrollo del Wazuh AI Assistant: herramientas backend que permiten a analistas de seguridad consultar datos mediante lenguaje natural.',
-          'Desarrollo de funcionalidades full-stack, integraciones con OpenSearch y lanzamientos del dashboard web de Wazuh.',
-          'Automatización de pipelines CI/CD con GitHub Actions para pruebas y empaquetado Linux en más de 90.000 despliegues.',
+          'Diseñé y construí el Wazuh AI Assistant de principio a fin, desde la idea y el diseño hasta el PR fusionado: renovación de herramientas, aplicación de la política de privacidad de no enviar nunca datos sensibles, sanitización por RBAC y persistencia de sesiones, para que los analistas consulten datos de la plataforma en lenguaje natural.',
+          'Diseñé e implementé el endurecimiento de seguridad del dashboard: cifrado en reposo de las claves API de proveedores, una clave de cifrado generada en la instalación y correcciones de inyección en logs y CSV.',
+          'Construí nuevas superficies y mejoras de plataforma, incluida la gestión de casos, dashboards de Engine Health y una búsqueda unificada de Security Analytics, junto con minificación del bundle y reducción de dependencias para un dashboard utilizado por más de 90.000 usuarios.',
         ],
-        skills: ['TypeScript', 'React', 'Node.js', 'Elasticsearch', 'OpenSearch', 'OpenAI', 'Docker', 'Linux'],
+        skills: [
+          'TypeScript',
+          'React',
+          'Node.js',
+          'Elasticsearch',
+          'OpenSearch',
+          'OpenAI',
+          'Docker',
+          'Linux',
+        ],
         kpis: [
           { value: '+90k usuarios', label: 'Despliegues de plataforma' },
+          { value: '130+ PR fusionados', label: 'Contribuciones open-source' },
           { value: 'AI Assistant', label: 'Herramientas GenAI' },
-          { value: 'XDR / SIEM', label: 'Panel de Seguridad' },
         ],
       },
       {
@@ -77,15 +89,27 @@ export const es: TranslationDictionary = {
         companyUrl: 'https://www.trespimedios.co/',
         client: 'Stanley Black & Decker',
         clientUrl: 'https://www.stanleyblackanddecker.com',
-        role: 'Desarrollador Full-stack',
+        role: 'Desarrollador Full-Stack',
         period: 'Jul 2024 – Ene 2026',
         location: 'Remoto',
         highlights: [
-          'Desarrollo de una plataforma web para gestión y reparación de herramientas para el cliente Stanley Black & Decker Italia, reduciendo el tiempo de atención en un 50%.',
-          'Creación de una Azure Function con IA generativa para automatizar respuestas de soporte técnico para Stanley Black & Decker (EE. UU. y Canadá).',
-          'Integración de flujos de datos en tiempo real para dashboards de Power BI y soporte multi-idioma (italiano e inglés).',
+          'Diseñé y construí una plataforma web para gestión y reparación de herramientas para el cliente Stanley Black & Decker Italia, reduciendo el tiempo de atención en un 50%.',
+          'Diseñé y construí una Azure Function con IA generativa para automatizar respuestas de soporte técnico para Stanley Black & Decker (EE. UU. y Canadá).',
+          'Diseñé y construí flujos de datos en tiempo real para dashboards de Power BI y lancé soporte multi-idioma (italiano e inglés).',
         ],
-        skills: ['TypeScript', 'Node.js', 'Express.js', 'React', 'PostgreSQL', 'MongoDB', 'AWS', 'Azure', 'OpenAI', 'Docker', 'Power BI'],
+        skills: [
+          'TypeScript',
+          'Node.js',
+          'Express.js',
+          'React',
+          'PostgreSQL',
+          'MongoDB',
+          'AWS',
+          'Azure',
+          'OpenAI',
+          'Docker',
+          'Power BI',
+        ],
         kpis: [
           { value: '-50% tiempo', label: 'App de reparación (Italia)' },
           { value: 'Zendesk AI', label: 'Bot de soporte (EE. UU./CA)' },
@@ -95,15 +119,24 @@ export const es: TranslationDictionary = {
       {
         company: 'SuperGIROS',
         companyUrl: 'https://www.supergiros.com.co',
-        role: 'Desarrollador Full-stack',
+        role: 'Desarrollador Full-Stack',
         period: 'Ago 2023 – Jul 2024',
         location: 'Presencial / Híbrido',
         highlights: [
-          'Desarrollo de herramientas internas de back-office para más de 1.100 puntos de atención en Norte de Santander.',
-          'Creación de un chatbot en Node.js que redujo las llamadas a la mesa de ayuda en un 60%.',
+          'Diseñé y construí herramientas internas de back-office para más de 1.100 puntos de atención en Norte de Santander.',
+          'Diseñé y construí un chatbot en Node.js que redujo las llamadas a la mesa de ayuda en un 60%.',
           'Optimización del rendimiento web en un 40% mediante refactorización, actualización de Angular y microservicios en Java/Spring Boot con Oracle SQL.',
         ],
-        skills: ['Node.js', 'TypeScript', 'Angular', 'Java', 'Spring Boot', 'PostgreSQL', 'Oracle SQL', 'Docker'],
+        skills: [
+          'Node.js',
+          'TypeScript',
+          'Angular',
+          'Java',
+          'Spring Boot',
+          'PostgreSQL',
+          'Oracle SQL',
+          'Docker',
+        ],
         kpis: [
           { value: '+1.100 puntos', label: 'Puntos de atención' },
           { value: '-60% llamadas', label: 'Mesa de ayuda interna' },
@@ -114,42 +147,84 @@ export const es: TranslationDictionary = {
   },
   skills: {
     sectionTitle: 'Stack técnico y herramientas.',
-    sectionDescription: 'Tecnologías y herramientas que utilizo para construir software en producción.',
+    sectionDescription:
+      'Tecnologías y herramientas que utilizo para construir software en producción.',
     coreStackTitle: 'Stack Principal y Herramientas Diarias',
-    coreStackSubtitle: 'Herramientas y tecnologías que uso a diario en producción',
+    coreStackSubtitle:
+      'Herramientas principales para sistemas en producción y herramientas de agentes en Wazuh',
     coreSkills: [
       { name: 'TypeScript', role: 'Lenguaje Principal' },
       { name: 'React', role: 'Arquitectura Frontend' },
-      { name: 'Next.js', role: 'Framework de Producción' },
-      { name: 'Node.js', role: 'Runtime Backend' },
+      { name: 'Node.js', role: 'Runtime y APIs' },
+      { name: 'OpenSearch', role: 'Búsqueda Distribuida & SIEM' },
+      { name: 'Elasticsearch', role: 'Indexación y Telemetría' },
+      { name: 'OpenAI', role: 'Tooling de Agentes & LLMs' },
+      { name: 'Docker', role: 'Contenedores y CI' },
+      { name: 'Linux', role: 'Entornos de Sistema' },
       { name: 'PostgreSQL', role: 'Base de Datos Relacional' },
-      { name: 'Elasticsearch', role: 'Búsqueda Distribuida y SIEM' },
-      { name: 'OpenAI', role: 'Herramientas de Agentes IA' },
       { name: 'Tailwind CSS', role: 'Sistemas de Diseño' },
-      { name: 'Docker', role: 'Contenedores' },
-      { name: 'Git', role: 'Control de Versiones' },
     ],
     categories: [
       {
         id: 'frontend',
         title: 'Frontend y Sistemas de UI',
         iconName: 'Layers',
-        description: 'Arquitectura de componentes, gestión de estado y diseño accesible.',
-        skills: ['React', 'Next.js', 'TypeScript', 'Angular', 'Tailwind CSS', 'Astro', 'Redux', 'Vite', 'HTML5', 'CSS3', 'Sass'],
+        description:
+          'Arquitectura de componentes, gestión de estado y sistemas de diseño accesibles.',
+        skills: [
+          'TypeScript',
+          'React',
+          'Next.js',
+          'Tailwind CSS',
+          'Astro',
+          'Angular',
+          'Redux',
+          'Vite',
+          'HTML5',
+          'CSS3',
+          'Sass',
+        ],
       },
       {
         id: 'backend',
         title: 'Backend y Arquitectura de Datos',
         iconName: 'Cpu',
-        description: 'Microservicios REST, diseño de bases de datos, búsqueda distribuida e integraciones con LLM.',
-        skills: ['Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'Elasticsearch', 'OpenSearch', 'MySQL', 'Oracle SQL', 'OpenAI', 'Java', 'Spring Boot', 'Bash'],
+        description:
+          'APIs de alto rendimiento, búsqueda distribuida y tooling de LLMs.',
+        skills: [
+          'Node.js',
+          'OpenSearch',
+          'Elasticsearch',
+          'PostgreSQL',
+          'Express',
+          'OpenAI',
+          'Oracle SQL',
+          'MongoDB',
+          'MySQL',
+          'Java',
+          'Spring Boot',
+          'Bash',
+        ],
       },
       {
         id: 'devops',
         title: 'Cloud, CI/CD y Testing',
         iconName: 'Shield',
-        description: 'Pipelines CI/CD, entornos en contenedores, despliegue cloud y pruebas automatizadas.',
-        skills: ['Docker', 'Linux', 'GitHub Actions', 'AWS', 'Azure', 'Vitest', 'Jest', 'Playwright', 'Turborepo', 'NPM', 'Yarn'],
+        description:
+          'Pipelines de integración, infraestructura en la nube y pruebas automatizadas.',
+        skills: [
+          'Docker',
+          'Linux',
+          'GitHub Actions',
+          'AWS',
+          'Azure',
+          'Vitest',
+          'Jest',
+          'Playwright',
+          'Turborepo',
+          'NPM',
+          'Yarn',
+        ],
       },
     ],
   },
@@ -167,12 +242,12 @@ export const es: TranslationDictionary = {
         liveUrl: 'https://wazuh.com',
       },
       {
-        name: 'NatGPT',
+        name: 'damped',
         description:
-          'Plataforma de chat con IA, grabación de voz, transcripción y respuestas en tiempo real por streaming.',
-        stack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Convex', 'OpenAI', 'Clerk'],
-        repoUrl: 'https://github.com/Ripdiegozz/nat-gpt',
-        liveUrl: 'https://nat-gpt.vercel.app/',
+          'Librería de animaciones físicas basadas en resortes para la web, React y React Native. Core de menos de 7 KB con transiciones de layout y soporte de accesibilidad.',
+        stack: ['TypeScript', 'React', 'Playwright'],
+        repoUrl: 'https://github.com/Ripdiegozz/damped',
+        liveUrl: 'https://damped.dagadev.net',
       },
       {
         name: 'Notewave',
@@ -194,7 +269,8 @@ export const es: TranslationDictionary = {
     less: 'Menos',
     more: 'Más',
     syncingTitle: 'La actividad de GitHub se está sincronizando',
-    syncingDescription: 'Configura tu GITHUB_TOKEN para ver analíticas de contribución en tiempo real.',
+    syncingDescription:
+      'Configura tu GITHUB_TOKEN para ver analíticas de contribución en tiempo real.',
     viewOnGithub: 'Ver en GitHub',
     inTheLastYear: 'en el último año',
     singularContribution: 'contribución',
@@ -255,7 +331,8 @@ export const es: TranslationDictionary = {
     sendAriaLabel: 'Enviar mensaje',
     clearAriaLabel: 'Limpiar conversación',
     closeAriaLabel: 'Cerrar asistente',
-    initialMessage: '¡Hola! Pregúntame lo que quieras sobre mi experiencia en Wazuh, proyectos, stack técnico o cómo contactarme.',
+    initialMessage:
+      '¡Hola! Pregúntame lo que quieras sobre mi experiencia en Wazuh, proyectos, stack técnico o cómo contactarme.',
     suggestedQuestions: [
       '¿Qué haces en Wazuh?',
       '¿Cuáles son tus tecnologías principales?',
@@ -263,6 +340,7 @@ export const es: TranslationDictionary = {
     ],
     disclaimer: 'Respuestas generadas con IA basadas en datos verificados de ingeniería.',
     errorMessage: 'Ocurrió un error al procesar tu pregunta. Por favor intenta de nuevo.',
-    rateLimitMessage: 'Has alcanzado el límite de preguntas. Por favor intenta de nuevo en unos minutos o usa el formulario de contacto.',
+    rateLimitMessage:
+      'Has alcanzado el límite de preguntas. Por favor intenta de nuevo en unos minutos o usa el formulario de contacto.',
   },
 };

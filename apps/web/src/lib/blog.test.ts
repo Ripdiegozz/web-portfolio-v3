@@ -1,5 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { formatBlogDate, getReadingTime, isPublished, sortPostsByDateDesc } from './blog';
+import {
+  filterTocHeadings,
+  findActiveHeading,
+  formatBlogDate,
+  getReadingTime,
+  isPublished,
+  sortPostsByDateDesc,
+} from './blog';
 
 const makeEntry = (pubDate: string, draft = false) =>
   ({ data: { pubDate: new Date(pubDate), draft } });
@@ -58,5 +65,53 @@ describe('formatBlogDate', () => {
     const formatted = formatBlogDate(d, 'es');
     expect(formatted).toContain('2026');
     expect(formatted.toLowerCase()).toContain('ago');
+  });
+});
+
+describe('filterTocHeadings', () => {
+  it('keeps only h2 and h3 headings', () => {
+    const headings = [
+      { depth: 1, slug: 'intro', text: 'Intro' },
+      { depth: 2, slug: 'section-1', text: 'Section 1' },
+      { depth: 3, slug: 'subsection-1', text: 'Subsection 1' },
+      { depth: 4, slug: 'deep', text: 'Deep' },
+    ];
+    const filtered = filterTocHeadings(headings);
+    expect(filtered).toHaveLength(2);
+    expect(filtered.map((h) => h.slug)).toEqual(['section-1', 'subsection-1']);
+  });
+});
+
+describe('findActiveHeading', () => {
+  const headings = [
+    { id: 'why-keystatic', top: 200 },
+    { id: 'stack', top: 500 },
+    { id: 'deployment', top: 900 },
+  ];
+
+  it('returns empty string when headings are empty', () => {
+    expect(findActiveHeading([])).toBe('');
+  });
+
+  it('returns first heading when user is near the top before crossing threshold', () => {
+    expect(findActiveHeading(headings, 110)).toBe('why-keystatic');
+  });
+
+  it('returns currently passed heading below threshold', () => {
+    const scrolled = [
+      { id: 'why-keystatic', top: -100 },
+      { id: 'stack', top: 80 },
+      { id: 'deployment', top: 400 },
+    ];
+    expect(findActiveHeading(scrolled, 110)).toBe('stack');
+  });
+
+  it('returns last heading when at the bottom of the page regardless of threshold', () => {
+    const atBottom = [
+      { id: 'why-keystatic', top: -600 },
+      { id: 'stack', top: -300 },
+      { id: 'deployment', top: 180 }, // still above 110 threshold
+    ];
+    expect(findActiveHeading(atBottom, 110, true)).toBe('deployment');
   });
 });

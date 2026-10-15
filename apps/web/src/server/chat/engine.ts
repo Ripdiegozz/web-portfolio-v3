@@ -8,34 +8,47 @@ export interface ChatRequestPayload {
   locale?: 'en' | 'es';
 }
 
+import { formatYearsOfExperience, getYearsOfExperience } from '../../lib/experience';
+
 export interface ChatEngineOptions {
   workersAi?: { run(model: string, input: unknown): Promise<unknown> } | undefined;
   geminiApiKey?: string | undefined;
   openaiApiKey?: string | undefined;
+  referenceDate?: Date | undefined;
 }
 
-export const PORTFOLIO_KNOWLEDGE_BASE = `
+export function buildPortfolioKnowledgeBase(referenceDate: Date = new Date()): string {
+  const expYearsSnippetEn = formatYearsOfExperience('en', referenceDate);
+
+  return `
 Identity & Background:
-- Full Name: Diego Alonso García Guerrero (dagadev)
-- Professional Title: Full-Stack Software Engineer & AI Tooling Developer
+- Full Name: Diego Alonso García Guerrero
+- Professional Title: Full-Stack Engineer
+- Experience: ${expYearsSnippetEn} building production software (since Aug 2023)
 - Location: Colombia (Remote)
 - Context: This chat assistant is embedded directly inside Diego's interactive portfolio website.
 - LinkedIn: https://www.linkedin.com/in/dagadev
 - GitHub: https://github.com/Ripdiegozz
 
 Current Role:
-- Company: Wazuh (Current)
-- Role: Full-Stack Engineer
-- Responsibilities & Achievements:
-  - Developing the Wazuh AI Assistant: backend tooling enabling security analysts to query complex SIEM/XDR security data using natural language.
-  - Full-stack features, OpenSearch / Elasticsearch integrations, and releases for the Wazuh web dashboard.
-  - Automating CI/CD pipelines with GitHub Actions to test and build Linux packages for 90,000+ deployments.
+- Company: Wazuh | Jan 2026 – Present
+- Role: Full-Stack Engineer (Remote)
+- Key Responsibilities & Achievements:
+  - Designed and built the Wazuh AI Assistant end to end (tools revamp, privacy never-send enforcement, RBAC sanitization, session persistence), enabling security analysts to query platform data using natural language.
+  - Designed and shipped security hardening across the dashboard: provider API-key encryption at rest, encryption key generated on install, and log/CSV injection fixes.
+  - Built new surfaces and platform improvements: Case management, Engine Health dashboards, unified Security Analytics search, bundle minification, and dependency reduction for 90,000+ deployments across open-source dashboard repositories (130+ merged PRs).
 
 Previous Roles & Impact:
 - Company: Tres Pi Medios (Client: Stanley Black & Decker) | Jul 2024 – Jan 2026
-  - Built an internal tool loan and repair app for Stanley Black & Decker Italy, cutting task completion time by 50%.
-  - Developed an Azure Function with Generative AI automating Zendesk customer support replies for Stanley Black & Decker US & Canada.
+  - Role: Full-Stack Developer (Remote)
+  - Designed and built an internal tool loan and repair app for Stanley Black & Decker Italy, cutting task completion time by 50%.
+  - Designed and built an Azure Function integrating generative AI to automate Zendesk customer support replies for Stanley Black & Decker in the US and Canada.
   - Built real-time data feeds for Power BI operational dashboards with i18n support for Italian and English.
+- Company: SuperGIROS | Aug 2023 – Jul 2024
+  - Role: Full-Stack Developer Intern (On-site / Hybrid)
+  - Designed and built internal back-office tools serving 1,100+ financial service points in Norte de Santander.
+  - Designed and built a Node.js sales chatbot that reduced helpdesk support calls by 60%.
+  - Improved web app load speed by 40% through code refactoring, Angular upgrades, and Java/Spring Boot microservices connected to Oracle databases.
 
 Technical Stack & Core Skills:
 - Languages: TypeScript, JavaScript, Python, SQL, HTML5, CSS3
@@ -48,26 +61,31 @@ Technical Stack & Core Skills:
 
 Featured Projects:
 - wazuh-dashboard: Open-source web interface for Wazuh security platform (TypeScript, React, OpenSearch, Docker).
-- NatGPT: AI chat platform with voice recording, transcription, and real-time streaming (React, Next.js, Convex, OpenAI, Clerk).
+- damped: Interruptible, physically based spring animation library for the web, React, and React Native (TypeScript, React, Playwright).
 - Notewave: Note-taking app with markdown editing and task management.
 - Section Link: [Projects](#projects)
 
 Experience & Career:
-- Wazuh (Current): Full-Stack Engineer on Wazuh AI Assistant & Dashboard.
-- Tres Pi Medios: Stanley Black & Decker (Italy & US/Canada).
+- Wazuh (Jan 2026 – Present): Full-Stack Engineer on Wazuh AI Assistant, Security Hardening & Dashboard (90k+ users, 130+ merged PRs).
+- Tres Pi Medios (Jul 2024 – Jan 2026): Full-Stack Developer for Stanley Black & Decker (Italy & US/Canada).
+- SuperGIROS (Aug 2023 – Jul 2024): Full-Stack Developer Intern (1,100+ points, chatbot, 40% speedup).
 - Section Link: [Experience](#experience)
 
 Contact & Availability:
 - How to get in touch: Through the [Contact Form](#contact) directly on this portfolio or via LinkedIn at https://www.linkedin.com/in/dagadev.
 `;
+}
 
-export function buildSystemPrompt(locale: 'en' | 'es' = 'en'): string {
+export function buildSystemPrompt(
+  locale: 'en' | 'es' = 'en',
+  referenceDate: Date = new Date(),
+): string {
   const languageDirective =
     locale === 'es'
       ? 'Responde SIEMPRE en español de forma profesional, clara, concisa y amigable.'
       : 'ALWAYS respond in English in a professional, clear, concise, and friendly tone.';
 
-  return `You are "Diego AI", the personal portfolio assistant for Diego Alonso García Guerrero (dagadev).
+  return `You are "Diego AI", the personal portfolio assistant for Diego Alonso García Guerrero.
 Your mission is to represent Diego, answer questions from recruiters, engineers, and clients about his real experience, technical stack, projects, and how to get in touch with him.
 
 ${languageDirective}
@@ -87,7 +105,7 @@ Strict Guardrails & Constraints:
 7. CONCISE TONE: Keep answers concise (2 to 4 sentences or a clean bulleted list).
 
 --- Knowledge Base ---
-${PORTFOLIO_KNOWLEDGE_BASE}
+${buildPortfolioKnowledgeBase(referenceDate)}
 `;
 }
 
@@ -119,8 +137,8 @@ export function checkInputGuardrails(userMessage: string, locale: 'en' | 'es'): 
   for (const pattern of creativeWritingPatterns) {
     if (pattern.test(text)) {
       return locale === 'es'
-        ? 'Solo puedo responder preguntas sobre el perfil profesional y proyectos de Diego, no genero historias o contenido ficticio. ¿Quieres que te cuente sobre sus proyectos reales como NatGPT o Wazuh Dashboard?'
-        : "I can only assist with real information regarding Diego's engineering work and projects, and do not generate fictional stories. Would you like to know about his real projects like NatGPT or Wazuh Dashboard?";
+        ? 'Solo puedo responder preguntas sobre el perfil profesional y proyectos de Diego, no genero historias o contenido ficticio. ¿Quieres que te cuente sobre sus proyectos reales como damped o Wazuh Dashboard?'
+        : "I can only assist with real information regarding Diego's engineering work and projects, and do not generate fictional stories. Would you like to know about his real projects like damped or Wazuh Dashboard?";
     }
   }
 
@@ -143,57 +161,121 @@ export function checkInputGuardrails(userMessage: string, locale: 'en' | 'es'): 
 }
 
 /** Fallback rule-based answering for offline / local dev when no LLM API key is present. */
-export function generateLocalFallbackResponse(userMessage: string, locale: 'en' | 'es' = 'en'): string {
+export function generateLocalFallbackResponse(
+  userMessage: string,
+  locale: 'en' | 'es' = 'en',
+  referenceDate: Date = new Date(),
+): string {
   const guardrail = checkInputGuardrails(userMessage, locale);
   if (guardrail) return guardrail;
 
+  const expYearsSnippetEn = formatYearsOfExperience('en', referenceDate);
+  const expYearsCount = getYearsOfExperience(referenceDate);
   const query = userMessage.toLowerCase();
 
   if (locale === 'es') {
-    if (query.includes('wazuh') || query.includes('trabajo') || query.includes('actual') || query.includes('experiencia')) {
-      return 'Actualmente Diego es Ingeniero Full-Stack en Wazuh, donde construye el **Wazuh AI Assistant** (herramientas de IA para consultar datos de seguridad con lenguaje natural), integraciones con OpenSearch y pipelines de CI/CD para más de 90.000 despliegues. Conoce más en la sección de [Experiencia](#experience).';
+    if (query.includes('wazuh') || query.includes('actual')) {
+      return 'Actualmente Diego es Ingeniero Full-Stack en Wazuh (desde enero de 2026), donde diseñó y construyó el **Wazuh AI Assistant** de principio a fin, implementó el endurecimiento de seguridad y mejoras en la plataforma para más de 90.000 despliegues (con 130+ PRs fusionados). Conoce más en la sección de [Experiencia](#experience).';
     }
-    if (query.includes('stack') || query.includes('tecnolog') || query.includes('skills') || query.includes('react') || query.includes('node') || query.includes('ia') || query.includes('ai')) {
+    if (
+      query.includes('experiencia') ||
+      query.includes('trayectoria') ||
+      query.includes('carrera') ||
+      query.includes('historia') ||
+      query.includes('supergiros') ||
+      query.includes('tres pi') ||
+      query.includes('stanley') ||
+      query.includes('años') ||
+      query.includes('trabajo')
+    ) {
+      return `Diego cuenta con más de **${expYearsCount} años de experiencia** construyendo software en producción: inició en **SuperGIROS** (herramientas para 1.100+ puntos de atención y chatbot que redujo llamadas un 60%), continuó en **Tres Pi Medios** para Stanley Black & Decker (reducción del 50% en tiempo de app y bot de soporte con IA), y actualmente en **Wazuh** liderando features clave de AI Assistant y seguridad. Explora su trayectoria en [Experiencia](#experience).`;
+    }
+    if (
+      query.includes('stack') ||
+      query.includes('tecnolog') ||
+      query.includes('skills') ||
+      query.includes('react') ||
+      query.includes('node') ||
+      query.includes('ia') ||
+      query.includes('ai')
+    ) {
       return 'El stack principal de Diego incluye **TypeScript, React 19, Astro, Node.js, Python, OpenSearch, Tailwind CSS, Cloudflare Workers y Docker**, con especialización en tooling de IA y sistemas escalables. Puedes ver el bento grid completo en la sección de [Habilidades](#skills).';
     }
-    if (query.includes('contact') || query.includes('email') || query.includes('contrat') || query.includes('linkedin') || query.includes('escribir') || query.includes('tocar')) {
+    if (
+      query.includes('contact') ||
+      query.includes('email') ||
+      query.includes('contrat') ||
+      query.includes('linkedin') ||
+      query.includes('escribir') ||
+      query.includes('tocar')
+    ) {
       return 'Puedes ponerte en contacto con Diego a través del [Formulario de Contacto](#contact) en este portafolio o conectar directamente en su [Perfil de LinkedIn](https://www.linkedin.com/in/dagadev).';
     }
-    if (query.includes('proyect') || query.includes('natgpt') || query.includes('notewave')) {
-      return 'Entre sus proyectos destacados están el **Wazuh Dashboard** (SIEM/XDR de código abierto), **NatGPT** (plataforma de IA con voz y streaming) y **Notewave** (gestor de notas en markdown). Explóralos en la sección de [Proyectos](#projects).';
+    if (query.includes('proyect') || query.includes('damped') || query.includes('notewave')) {
+      return 'Entre sus proyectos destacados están el **Wazuh Dashboard** (SIEM/XDR de código abierto), **damped** (librería de animaciones físicas con resortes para React/Web) y **Notewave** (gestor de notas en markdown). Explóralos en la sección de [Proyectos](#projects).';
     }
     return '¡Hola! Soy el asistente de Diego. Puedo contarte sobre su [Experiencia](#experience) en Wazuh, su stack en [Habilidades](#skills), sus [Proyectos](#projects) destacados o cómo contactarlo en el [Formulario de Contacto](#contact).';
   }
 
   // English fallback
-  if (query.includes('wazuh') || query.includes('work') || query.includes('current') || query.includes('role') || query.includes('experience')) {
-    return "Diego is currently a Full-Stack Engineer at Wazuh, where he builds the **Wazuh AI Assistant** (enabling security analysts to query SIEM data using natural language), OpenSearch integrations, and CI/CD automation for 90,000+ deployments. Explore more in the [Experience](#experience) section.";
+  if (query.includes('wazuh') || query.includes('current')) {
+    return 'Diego is currently a Full-Stack Engineer at Wazuh (since Jan 2026), where he designed and built the **Wazuh AI Assistant** end to end, shipped security hardening across the dashboard, and delivered platform improvements for 90,000+ deployments with 130+ merged PRs. Explore more in the [Experience](#experience) section.';
   }
-  if (query.includes('stack') || query.includes('tech') || query.includes('skills') || query.includes('react') || query.includes('node') || query.includes('ai') || query.includes('llm')) {
+  if (
+    query.includes('experience') ||
+    query.includes('career') ||
+    query.includes('background') ||
+    query.includes('history') ||
+    query.includes('supergiros') ||
+    query.includes('tres pi') ||
+    query.includes('stanley') ||
+    query.includes('years') ||
+    query.includes('work') ||
+    query.includes('job')
+  ) {
+    return `Diego has **${expYearsSnippetEn} of experience** building production software: started at **SuperGIROS** (tools for 1,100+ branches and a chatbot cutting support calls by 60%), built enterprise tools for Stanley Black & Decker at **Tres Pi Medios** (-50% task time, AI support bot), and now designs AI tooling and scalable backends at **Wazuh**. Explore his career timeline in [Experience](#experience).`;
+  }
+  if (
+    query.includes('stack') ||
+    query.includes('tech') ||
+    query.includes('skills') ||
+    query.includes('react') ||
+    query.includes('node') ||
+    query.includes('ai') ||
+    query.includes('llm')
+  ) {
     return "Diego's primary stack includes **TypeScript, React 19, Astro, Node.js, Python, OpenSearch, Cloudflare Workers, Tailwind CSS, and Docker**, specializing in AI tooling and scalable web applications. Explore the full interactive bento grid in the [Skills](#skills) section.";
   }
-  if (query.includes('contact') || query.includes('hire') || query.includes('email') || query.includes('linkedin') || query.includes('reach') || query.includes('touch')) {
-    return "You can get in touch with Diego through the [Contact Form](#contact) directly on this portfolio or connect with him via [LinkedIn](https://www.linkedin.com/in/dagadev).";
+  if (
+    query.includes('contact') ||
+    query.includes('hire') ||
+    query.includes('email') ||
+    query.includes('linkedin') ||
+    query.includes('reach') ||
+    query.includes('touch')
+  ) {
+    return 'You can get in touch with Diego through the [Contact Form](#contact) directly on this portfolio or connect with him via [LinkedIn](https://www.linkedin.com/in/dagadev).';
   }
-  if (query.includes('project') || query.includes('natgpt') || query.includes('notewave')) {
-    return "Key highlighted projects include **Wazuh Dashboard** (open-source SIEM/XDR web UI), **NatGPT** (AI voice & streaming platform), and **Notewave** (rich-text markdown app). Check them out in the [Projects](#projects) section.";
+  if (query.includes('project') || query.includes('damped') || query.includes('notewave')) {
+    return 'Key highlighted projects include **Wazuh Dashboard** (open-source SIEM/XDR web UI), **damped** (physically based spring animation library for React and the web), and **Notewave** (rich-text markdown app). Check them out in the [Projects](#projects) section.';
   }
   return "Hello! I'm Diego's AI Assistant. Ask me anything about his work in [Experience](#experience), his core stack in [Skills](#skills), his [Projects](#projects), or how to get in touch via the [Contact Form](#contact).";
 }
 
 export async function processChatRequest(
   payload: ChatRequestPayload,
-  options: ChatEngineOptions
+  options: ChatEngineOptions,
 ): Promise<string> {
   const locale = payload.locale === 'es' ? 'es' : 'en';
-  const systemPrompt = buildSystemPrompt(locale);
+  const referenceDate = options.referenceDate ?? new Date();
+  const systemPrompt = buildSystemPrompt(locale, referenceDate);
 
   const cleanMessages = (payload.messages || [])
     .filter((m) => m && typeof m.content === 'string' && m.content.trim().length > 0)
     .slice(-6); // Keep last 6 turns for context efficiency
 
   if (cleanMessages.length === 0) {
-    return generateLocalFallbackResponse('', locale);
+    return generateLocalFallbackResponse('', locale, referenceDate);
   }
 
   const lastMessage = cleanMessages[cleanMessages.length - 1];
@@ -224,7 +306,11 @@ export async function processChatRequest(
           temperature: 0.3,
         })) as { response?: string };
 
-        if (response && typeof response.response === 'string' && response.response.trim().length > 0) {
+        if (
+          response &&
+          typeof response.response === 'string' &&
+          response.response.trim().length > 0
+        ) {
           return response.response.trim();
         }
       } catch (err) {
@@ -267,5 +353,5 @@ export async function processChatRequest(
   }
 
   // 3. Fallback to smart grounded local response
-  return generateLocalFallbackResponse(latestUserMessage, locale);
+  return generateLocalFallbackResponse(latestUserMessage, locale, referenceDate);
 }

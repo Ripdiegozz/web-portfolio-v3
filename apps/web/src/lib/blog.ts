@@ -54,3 +54,41 @@ export function formatBlogDate(date: Date, locale: Locale = 'en'): string {
 
   return formatter.format(date);
 }
+
+export interface TocHeading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+/**
+ * Filters headings for table of contents (h2 and h3).
+ */
+export function filterTocHeadings(headings: TocHeading[]): TocHeading[] {
+  return headings.filter((h) => h.depth === 2 || h.depth === 3);
+}
+
+/**
+ * Determines the active heading id based on current viewport coordinates.
+ */
+export function findActiveHeading(
+  headings: Array<{ id: string; top: number }>,
+  threshold = 110,
+  isBottom = false
+): string {
+  if (headings.length === 0) return '';
+  if (isBottom) {
+    return headings[headings.length - 1]?.id ?? '';
+  }
+
+  let currentId = '';
+  for (const h of headings) {
+    if (h.top <= threshold) {
+      currentId = h.id;
+    } else {
+      break;
+    }
+  }
+
+  return currentId || (headings[0]?.id ?? '');
+}

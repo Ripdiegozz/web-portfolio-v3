@@ -47,6 +47,7 @@ export default defineConfig({
       // the first page that mounts an island using it, forcing a full dev
       // server reload mid-session that wipes client-side React state.
       include: ['lucide-react'],
+      exclude: ['@astrojs/cloudflare'],
     },
     ssr: {
       // hono and zod (used by the /api/contact route) are otherwise only
@@ -54,6 +55,7 @@ export default defineConfig({
       // server reload mid-request that can crash with a missing-chunk error.
       optimizeDeps: {
         include: ['hono', 'zod'],
+        exclude: ['@astrojs/cloudflare'],
       },
     },
   },

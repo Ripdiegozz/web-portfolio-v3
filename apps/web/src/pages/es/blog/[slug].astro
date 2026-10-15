@@ -3,6 +3,7 @@ export const prerender = false;
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import TableOfContents from '../../../components/TableOfContents.astro';
+import HeadingPermalinks from '../../../components/HeadingPermalinks.astro';
 import { isPublished, getReadingTime, formatBlogDate } from '../../../lib/blog';
 import { getTranslations } from '../../../i18n';
 import type { Locale } from '../../../i18n/types';
@@ -93,28 +94,23 @@ const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length > 1
       />
     )}
 
-    <!-- Mobile ToC (before content) -->
-    {hasToc && (
-      <div class="mb-8 lg:hidden">
-        <TableOfContents headings={headings} label={t.tableOfContents ?? 'En esta página'} />
-      </div>
-    )}
-
     <!-- Two-column layout: article + sticky sidebar -->
     <div class={hasToc ? 'lg:grid lg:grid-cols-[1fr_220px] lg:gap-16' : ''}>
 
+      <!-- Table of Contents (single instance: mobile before content, desktop sticky sidebar) -->
+      {hasToc && (
+        <aside class="mb-8 lg:mb-0 lg:col-start-2 lg:row-start-1 lg:sticky lg:top-24 lg:self-start">
+          <TableOfContents headings={headings} label={t.tableOfContents ?? 'En esta página'} />
+        </aside>
+      )}
+
       <!-- Post body -->
-      <article class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-sans-display prose-h2:mt-12 prose-h2:text-xl prose-h2:font-semibold prose-h3:mt-8 prose-h3:text-base prose-h3:font-medium prose-a:text-accent-readable prose-a:underline-offset-4 prose-code:font-mono-code prose-pre:rounded-lg prose-pre:border prose-pre:border-border-subtle prose-img:rounded-lg">
+      <article class="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-sans-display prose-h2:mt-12 prose-h2:text-xl prose-h2:font-semibold prose-h3:mt-8 prose-h3:text-base prose-h3:font-medium prose-a:text-accent-readable prose-a:underline-offset-4 prose-code:font-mono-code prose-pre:rounded-lg prose-pre:border prose-pre:border-border-subtle prose-img:rounded-lg lg:col-start-1 lg:row-start-1">
         <Content />
       </article>
-
-      <!-- Desktop ToC sidebar -->
-      {hasToc && (
-        <div class="hidden lg:block">
-          <TableOfContents headings={headings} label={t.tableOfContents ?? 'En esta página'} />
-        </div>
-      )}
     </div>
+
+    <HeadingPermalinks locale={locale} />
 
     <!-- Footer nav -->
     <footer class="mt-16 max-w-3xl border-t border-border-subtle pt-8">

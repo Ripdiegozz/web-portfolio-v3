@@ -4,6 +4,7 @@ dist/
 .turbo/
 .wrangler/
 .atl/
+odd/
 .env
 .env.*
 .dev.vars

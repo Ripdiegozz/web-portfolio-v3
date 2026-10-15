@@ -71,3 +71,9 @@ body {
 .prose h6 {
   scroll-margin-top: 5.5rem;
 }
+
+/* Ensure native hidden attribute is honored over utility display classes (e.g. flex) */
+[hidden] {
+  display: none !important;
+}
+

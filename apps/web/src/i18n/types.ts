@@ -42,8 +42,6 @@ export interface AboutTranslations {
   sectionTitle: string;
   lead: string;
   support: string;
-  philosophyQuote?: string;
-  philosophyLabel?: string;
 }
 
 export interface ExperienceTranslations {

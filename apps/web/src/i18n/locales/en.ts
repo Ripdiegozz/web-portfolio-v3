@@ -44,8 +44,6 @@ export const en: TranslationDictionary = {
   about: {
     sectionTitle: 'A bit about me.',
     lead: `Full-stack engineer with ${expYears} building production web applications, LLM tooling, and distributed systems, from financial back-office software to AI tooling at Wazuh.`,
-    philosophyQuote:
-      '“Designing AI-powered tooling and distributed architectures built to scale without compromise.”',
     support:
       'I started at SuperGIROS, where I designed and built back-office tools for 1,100+ service points, a chatbot that cut helpdesk calls by 60%, and web improvements that raised load speed by 40%. At Tres Pi Medios, I designed and built tools for Stanley Black & Decker, cutting task time by 50% in Italy and automating Zendesk support with AI for the US and Canada. Now at Wazuh, I design and build the Wazuh AI Assistant end to end for a platform used by 90,000+ users.',
   },

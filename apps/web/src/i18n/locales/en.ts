@@ -6,12 +6,12 @@ const heroKicker = formatHeroKicker('en');
 
 export const en: TranslationDictionary = {
   meta: {
-    title: 'Diego García — Full Stack Developer & Software Engineer',
+    title: 'Diego García — Full-Stack Developer & Software Engineer',
     description:
       `Diego Alonso García is a Full-Stack Engineer at Wazuh, Colombia, with ${expYears} of experience building scalable web apps, AI tooling, and high-performance backends for 90,000+ users.`,
     ogLocale: 'en_US',
     keywords:
-      'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García Guerrero, Diego Alonso Garcia Guerrero, Diego García, Diego Garcia, dagadev, Full Stack Developer, Full Stack Engineer, Software Engineer, Web Developer, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
+      'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García Guerrero, Diego Alonso Garcia Guerrero, Diego García, Diego Garcia, dagadev, Full-Stack Developer, Full-Stack Engineer, Software Engineer, Web Developer, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
   },
   nav: {
     about: 'About',
@@ -43,7 +43,7 @@ export const en: TranslationDictionary = {
   },
   about: {
     sectionTitle: 'A bit about me.',
-    lead: `Full-stack engineer with ${expYears} building production web applications, LLM tooling, and distributed systems, from financial back-office software to AI tooling at Wazuh.`,
+    lead: `Full-Stack Engineer with ${expYears} building production web applications, LLM tooling, and distributed systems, from financial back-office software to AI tooling at Wazuh.`,
     support:
       'I started at SuperGIROS, where I designed and built back-office tools for 1,100+ service points, a chatbot that cut helpdesk calls by 60%, and web improvements that raised load speed by 40%. At Tres Pi Medios, I designed and built tools for Stanley Black & Decker, cutting task time by 50% in Italy and automating Zendesk support with AI for the US and Canada. Now at Wazuh, I design and build the Wazuh AI Assistant end to end for a platform used by 90,000+ users.',
   },
@@ -89,7 +89,7 @@ export const en: TranslationDictionary = {
         companyUrl: 'https://www.trespimedios.co/',
         client: 'Stanley Black & Decker',
         clientUrl: 'https://www.stanleyblackanddecker.com',
-        role: 'Full-stack Developer',
+        role: 'Full-Stack Developer',
         period: 'Jul 2024 – Jan 2026',
         location: 'Remote',
         highlights: [
@@ -119,7 +119,7 @@ export const en: TranslationDictionary = {
       {
         company: 'SuperGIROS',
         companyUrl: 'https://www.supergiros.com.co',
-        role: 'Full-stack Developer Intern',
+        role: 'Full-Stack Developer Intern',
         period: 'Aug 2023 – Jul 2024',
         location: 'On-site / Hybrid',
         highlights: [
@@ -148,21 +148,21 @@ export const en: TranslationDictionary = {
   skills: {
     sectionTitle: 'Technical arsenal & stack.',
     sectionDescription:
-      'Technologies and tools I use to build production software. TypeScript, React, Node.js, and OpenSearch are my production daily drivers at Wazuh.',
+      'Technologies and tools I use to build production software.',
     coreStackTitle: 'Core Stack & Daily Drivers',
     coreStackSubtitle:
-      'Primary tools for production systems and agent tooling, in daily production use at Wazuh',
+      'Primary tools for production systems and agent tooling at Wazuh',
     coreSkills: [
-      { name: 'TypeScript', role: 'Primary Language', context: 'Daily Driver · Wazuh' },
-      { name: 'React', role: 'Frontend Architecture', context: 'Wazuh Dashboard' },
-      { name: 'Node.js', role: 'Runtime & APIs', context: 'Daily Driver · Wazuh' },
-      { name: 'OpenSearch', role: 'Distributed Search & SIEM', context: 'Production · Wazuh' },
-      { name: 'Elasticsearch', role: 'Indexing & Telemetry', context: 'Production · Wazuh' },
-      { name: 'OpenAI', role: 'Agent & LLM Tooling', context: 'Wazuh AI Assistant' },
-      { name: 'Docker', role: 'Containerization & CI', context: 'Daily Driver · Wazuh' },
-      { name: 'Linux', role: 'System Environments', context: 'Production Deployments' },
-      { name: 'PostgreSQL', role: 'Relational Database', context: 'Production Systems' },
-      { name: 'Tailwind CSS', role: 'Design Systems', context: 'Production & Portfolios' },
+      { name: 'TypeScript', role: 'Primary Language' },
+      { name: 'React', role: 'Frontend Architecture' },
+      { name: 'Node.js', role: 'Runtime & APIs' },
+      { name: 'OpenSearch', role: 'Distributed Search & SIEM' },
+      { name: 'Elasticsearch', role: 'Indexing & Telemetry' },
+      { name: 'OpenAI', role: 'Agent & LLM Tooling' },
+      { name: 'Docker', role: 'Containerization & CI' },
+      { name: 'Linux', role: 'System Environments' },
+      { name: 'PostgreSQL', role: 'Relational Database' },
+      { name: 'Tailwind CSS', role: 'Design Systems' },
     ],
     categories: [
       {
@@ -170,7 +170,7 @@ export const en: TranslationDictionary = {
         title: 'Frontend & UI Systems',
         iconName: 'Layers',
         description:
-          'Component architecture, state management, and accessible UI. Production daily drivers at Wazuh: TypeScript and React; Next.js and Astro across full-stack applications.',
+          'Component architecture, state management, and accessible design systems.',
         skills: [
           'TypeScript',
           'React',
@@ -190,7 +190,7 @@ export const en: TranslationDictionary = {
         title: 'Backend & Data Architecture',
         iconName: 'Cpu',
         description:
-          'High-throughput APIs, distributed search, and LLM tooling. Production daily drivers: Node.js, OpenSearch, Elasticsearch, and OpenAI at Wazuh; PostgreSQL and Oracle SQL in enterprise systems.',
+          'High-throughput APIs, distributed search, and LLM tooling.',
         skills: [
           'Node.js',
           'OpenSearch',
@@ -211,7 +211,7 @@ export const en: TranslationDictionary = {
         title: 'Cloud, CI/CD & Testing',
         iconName: 'Shield',
         description:
-          'Containerized pipelines, Linux package builders, and cloud platforms. Production daily drivers: Docker, Linux, and GitHub Actions at Wazuh; Azure and AWS across enterprise clients.',
+          'Containerized pipelines, cloud infrastructure, and automated testing.',
         skills: [
           'Docker',
           'Linux',
@@ -242,12 +242,12 @@ export const en: TranslationDictionary = {
         liveUrl: 'https://wazuh.com',
       },
       {
-        name: 'NatGPT',
+        name: 'damped',
         description:
-          'AI chat platform with voice recording, transcription, and real-time response streaming.',
-        stack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Convex', 'OpenAI', 'Clerk'],
-        repoUrl: 'https://github.com/Ripdiegozz/nat-gpt',
-        liveUrl: 'https://nat-gpt.vercel.app/',
+          'Interruptible, physically based spring animation library for the web, React, and React Native. Sub-7 KB core with layout transitions and accessible motion.',
+        stack: ['TypeScript', 'React', 'Playwright'],
+        repoUrl: 'https://github.com/Ripdiegozz/damped',
+        liveUrl: 'https://damped.dagadev.net',
       },
       {
         name: 'Notewave',

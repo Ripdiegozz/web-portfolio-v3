@@ -53,6 +53,14 @@ describe('Chat Engine & Knowledge Base', () => {
       referenceDate,
     );
     expect(contactRes).toContain('Formulario de Contacto');
+
+    const projectRes = generateLocalFallbackResponse(
+      '¿Cuáles son sus proyectos destacados?',
+      'es',
+      referenceDate,
+    );
+    expect(projectRes).toContain('damped');
+    expect(projectRes).toContain('Wazuh Dashboard');
   });
 
   it('generates accurate grounded responses in English fallback', () => {
@@ -73,6 +81,14 @@ describe('Chat Engine & Knowledge Base', () => {
       referenceDate,
     );
     expect(contactRes).toContain('Contact Form');
+
+    const projectRes = generateLocalFallbackResponse(
+      'tell me about his projects or damped',
+      'en',
+      referenceDate,
+    );
+    expect(projectRes).toContain('damped');
+    expect(projectRes).toContain('Wazuh Dashboard');
   });
 
   it('uses Cloudflare Workers AI when available', async () => {
@@ -125,6 +141,7 @@ describe('Chat Engine & Knowledge Base', () => {
       {},
     );
     expect(storyReply).toContain('do not generate fictional stories');
+    expect(storyReply).toContain('damped');
 
     // 3. Prompt injection
     const injectionReply = await processChatRequest(

@@ -40,12 +40,12 @@ Current Role:
 
 Previous Roles & Impact:
 - Company: Tres Pi Medios (Client: Stanley Black & Decker) | Jul 2024 – Jan 2026
-  - Role: Full-stack Developer (Remote)
+  - Role: Full-Stack Developer (Remote)
   - Designed and built an internal tool loan and repair app for Stanley Black & Decker Italy, cutting task completion time by 50%.
   - Designed and built an Azure Function integrating generative AI to automate Zendesk customer support replies for Stanley Black & Decker in the US and Canada.
   - Built real-time data feeds for Power BI operational dashboards with i18n support for Italian and English.
 - Company: SuperGIROS | Aug 2023 – Jul 2024
-  - Role: Full-stack Developer Intern (On-site / Hybrid)
+  - Role: Full-Stack Developer Intern (On-site / Hybrid)
   - Designed and built internal back-office tools serving 1,100+ financial service points in Norte de Santander.
   - Designed and built a Node.js sales chatbot that reduced helpdesk support calls by 60%.
   - Improved web app load speed by 40% through code refactoring, Angular upgrades, and Java/Spring Boot microservices connected to Oracle databases.
@@ -61,14 +61,14 @@ Technical Stack & Core Skills:
 
 Featured Projects:
 - wazuh-dashboard: Open-source web interface for Wazuh security platform (TypeScript, React, OpenSearch, Docker).
-- NatGPT: AI chat platform with voice recording, transcription, and real-time streaming (React, Next.js, Convex, OpenAI, Clerk).
+- damped: Interruptible, physically based spring animation library for the web, React, and React Native (TypeScript, React, Playwright).
 - Notewave: Note-taking app with markdown editing and task management.
 - Section Link: [Projects](#projects)
 
 Experience & Career:
 - Wazuh (Jan 2026 – Present): Full-Stack Engineer on Wazuh AI Assistant, Security Hardening & Dashboard (90k+ users, 130+ merged PRs).
-- Tres Pi Medios (Jul 2024 – Jan 2026): Full-stack Developer for Stanley Black & Decker (Italy & US/Canada).
-- SuperGIROS (Aug 2023 – Jul 2024): Full-stack Developer Intern (1,100+ points, chatbot, 40% speedup).
+- Tres Pi Medios (Jul 2024 – Jan 2026): Full-Stack Developer for Stanley Black & Decker (Italy & US/Canada).
+- SuperGIROS (Aug 2023 – Jul 2024): Full-Stack Developer Intern (1,100+ points, chatbot, 40% speedup).
 - Section Link: [Experience](#experience)
 
 Contact & Availability:
@@ -137,8 +137,8 @@ export function checkInputGuardrails(userMessage: string, locale: 'en' | 'es'): 
   for (const pattern of creativeWritingPatterns) {
     if (pattern.test(text)) {
       return locale === 'es'
-        ? 'Solo puedo responder preguntas sobre el perfil profesional y proyectos de Diego, no genero historias o contenido ficticio. ¿Quieres que te cuente sobre sus proyectos reales como NatGPT o Wazuh Dashboard?'
-        : "I can only assist with real information regarding Diego's engineering work and projects, and do not generate fictional stories. Would you like to know about his real projects like NatGPT or Wazuh Dashboard?";
+        ? 'Solo puedo responder preguntas sobre el perfil profesional y proyectos de Diego, no genero historias o contenido ficticio. ¿Quieres que te cuente sobre sus proyectos reales como damped o Wazuh Dashboard?'
+        : "I can only assist with real information regarding Diego's engineering work and projects, and do not generate fictional stories. Would you like to know about his real projects like damped or Wazuh Dashboard?";
     }
   }
 
@@ -211,8 +211,8 @@ export function generateLocalFallbackResponse(
     ) {
       return 'Puedes ponerte en contacto con Diego a través del [Formulario de Contacto](#contact) en este portafolio o conectar directamente en su [Perfil de LinkedIn](https://www.linkedin.com/in/dagadev).';
     }
-    if (query.includes('proyect') || query.includes('natgpt') || query.includes('notewave')) {
-      return 'Entre sus proyectos destacados están el **Wazuh Dashboard** (SIEM/XDR de código abierto), **NatGPT** (plataforma de IA con voz y streaming) y **Notewave** (gestor de notas en markdown). Explóralos en la sección de [Proyectos](#projects).';
+    if (query.includes('proyect') || query.includes('damped') || query.includes('notewave')) {
+      return 'Entre sus proyectos destacados están el **Wazuh Dashboard** (SIEM/XDR de código abierto), **damped** (librería de animaciones físicas con resortes para React/Web) y **Notewave** (gestor de notas en markdown). Explóralos en la sección de [Proyectos](#projects).';
     }
     return '¡Hola! Soy el asistente de Diego. Puedo contarte sobre su [Experiencia](#experience) en Wazuh, su stack en [Habilidades](#skills), sus [Proyectos](#projects) destacados o cómo contactarlo en el [Formulario de Contacto](#contact).';
   }
@@ -256,8 +256,8 @@ export function generateLocalFallbackResponse(
   ) {
     return 'You can get in touch with Diego through the [Contact Form](#contact) directly on this portfolio or connect with him via [LinkedIn](https://www.linkedin.com/in/dagadev).';
   }
-  if (query.includes('project') || query.includes('natgpt') || query.includes('notewave')) {
-    return 'Key highlighted projects include **Wazuh Dashboard** (open-source SIEM/XDR web UI), **NatGPT** (AI voice & streaming platform), and **Notewave** (rich-text markdown app). Check them out in the [Projects](#projects) section.';
+  if (query.includes('project') || query.includes('damped') || query.includes('notewave')) {
+    return 'Key highlighted projects include **Wazuh Dashboard** (open-source SIEM/XDR web UI), **damped** (physically based spring animation library for React and the web), and **Notewave** (rich-text markdown app). Check them out in the [Projects](#projects) section.';
   }
   return "Hello! I'm Diego's AI Assistant. Ask me anything about his work in [Experience](#experience), his core stack in [Skills](#skills), his [Projects](#projects), or how to get in touch via the [Contact Form](#contact).";
 }

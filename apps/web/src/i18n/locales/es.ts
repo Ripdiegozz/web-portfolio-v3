@@ -6,12 +6,12 @@ const heroKicker = formatHeroKicker('es');
 
 export const es: TranslationDictionary = {
   meta: {
-    title: 'Diego García — Desarrollador Full Stack & Software Engineer',
+    title: 'Diego García — Desarrollador Full-Stack & Software Engineer',
     description:
       `Diego Alonso García, Ingeniero Full-Stack en Wazuh, Colombia, con ${expYears} de experiencia construyendo aplicaciones web escalables, herramientas de IA y backends de alto rendimiento para más de 90.000 usuarios.`,
     ogLocale: 'es_ES',
     keywords:
-      'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García Guerrero, Diego Alonso Garcia Guerrero, Diego García, Diego Garcia, dagadev, Desarrollador Full Stack, Ingeniero Full-Stack, Ingeniero de Software, Desarrollador Web, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
+      'Diego Alonso García, Diego Alonso Garcia, Diego Alonso García Guerrero, Diego Alonso Garcia Guerrero, Diego García, Diego Garcia, dagadev, Desarrollador Full-Stack, Ingeniero Full-Stack, Ingeniero de Software, Desarrollador Web, React, Node.js, TypeScript, Astro, Wazuh, Colombia, Bogota',
   },
   nav: {
     about: 'Sobre mí',
@@ -89,7 +89,7 @@ export const es: TranslationDictionary = {
         companyUrl: 'https://www.trespimedios.co/',
         client: 'Stanley Black & Decker',
         clientUrl: 'https://www.stanleyblackanddecker.com',
-        role: 'Desarrollador Full-stack',
+        role: 'Desarrollador Full-Stack',
         period: 'Jul 2024 – Ene 2026',
         location: 'Remoto',
         highlights: [
@@ -119,7 +119,7 @@ export const es: TranslationDictionary = {
       {
         company: 'SuperGIROS',
         companyUrl: 'https://www.supergiros.com.co',
-        role: 'Desarrollador Full-stack',
+        role: 'Desarrollador Full-Stack',
         period: 'Ago 2023 – Jul 2024',
         location: 'Presencial / Híbrido',
         highlights: [
@@ -148,21 +148,21 @@ export const es: TranslationDictionary = {
   skills: {
     sectionTitle: 'Stack técnico y herramientas.',
     sectionDescription:
-      'Tecnologías y herramientas que utilizo para construir software en producción. TypeScript, React, Node.js y OpenSearch son mis herramientas diarias en producción en Wazuh.',
+      'Tecnologías y herramientas que utilizo para construir software en producción.',
     coreStackTitle: 'Stack Principal y Herramientas Diarias',
     coreStackSubtitle:
-      'Herramientas principales para sistemas en producción y herramientas de agentes, de uso diario en producción en Wazuh',
+      'Herramientas principales para sistemas en producción y herramientas de agentes en Wazuh',
     coreSkills: [
-      { name: 'TypeScript', role: 'Lenguaje Principal', context: 'Uso Diario · Wazuh' },
-      { name: 'React', role: 'Arquitectura Frontend', context: 'Dashboard de Wazuh' },
-      { name: 'Node.js', role: 'Runtime y APIs', context: 'Uso Diario · Wazuh' },
-      { name: 'OpenSearch', role: 'Búsqueda Distribuida & SIEM', context: 'Producción · Wazuh' },
-      { name: 'Elasticsearch', role: 'Indexación y Telemetría', context: 'Producción · Wazuh' },
-      { name: 'OpenAI', role: 'Tooling de Agentes & LLMs', context: 'Wazuh AI Assistant' },
-      { name: 'Docker', role: 'Contenedores y CI', context: 'Uso Diario · Wazuh' },
-      { name: 'Linux', role: 'Entornos de Sistema', context: 'Despliegues en Producción' },
-      { name: 'PostgreSQL', role: 'Base de Datos Relacional', context: 'Sistemas en Producción' },
-      { name: 'Tailwind CSS', role: 'Sistemas de Diseño', context: 'Producción y Portafolio' },
+      { name: 'TypeScript', role: 'Lenguaje Principal' },
+      { name: 'React', role: 'Arquitectura Frontend' },
+      { name: 'Node.js', role: 'Runtime y APIs' },
+      { name: 'OpenSearch', role: 'Búsqueda Distribuida & SIEM' },
+      { name: 'Elasticsearch', role: 'Indexación y Telemetría' },
+      { name: 'OpenAI', role: 'Tooling de Agentes & LLMs' },
+      { name: 'Docker', role: 'Contenedores y CI' },
+      { name: 'Linux', role: 'Entornos de Sistema' },
+      { name: 'PostgreSQL', role: 'Base de Datos Relacional' },
+      { name: 'Tailwind CSS', role: 'Sistemas de Diseño' },
     ],
     categories: [
       {
@@ -170,7 +170,7 @@ export const es: TranslationDictionary = {
         title: 'Frontend y Sistemas de UI',
         iconName: 'Layers',
         description:
-          'Arquitectura de componentes, gestión de estado e interfaces accesibles. Uso diario en producción en Wazuh: TypeScript y React; Next.js y Astro en proyectos full-stack.',
+          'Arquitectura de componentes, gestión de estado y sistemas de diseño accesibles.',
         skills: [
           'TypeScript',
           'React',
@@ -190,7 +190,7 @@ export const es: TranslationDictionary = {
         title: 'Backend y Arquitectura de Datos',
         iconName: 'Cpu',
         description:
-          'APIs de alto rendimiento, búsqueda distribuida y tooling de LLMs. Uso diario en producción: Node.js, OpenSearch, Elasticsearch y OpenAI en Wazuh; PostgreSQL y Oracle SQL en sistemas corporativos.',
+          'APIs de alto rendimiento, búsqueda distribuida y tooling de LLMs.',
         skills: [
           'Node.js',
           'OpenSearch',
@@ -211,7 +211,7 @@ export const es: TranslationDictionary = {
         title: 'Cloud, CI/CD y Testing',
         iconName: 'Shield',
         description:
-          'Pipelines de integración, construcción de paquetes Linux y plataformas en la nube. Uso diario en producción: Docker, Linux y GitHub Actions en Wazuh; Azure y AWS en clientes corporativos.',
+          'Pipelines de integración, infraestructura en la nube y pruebas automatizadas.',
         skills: [
           'Docker',
           'Linux',
@@ -242,12 +242,12 @@ export const es: TranslationDictionary = {
         liveUrl: 'https://wazuh.com',
       },
       {
-        name: 'NatGPT',
+        name: 'damped',
         description:
-          'Plataforma de chat con IA, grabación de voz, transcripción y respuestas en tiempo real por streaming.',
-        stack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Convex', 'OpenAI', 'Clerk'],
-        repoUrl: 'https://github.com/Ripdiegozz/nat-gpt',
-        liveUrl: 'https://nat-gpt.vercel.app/',
+          'Librería de animaciones físicas basadas en resortes para la web, React y React Native. Core de menos de 7 KB con transiciones de layout y soporte de accesibilidad.',
+        stack: ['TypeScript', 'React', 'Playwright'],
+        repoUrl: 'https://github.com/Ripdiegozz/damped',
+        liveUrl: 'https://damped.dagadev.net',
       },
       {
         name: 'Notewave',

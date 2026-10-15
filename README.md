@@ -7,9 +7,11 @@
 ## ✨ Features
 
 - ⚡ **Hybrid Rendering**: Static-first edge delivery with Astro 7 + `@astrojs/cloudflare`, backed by SSR Cloudflare Workers routes for dynamic APIs.
+- 🤖 **Diego AI Assistant**: Grounded interactive assistant island powered by verified portfolio context, keyboard navigation, and smooth physics-based transitions.
+- 💫 **Spring Physics Motion**: Interruptible, physically-based spring animations powered by [`@damped/react`](https://damped.dagadev.net) across interactive islands (`ChatAssistant` modal, `ExperienceDashboard` tab transitions).
 - 🌐 **Full Internationalization (i18n)**: Seamless English (`/`) and Spanish (`/es/`) switching with hash preservation across sections and articles.
 - 🎨 **Adaptive Design & Theming**: Dark/Light mode with FOUC-safe pre-hydration, Tailwind CSS v4 design tokens, and smooth circular ripple View Transitions.
-- ✍️ **Integrated Blog & Keystatic CMS**: Markdown content layer powered by Keystatic (GitHub mode), syntax highlighting with Shiki, reading time estimates, table of contents, and RSS/Sitemap generation.
+- ✍️ **Integrated Blog & Keystatic CMS**: Markdown content layer powered by Keystatic (GitHub mode), syntax highlighting with Shiki, scroll-synced Table of Contents, heading permalinks with clipboard copy, reading time estimates, and RSS/Sitemap generation.
 - 📬 **Server-side Contact API**: Powered by Hono with Zod schema validation, Cloudflare Turnstile bot verification, IP rate limiting, and Resend email delivery via React Email templates.
 - 📊 **Dynamic GitHub Contribution Grid**: Fetches and renders live GitHub activity with KV caching and fallback resilience.
 - 🌌 **Interactive Ambient Background**: Lightweight Three.js / R3F shader background with `prefers-reduced-motion` compliance.
@@ -53,7 +55,7 @@ web-portfolio-v3/
 | **API Layer** | [Hono](https://hono.dev/) |
 | **UI & Islands** | [React 19](https://react.dev/) |
 | **Styling** | [Tailwind CSS v4](https://tailwindcss.com/) (CSS-first `@theme`) |
-| **Animation & WebGL** | [Motion](https://motion.dev/) & [Three.js](https://threejs.org/) / `@react-three/fiber` |
+| **Animation & WebGL** | [@damped/react](https://damped.dagadev.net) (Spring physics) & [Three.js](https://threejs.org/) / `@react-three/fiber` |
 | **Content Management** | [Keystatic](https://keystatic.com/) (`@keystatic/core`, GitHub mode) |
 | **Email System** | [Resend](https://resend.com/) & [React Email](https://react.email/) |
 | **Testing** | [Vitest](https://vitest.dev/) & [Playwright](https://playwright.dev/) |
@@ -109,6 +111,7 @@ Run these scripts from the repository root:
 | `bun run dev` | Starts the Astro development server via Turborepo |
 | `bun run build` | Builds the static pages and Cloudflare Worker bundle |
 | `bun run test` | Runs the Vitest test suite across all workspace packages |
+| `bun run test:e2e` | Runs Playwright end-to-end tests (chat, contact, blog flows) |
 | `bun run typecheck` | Runs TypeScript checks (`tsc --noEmit`) and `astro check` |
 | `bun run lint` | Lints the codebase with ESLint |
 | `bun run preview` | Runs Cloudflare Worker preview with Wrangler (`wrangler dev`) |
@@ -118,6 +121,7 @@ Run these scripts from the repository root:
 ## 🧪 Testing & Quality
 
 - **Unit & Integration**: Vitest tests covering i18n routing, contact validation/rate-limiting/turnstile, blog utilities, and contribution grid components.
+- **End-to-End (E2E)**: Playwright tests covering happy-path flows, Turnstile mocking, dialog accessibility, and `@damped/react` spring physics transitions.
 - **Strict Typing**: TypeScript `strict: true` across all packages and Astro components.
 - **Linting**: ESLint with unified flat config.
 
@@ -126,6 +130,7 @@ Run these scripts from the repository root:
 bun run lint
 bun run typecheck
 bun run test
+bun run test:e2e
 ```
 
 ---

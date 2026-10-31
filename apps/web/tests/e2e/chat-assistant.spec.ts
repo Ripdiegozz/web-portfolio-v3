@@ -3,6 +3,12 @@ import { expect, test } from '@playwright/test';
 test('chat assistant dialog opens and closes smoothly with Presence spring physics', async ({ page }) => {
   await page.goto('/');
 
+  // Astro removes the `ssr` attribute once an island has hydrated; clicking
+  // earlier is a no-op because React has not attached its handlers yet.
+  await page
+    .locator('astro-island[component-url*="ChatAssistant"]:not([ssr])')
+    .waitFor({ state: 'attached' });
+
   const trigger = page.getByRole('button', { name: /ask diego ai|pregunta a diego ai/i });
   await expect(trigger).toBeVisible();
 

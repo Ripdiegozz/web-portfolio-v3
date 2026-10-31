@@ -336,6 +336,7 @@ export default function ChatAssistant({ locale = 'en', labels }: ChatAssistantPr
             role="dialog"
             aria-modal="true"
             aria-label={title}
+            data-lenis-prevent
             className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-50 flex h-[100dvh] sm:h-[520px] sm:max-h-[82vh] w-full sm:w-[400px] flex-col overflow-hidden sm:rounded-2xl sm:border sm:border-border-subtle bg-bg shadow-2xl origin-bottom sm:origin-bottom-right"
           >
           {/* Header */}

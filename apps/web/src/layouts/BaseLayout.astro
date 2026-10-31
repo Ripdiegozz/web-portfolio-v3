@@ -475,6 +475,15 @@ const jsonLd = article
         });
       })();
     </script>
+    <script>
+      import Lenis from 'lenis';
+      import 'lenis/dist/lenis.css';
+
+      // Smooth (inertial) scroll. Skipped for users who prefer reduced motion.
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        new Lenis({ autoRaf: true, lerp: 0.12, anchors: true });
+      }
+    </script>
     <slot />
     <ChatAssistant client:load locale={locale} labels={dict.chatAssistant} />
   </body>

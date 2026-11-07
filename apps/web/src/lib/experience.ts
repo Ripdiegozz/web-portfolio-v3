@@ -1,7 +1,7 @@
 import type { Locale } from '../i18n/types';
 
-/** Career start date: August 1, 2023 (SuperGIROS software engineering internship) */
-export const CAREER_START_DATE = new Date('2023-08-01T00:00:00Z');
+/** Career start date: January 1, 2024 (SuperGIROS, Full Stack Developer - Trainee) */
+export const CAREER_START_DATE = new Date('2024-01-01T00:00:00Z');
 
 /**
  * Calculates completed full years of professional experience from the career start date.
@@ -22,8 +22,8 @@ export function getYearsOfExperience(referenceDate: Date = new Date()): number {
 
 /**
  * Formats the experience snippet for sentences:
- * - 'en': '3+ years'
- * - 'es': 'más de 3 años'
+ * - 'en': '2+ years'
+ * - 'es': 'más de 2 años'
  */
 export function formatYearsOfExperience(
   locale: Locale,
@@ -38,8 +38,8 @@ export function formatYearsOfExperience(
 
 /**
  * Formats the kicker pill text for the Hero section:
- * - 'en': 'Full-Stack Engineer · 3+ years in production'
- * - 'es': 'Ingeniero Full-Stack · Más de 3 años en producción'
+ * - 'en': 'Full-Stack Engineer · 2+ years in production'
+ * - 'es': 'Ingeniero Full-Stack · Más de 2 años en producción'
  */
 export function formatHeroKicker(
   locale: Locale,

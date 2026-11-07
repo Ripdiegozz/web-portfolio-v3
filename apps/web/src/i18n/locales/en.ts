@@ -5,7 +5,7 @@ export const en: TranslationDictionary = {
   meta: {
     title: 'Diego García — Full-Stack Developer & Software Engineer',
     get description() {
-      return `Diego Alonso García is a Full-Stack Engineer at Wazuh, Colombia, with ${formatYearsOfExperience('en')} of experience building scalable web apps, AI tooling, and high-performance backends for 90,000+ users.`;
+      return `Diego Alonso García is a Full Stack Engineer at Wazuh, Colombia, with ${formatYearsOfExperience('en')} of experience building scalable web apps, AI tooling, and high-performance backends for 90,000+ users.`;
     },
     ogLocale: 'en_US',
     keywords:
@@ -32,7 +32,7 @@ export const en: TranslationDictionary = {
     headlineEmphasis: 'software',
     headlineEnd: ' that ships.',
     get lead() {
-      return `I'm Diego Alonso García, a full-stack engineer at Wazuh with ${formatYearsOfExperience('en')} building production software. I design and build AI tooling, scalable backends, and web apps for 90,000+ users.`;
+      return `I'm Diego Alonso García, a Full Stack Engineer at Wazuh with ${formatYearsOfExperience('en')} building production software. I design and build AI tooling, scalable backends, and web apps for 90,000+ users.`;
     },
     contactButton: 'Get in touch',
     githubAriaLabel: 'GitHub profile',
@@ -63,7 +63,7 @@ export const en: TranslationDictionary = {
       {
         company: 'Wazuh',
         companyUrl: 'https://wazuh.com',
-        role: 'Full-Stack Engineer',
+        role: 'Full Stack Engineer',
         period: 'Jan 2026 – Present',
         current: true,
         location: 'Remote',
@@ -84,7 +84,7 @@ export const en: TranslationDictionary = {
         ],
         kpis: [
           { value: '90k+ users', label: 'Platform deployments' },
-          { value: '130+ merged PRs', label: 'Open-source contributions' },
+          { value: '180+ merged PRs', label: 'Open-source contributions' },
           { value: 'AI Assistant', label: 'GenAI Tooling' },
         ],
       },
@@ -93,7 +93,7 @@ export const en: TranslationDictionary = {
         companyUrl: 'https://www.trespimedios.co/',
         client: 'Stanley Black & Decker',
         clientUrl: 'https://www.stanleyblackanddecker.com',
-        role: 'Full-Stack Developer',
+        role: 'Back End Developer',
         period: 'Jul 2024 – Jan 2026',
         location: 'Remote',
         highlights: [
@@ -123,8 +123,8 @@ export const en: TranslationDictionary = {
       {
         company: 'SuperGIROS',
         companyUrl: 'https://www.supergiros.com.co',
-        role: 'Full-Stack Developer Intern',
-        period: 'Aug 2023 – Jul 2024',
+        role: 'Full Stack Developer - Trainee',
+        period: 'Jan 2024 – Jul 2024',
         location: 'On-site / Hybrid',
         highlights: [
           'Designed and built internal back-office tools serving 1,100+ financial service points in Norte de Santander.',

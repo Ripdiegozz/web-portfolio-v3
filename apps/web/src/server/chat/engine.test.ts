@@ -15,9 +15,20 @@ describe('Chat Engine & Knowledge Base', () => {
     expect(promptEn).not.toContain('(dagadev)');
     expect(promptEn).toContain('Wazuh');
     expect(promptEn).toContain('SuperGIROS');
-    expect(promptEn).toContain('3+ years');
+    expect(promptEn).toContain('2+ years building production software (since Jan 2024)');
     expect(promptEn).toContain('ALWAYS respond in English');
-    expect(buildSystemPrompt('en', new Date('2027-09-01T00:00:00Z'))).toContain('4+ years');
+    expect(buildSystemPrompt('en', new Date('2027-09-01T00:00:00Z'))).toContain('3+ years');
+    expect(promptEn).toContain('Company: Wazuh | Jan 2026 – Present');
+    expect(promptEn).toContain('Role: Full Stack Engineer (Remote)');
+    expect(promptEn).toContain('Jul 2024 – Jan 2026');
+    expect(promptEn).toContain('Role: Back End Developer (Remote)');
+    expect(promptEn).toContain('Company: SuperGIROS | Jan 2024 – Jul 2024');
+    expect(promptEn).toContain('Role: Full Stack Developer - Trainee');
+    expect(promptEn).toContain('SuperGIROS (Jan 2024 – Jul 2024): Full Stack Developer - Trainee');
+    expect(promptEn).toContain('180+ merged PRs');
+    expect(promptEn).not.toContain('130+');
+    expect(promptEn).not.toContain('Aug 2023');
+    expect(promptEn).not.toContain('Intern');
 
     const promptEs = buildSystemPrompt('es', referenceDate);
     expect(promptEs).toContain('Diego Alonso García Guerrero');
@@ -30,14 +41,24 @@ describe('Chat Engine & Knowledge Base', () => {
   it('generates accurate grounded responses in Spanish fallback', () => {
     const wazuhRes = generateLocalFallbackResponse('¿Qué hace en wazuh?', 'es', referenceDate);
     expect(wazuhRes).toContain('Wazuh AI Assistant');
+    expect(wazuhRes).toContain('Full Stack Engineer en Wazuh');
+    expect(wazuhRes).toContain('180+ PR fusionados');
+    expect(wazuhRes).not.toContain('130+');
 
     const expRes = generateLocalFallbackResponse(
       '¿Cuál es su experiencia y trayectoria profesional?',
       'es',
       referenceDate,
     );
-    expect(expRes).toContain('3 años');
+    expect(expRes).toContain('más de **2 años de experiencia**');
     expect(expRes).toContain('SuperGIROS');
+    expect(
+      generateLocalFallbackResponse(
+        '¿Cuál es su experiencia?',
+        'es',
+        new Date('2027-01-01T00:00:00Z'),
+      ),
+    ).toContain('más de **3 años de experiencia**');
 
     const stackRes = generateLocalFallbackResponse(
       '¿Cuál es su stack de tecnologías?',
@@ -66,14 +87,24 @@ describe('Chat Engine & Knowledge Base', () => {
   it('generates accurate grounded responses in English fallback', () => {
     const wazuhRes = generateLocalFallbackResponse('tell me about wazuh', 'en', referenceDate);
     expect(wazuhRes).toContain('Wazuh AI Assistant');
+    expect(wazuhRes).toContain('Full Stack Engineer at Wazuh');
+    expect(wazuhRes).toContain('180+ merged PRs');
+    expect(wazuhRes).not.toContain('130+');
 
     const expRes = generateLocalFallbackResponse(
       'tell me about his career experience',
       'en',
       referenceDate,
     );
-    expect(expRes).toContain('3+ years');
+    expect(expRes).toContain('**2+ years of experience**');
     expect(expRes).toContain('SuperGIROS');
+    expect(
+      generateLocalFallbackResponse(
+        'tell me about his experience',
+        'en',
+        new Date('2027-01-01T00:00:00Z'),
+      ),
+    ).toContain('**3+ years of experience**');
 
     const contactRes = generateLocalFallbackResponse(
       'how to hire or contact?',
